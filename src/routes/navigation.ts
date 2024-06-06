@@ -1,11 +1,10 @@
 export enum HomePaths {
-    HOME = "/",
+  HOME = '/'
 }
 
 export enum WillPaths {
-    CREATE_WILL = "/create-will",
-    DETAIL_WILL = "/detail",
-    CONFIG_WILL = "/config",
+  CREATE_WILL = '/create-will',
+  DETAIL_WILL = '/detail',
 }
 
 export const APP_ROUTES_PATHS = {
