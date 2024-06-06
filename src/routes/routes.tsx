@@ -1,48 +1,88 @@
-import loadable, { DefaultComponent } from "@loadable/component";
-import React from "react";
-import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { Suspense, useMemo } from 'react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { ProtectedRoute } from './protected-route';
+import { Flex, Spin } from 'antd';
+import { lazyImport } from '../helpers/lazyImport';
+import LayoutComponent from '../components/templates/layout';
+import { APP_ROUTES_PATHS } from '../constants';
 
-import { LoadingPage } from "./components/LoadingPage";
-import { PATHS } from "../constants/paths";
+const { HomePage } = lazyImport(() => import('..//pages/HomePage'), 'HomePage');
+const { ConfigWillPage } = lazyImport(() => import('..//pages/ConfigWillPage'), 'ConfigWillPage');
+const { NotFound } = lazyImport(() => import('..//routes/components/NotFound'), 'NotFound');
+const { ErrorPage } = lazyImport(() => import('..//routes/components/ErrorPage'), 'ErrorPage');
 
-const LoadingByTemplate: React.FC = () => {
-  const history = useHistory();
-  if (history.location.pathname.includes(PATHS.default)) {
-    return <LoadingPage />;
-  }
-  return <LoadingPage />;
-};
-
-export function loadableWFallback(
-  loadFn: (props: object) => Promise<DefaultComponent<object>>
-) {
-  return loadable(loadFn, {
-    fallback: <LoadingByTemplate />,
-  });
-}
-
-const HomePage = loadableWFallback(() => import("../pages/HomePage"));
-
-export const Components = (block: any) => {
-  if (typeof Components[block.component] !== "undefined") {
-    return React.createElement(Components[block.component], {
-      key: block._uid,
-      block: block,
-    });
-  }
-  return React.createElement(() => <div></div>, { key: block._uid });
-};
-
-const Routes = () => {
-  return (
-    <>
-      <Switch>
-        <Route exact path={PATHS.default} component={HomePage} />
-
-        <Redirect path="*" to={PATHS.notFound} />
-      </Switch>
-    </>
+export function AppRoutes() {
+  const router = useMemo(
+    () =>
+      createBrowserRouter([
+        {
+          path: '/',
+          errorElement: <ErrorPage />,
+          element: <LayoutComponent />,
+          children: [
+            {
+              path: '/',
+              element: <ProtectedRoute />,
+              children: [
+                {
+                  index: true,
+                  path: APP_ROUTES_PATHS.HOME,
+                  element: <HomePage />
+                },
+                {
+                  path: `${APP_ROUTES_PATHS.CONFIG_WILL}/:willType`,
+                  element: <ConfigWillPage />
+                },
+              ]
+            },
+            {
+              path: '*',
+              element: <NotFound />
+            }
+          ]
+        }
+      ]),
+    []
   );
-};
 
-export default Routes;
+  return (
+    <Suspense
+      fallback={
+        <Flex
+        style={{
+          position: "fixed",
+          height: "100vh",
+          width: "100vw",
+          top: 0,
+          backdropFilter: "blur(10px) hue-rotate(90deg)",
+          backgroundColor: "rgba(0, 0, 0, 0.1)",
+        }}
+          align="center"
+          justify="center"
+        >
+          <Spin size="large" />
+        </Flex>
+      }
+    >
+      <RouterProvider
+        router={router}
+        fallbackElement={
+          <Flex
+            style={{
+              position: "fixed",
+              height: "100vh",
+              width: "100vw",
+              top: 0,
+              backdropFilter: "blur(10px) hue-rotate(90deg)",
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+            }}
+              align="center"
+              justify="center"
+            >
+              <Spin size="large" />
+        </Flex>
+        }
+      />
+    </Suspense>
+  );
+}

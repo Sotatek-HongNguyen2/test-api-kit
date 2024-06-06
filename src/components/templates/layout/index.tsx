@@ -1,5 +1,7 @@
-import { Layout } from "antd";
+import { Flex, Layout } from "antd";
 import "./styles.scss";
+import { Outlet } from "react-router-dom";
+import { Header } from "../../organisms";
 
 const { Content } = Layout;
 
@@ -14,12 +16,19 @@ export enum ThemesMode {
   light = "light",
 }
 
-const LayoutComponent: React.FC<ILayoutProps> = ({ children }) => {
+const LayoutComponent: React.FC<ILayoutProps> = () => {
   return (
-    <div id="layout">
+    <div id="app-layout">
       <Layout className="container">
         <Layout className={`site-layout`}>
-          <Content className="site-layout-background">aa{children}</Content>
+          <Content className="site-layout-background">
+            <Flex vertical>
+              <Header />
+              <div className="app-page">
+                <Outlet />
+              </div>
+            </Flex>
+          </Content>
         </Layout>
       </Layout>
     </div>

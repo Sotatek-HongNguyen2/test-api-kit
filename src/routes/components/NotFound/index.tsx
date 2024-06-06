@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { NotFoundPage } from 'src/assets/icons';
 import './not-found.scss';
 
-const NotFound: React.FC = () => {
+export function NotFound () {
   const { t } = useTranslation();
   const userTheme = useSelector((state: any) => state.theme);
 
@@ -23,5 +23,3 @@ const NotFound: React.FC = () => {
     </div>
   );
 };
-
-export default NotFound;
