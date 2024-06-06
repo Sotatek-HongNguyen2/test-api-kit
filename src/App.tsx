@@ -1,19 +1,21 @@
 import React, { Fragment } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
-// import { Web3ReactProvider } from "@web3-react/core";
 import ToastContext from "./components/atoms/toast";
 import { AppRoutes } from "./routes/routes";
-// import { appConnectors } from "./web3/connectors";
+
+import { Provider } from "react-redux";
+import useWeb3Injected from "./hooks/useWeb3Injected";
+import useLoadWalletInstances from "./hooks/useLoadWalletInstances";
 
 const App: React.FC = () => {
+  useWeb3Injected();
+  useLoadWalletInstances();
   return (
-    // <Web3ReactProvider connectors={appConnectors}>
     <Fragment>
-        <ToastContext />
-        <AppRoutes />
+      <ToastContext />
+      <AppRoutes />
     </Fragment>
-    // </Web3ReactProvider>
   );
 };
 
