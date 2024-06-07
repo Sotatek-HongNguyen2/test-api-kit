@@ -32,7 +32,13 @@ export type connectWalletPayload = {
 
 export type signMessagePayload = {
   wallet: Wallet;
-  address: any;
+  address: string;
+};
+
+export type getBalancePayload = {
+  wallet: Wallet;
+  address: string;
+  decimals: number;
 };
 
 export type connectedPayload = Required<
@@ -134,8 +140,19 @@ const signMessage = createAppThunk<{
   async ({ wallet, address }: signMessagePayload, { dispatch, getState }) => {
     const res = await wallet.signMessage(address);
 
-    console.log(res);
+    return res;
+  }
+);
 
+const getBalance = createAppThunk<{
+  message: string;
+}>()(
+  "wallet/getBalance",
+  async (
+    { wallet, address, decimals }: getBalancePayload,
+    { dispatch, getState }
+  ) => {
+    const res = await wallet.getBalance(address, decimals);
     return res;
   }
 );
@@ -212,6 +229,7 @@ export const walletSliceActions = {
   disconnect,
   reconnectWallet,
   signMessage,
+  getBalance,
 };
 
 // export

@@ -79,7 +79,7 @@ export default abstract class Wallet {
   abstract signTx(): Promise<string>;
   abstract getNetwork(nwType?: NETWORK_TYPE): Promise<string>;
   abstract switchNetwork(network: Network): Promise<boolean>;
-  abstract getBalance(network: Network, userAddr: string): Promise<string>;
+  abstract getBalance(userAddr: string, decimals: number): Promise<string>;
   abstract addListener(params: {
     eventName: WALLET_EVENT_NAME;
     handler: (args: any) => void;
