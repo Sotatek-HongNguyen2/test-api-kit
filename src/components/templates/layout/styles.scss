@@ -2,10 +2,14 @@
   width: 100vw;
   min-height: 100vh;
   background-color: #F8F8F8;
+
+  .ant-layout {
+    background-color: transparent;
+  }
 }
 
 .app-page {
   width: 100%;
-  padding: 5vh 10vw;
+  padding: 5vh 15vw;
   background-color: transparent;
 }

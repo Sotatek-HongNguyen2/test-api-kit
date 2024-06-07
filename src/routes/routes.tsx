@@ -1,15 +1,15 @@
 import { Suspense, useMemo } from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './protected-route';
 import { Flex, Spin } from 'antd';
-import { lazyImport } from '../helpers/lazyImport';
-import LayoutComponent from '../components/templates/layout';
-import { APP_ROUTES_PATHS } from '../constants';
+import { lazyImport } from '@/helpers';
+import LayoutComponent from '@/components/templates/layout';
+import { APP_ROUTES_PATHS } from '@/constants';
 
-const { HomePage } = lazyImport(() => import('..//pages/HomePage'), 'HomePage');
-const { ConfigWillPage } = lazyImport(() => import('..//pages/ConfigWillPage'), 'ConfigWillPage');
-const { NotFound } = lazyImport(() => import('..//routes/components/NotFound'), 'NotFound');
-const { ErrorPage } = lazyImport(() => import('..//routes/components/ErrorPage'), 'ErrorPage');
+const { HomePage } = lazyImport(() => import('@/pages/HomePage'), 'HomePage');
+const { ConfigWillPage } = lazyImport(() => import('@/pages/ConfigWillPage'), 'ConfigWillPage');
+const { NotFound } = lazyImport(() => import('@/routes/components/NotFound'), 'NotFound');
+const { ErrorPage } = lazyImport(() => import('@/routes/components/ErrorPage'), 'ErrorPage');
 
 export function AppRoutes() {
   const router = useMemo(
@@ -22,15 +22,21 @@ export function AppRoutes() {
           children: [
             {
               path: '/',
-              element: <ProtectedRoute />,
+              element: <Outlet />, // public route
               children: [
                 {
                   index: true,
                   path: APP_ROUTES_PATHS.HOME,
                   element: <HomePage />
                 },
+              ]
+            },
+            {
+              path: APP_ROUTES_PATHS.CONFIG_WILL,
+              element: <ProtectedRoute />,
+              children: [
                 {
-                  path: `${APP_ROUTES_PATHS.CONFIG_WILL}/:willType`,
+                  path: ':willType',
                   element: <ConfigWillPage />
                 },
               ]
@@ -49,14 +55,14 @@ export function AppRoutes() {
     <Suspense
       fallback={
         <Flex
-        style={{
-          position: "fixed",
-          height: "100vh",
-          width: "100vw",
-          top: 0,
-          backdropFilter: "blur(10px) hue-rotate(90deg)",
-          backgroundColor: "rgba(0, 0, 0, 0.1)",
-        }}
+          style={{
+            position: "fixed",
+            height: "100vh",
+            width: "100vw",
+            top: 0,
+            backdropFilter: "blur(10px) hue-rotate(90deg)",
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
+          }}
           align="center"
           justify="center"
         >
@@ -76,11 +82,11 @@ export function AppRoutes() {
               backdropFilter: "blur(10px) hue-rotate(90deg)",
               backgroundColor: "rgba(0, 0, 0, 0.1)",
             }}
-              align="center"
-              justify="center"
-            >
-              <Spin size="large" />
-        </Flex>
+            align="center"
+            justify="center"
+          >
+            <Spin size="large" />
+          </Flex>
         }
       />
     </Suspense>

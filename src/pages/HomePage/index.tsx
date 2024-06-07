@@ -1,28 +1,20 @@
-import { WrapperContainer } from "../../components/organisms/wrapperContainer";
-
-import NETWORKS from "@/models/network";
-import WALLETS from "@/models/wallet";
+import { WillTabs } from "@/components/organisms/wil-tabs";
+import { WrapperContainer } from "@/components/organisms/wrapper-container";
 import { AuthServices } from "@/services/auth-service";
+import WALLETS from "@/models/wallet";
 import { getWalletSlice, useAppDispatch, useAppSelector } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
-import { Button } from "antd";
+import { AppButton } from "@/components/atoms/button";
+import { RightOutlined } from '@ant-design/icons';
 
 export function HomePage() {
+
   const dispatch = useAppDispatch();
   const { isConnected, walletKey, address } = useAppSelector(getWalletSlice);
   console.log({ isConnected, walletKey, address });
+  const { signMessage } = walletSliceActions;
   const authService = new AuthServices();
 
-  const { connectWallet, signMessage } = walletSliceActions;
-  const handleClickTest = async () => {
-    await dispatch(
-      connectWallet({
-        wallet: WALLETS.metamask,
-        network: NETWORKS.ethereum,
-      })
-    );
-    console.log({ isConnected, walletKey, address });
-  };
   const handleSignMessage = async () => {
     const res = await dispatch(
       signMessage({
@@ -37,16 +29,12 @@ export function HomePage() {
       });
     }
   };
-
   return (
-    <>
-      <WrapperContainer title="Dashboard"></WrapperContainer>
-      <Button type="primary" onClick={handleClickTest}>
-        Test Connect Wallet
-      </Button>
-      <Button type="primary" onClick={handleSignMessage}>
-        sign Wallet
-      </Button>
-    </>
+    <WrapperContainer title="Dashboard">
+      <WillTabs />
+      <AppButton type="primary" onClick={handleSignMessage} rightIcon={<RightOutlined />} style={{ width: '10vw' }}>
+        Sign message
+      </AppButton>
+    </WrapperContainer>
   );
 }

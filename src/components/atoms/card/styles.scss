@@ -1,0 +1,14 @@
+.app-card {
+  background-color: white;
+  padding: 24px;
+  border-radius: 4px; // default: small
+  box-shadow: 0px 0px 8px rgba($color: #2330431A, $alpha: 0.1); // default: small
+}
+
+.box-shadow-large {
+  box-shadow: 0px 0px 16px rgba($color: #2330431A, $alpha: 0.1); // large
+}
+
+.radius-large {
+  border-radius: 15px; // large
+}

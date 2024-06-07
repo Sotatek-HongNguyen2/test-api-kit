@@ -1,0 +1,36 @@
+.ant-tabs-nav {
+  margin-bottom: 0 !important;
+
+  .ant-tabs-nav-wrap {
+    background-color: #EAEAEA;
+    border-radius: 12px 12px 0px 0px;
+
+    .ant-tabs-tab {
+      height: 63px;
+      padding: 20px 32px;
+      box-sizing: border-box;
+    }
+
+    .ant-tabs-tab-active {
+      background-color: white;
+      border-radius: 12px 12px 0px 0px;
+    }
+
+    .ant-tabs-tab-btn {
+      color: #222222 !important;
+      font-weight: 500;
+    }
+
+    .ant-tabs-ink-bar {
+      background-color: transparent;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.ant-tabs-content-holder {
+  background-color: white;
+  border-radius: 4px;
+  padding: 24px;
+  box-shadow: 0px 4px 8px rgba($color: #2330431A, $alpha: 0.1);
+}

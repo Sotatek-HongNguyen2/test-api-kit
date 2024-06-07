@@ -1,0 +1,30 @@
+.app-icon-button {
+  border: none;
+  box-shadow: none;
+  width: fit-content;
+  height: fit-content;
+
+  :hover {
+    svg {
+      path {
+        fill: #1053FF;
+
+      }
+    }
+  }
+}
+
+.app-button--primary {
+  background-color: #136AF3;
+  height: 40px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+}
+
+.app-button--connect-btn {
+  background-color: #FDEBB6;
+  height: 32px;
+  padding: 8px 18px;
+  box-sizing: border-box;
+  border: none;
+}
