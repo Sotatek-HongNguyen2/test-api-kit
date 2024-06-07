@@ -8,7 +8,6 @@ import { walletSliceActions } from "@/store/slices/walletSlice";
 import { useMemo } from "react";
 import { AppButton } from '@/components/atoms/button';
 import useDisclosure from "@/hooks/useDisclosure";
-import { Flex } from "antd";
 import clsx from "clsx";
 
 export const ConnectButton = () => {
