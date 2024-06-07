@@ -1,0 +1,20 @@
+.connected-btn {
+  position: relative;
+
+  .user-balance {
+    position: absolute;
+    background-color: yellow;
+    height: 0;
+    top: 30;
+    padding: 0 18px;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: height 0.1s ease, padding 0.1s ease, top 0.1s ease;
+  }
+
+  .user-balance.visible {
+    height: 30px;
+    top: 37px;
+    padding: 8px 18px;
+  }
+}

@@ -1,7 +1,7 @@
 import { Flex, Layout } from "antd";
 import "./styles.scss";
 import { Outlet } from "react-router-dom";
-import { Header } from "../../organisms";
+import { Header } from "@/components/organisms";
 
 const { Content } = Layout;
 

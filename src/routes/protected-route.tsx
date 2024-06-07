@@ -1,12 +1,11 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { APP_ROUTES_PATHS } from './navigation';
-import { useAuthentication } from '../hooks/useAuthentication';
+import { getWalletSlice, useAppSelector } from '@/store';
+import { APP_ROUTES_PATHS } from '@/constants';
 
 export function ProtectedRoute({ children }: { children?: JSX.Element }) {
   const location = useLocation();
 
-  // const { isUserLoggedIn } = useAuthentication();
-  const isUserLoggedIn = true;
+  const { isConnected: isUserLoggedIn } = useAppSelector(getWalletSlice);
 
   if (!isUserLoggedIn) {
     return (
