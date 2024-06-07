@@ -30,6 +30,11 @@ export type connectWalletPayload = {
   whileCnHandle?: () => void;
 };
 
+export type signMessagePayload = {
+  wallet: Wallet;
+  address: any;
+};
+
 export type connectedPayload = Required<
   Omit<WalletStateConnected, "isConnected" | "asset">
 >;
@@ -122,6 +127,19 @@ const disconnect = createAppThunk()(
   }
 );
 
+const signMessage = createAppThunk<{
+  message: string;
+}>()(
+  "wallet/signMessage",
+  async ({ wallet, address }: signMessagePayload, { dispatch, getState }) => {
+    const res = await wallet.signMessage(address);
+
+    console.log(res);
+
+    return res;
+  }
+);
+
 const reconnectWallet = createAppThunk()(
   "wallet/reconnectWallet",
   async (_, { dispatch, getState }) => {
@@ -193,6 +211,7 @@ export const walletSliceActions = {
   changeNetwork,
   disconnect,
   reconnectWallet,
+  signMessage,
 };
 
 // export
