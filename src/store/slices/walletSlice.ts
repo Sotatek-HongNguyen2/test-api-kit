@@ -93,7 +93,7 @@ const connectWallet = createAppThunk<{
     );
 
     // store last network key
-    return true;
+    return res;
   }
 );
 

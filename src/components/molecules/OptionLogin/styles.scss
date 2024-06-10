@@ -1,0 +1,25 @@
+.item-option-login {
+    width: 100%;
+    padding: 16px;
+    gap: 0px;
+    border-radius: 12px;
+    border: 1px solid #DCE0EA;
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    cursor: pointer;
+
+    .option-name {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 26px;
+        text-align: center;
+        color: #6F7688;
+    }
+
+    .option-image {
+        display: flex;
+        align-items: center;
+    }
+
+}

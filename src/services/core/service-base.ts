@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
-import { HttpClient } from './http-service';
+import { AxiosResponse } from "axios";
+import { HttpClient } from "./http-service";
 
 interface Dict<T> {
   [key: string]: T;
@@ -8,7 +8,7 @@ interface Dict<T> {
 
 interface DataResult {
   data: any;
-  metadata: any;
+  // metadata: any;
 }
 
 export interface ChangeListener {
@@ -18,9 +18,9 @@ export interface ChangeListener {
 export class ServiceBase extends HttpClient {
   private onChangeListeners: Dict<ChangeListener> = {};
   getDataResult = (response: AxiosResponse) => {
-    const data = response?.data.data;
-    const metadata = response.data?.metadata;
-    return { data, metadata };
+    const data = response;
+    // const metadata = response.data?.metadata;
+    return { data };
   };
 
   get = async (url: string, params?: any): Promise<DataResult> => {
@@ -53,7 +53,11 @@ export class ServiceBase extends HttpClient {
     return this.getDataResult(response);
   };
 
-  update = async (url: string, id: number | undefined, params: any): Promise<DataResult> => {
+  update = async (
+    url: string,
+    id: number | undefined,
+    params: any
+  ): Promise<DataResult> => {
     const response = await this.axiosInstance.patch(`${url}/${id}`, params);
     return this.getDataResult(response);
   };

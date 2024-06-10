@@ -9,10 +9,12 @@ import { AppButton } from "@/components/atoms/button";
 import useDisclosure from "@/hooks/useDisclosure";
 import clsx from "clsx";
 
-export const ConnectButton = () => {
-  const dispatch = useAppDispatch();
+interface IPropsConnectButton {
+  clickLogin: () => void;
+}
+
+export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
   const { isConnected, walletKey, address } = useAppSelector(getWalletSlice);
-  console.log({ isConnected, walletKey, address });
   const displayedAddress = useMemo(
     () =>
       `${address?.substring(0, 10)}...${address?.substring(
@@ -21,21 +23,15 @@ export const ConnectButton = () => {
       )}`,
     [address]
   );
-  const { connectWallet } = walletSliceActions;
   const { isOpen, onToggle } = useDisclosure();
-
-  const handleClickTest = async () => {
-    await dispatch(
-      connectWallet({
-        wallet: WALLETS.metamask,
-        network: NETWORKS.ethereum,
-      })
-    );
+  const a = false;
+  const handleClickLogin = async () => {
+    clickLogin();
   };
 
   return (
     <>
-      {isConnected ? (
+      {a ? (
         <div className="connected-btn">
           <AppButton type="connect-btn" onClick={onToggle}>
             {displayedAddress}
@@ -47,10 +43,10 @@ export const ConnectButton = () => {
       ) : (
         <AppButton
           type="primary"
-          onClick={handleClickTest}
+          onClick={handleClickLogin}
           rightIcon={<RightOutlined />}
         >
-          Connect Wallet
+          Login
         </AppButton>
       )}
     </>

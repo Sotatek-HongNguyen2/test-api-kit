@@ -120,7 +120,7 @@ export default class WalletMetamask extends Wallet {
   }
 
   async signMessage(walletAddress: string) {
-    const message = "I like tacos and I approved of this message";
+    const message = "Will-2024";
     const signature = await this.sendRequest<string[]>({
       method: "personal_sign",
       params: [message, walletAddress],
