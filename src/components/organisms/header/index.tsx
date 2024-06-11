@@ -1,16 +1,12 @@
 import { Flex } from "antd";
+
 import "./styles.scss";
-import { FAQIcon } from "@/components/atoms/icons";
-import { AppButton, IconButton } from "@/components/atoms/button";
-import { ConnectButton } from "@/components/molecules";
-import LoginModal from "../LoginModal";
 import { useState } from "react";
-import {
-  getWalletInstanceSlice,
-  getWalletSlice,
-  useAppDispatch,
-  useAppSelector,
-} from "@/store";
+
+import { ConnectButton } from "@/components/molecules";
+import { AppButton, IconButton } from "@/components/atoms/button";
+import { FAQIcon } from "@/components/atoms/icons";
+import { getWalletSlice, useAppDispatch, useAppSelector } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import { DECIMALS, KEY_OPTION_LOIN } from "@/constants";
 import WALLETS from "@/models/wallet";
@@ -18,15 +14,17 @@ import NETWORKS from "@/models/network";
 import { defaultAvatar } from "@/assets/images";
 import { useLogin } from "@/hooks/useAuth";
 import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
-import WillToast from "@/components/atoms/Toast";
+import WillToast from "@/components/atoms/ToastMessage";
+
+import LoginModal from "../LoginModal";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-  const { isConnected, walletKey, address } = useAppSelector(getWalletSlice);
+  const { isConnected, address } = useAppSelector(getWalletSlice);
   const { signMessage, getBalance, connectWallet } = walletSliceActions;
-  const { login, isLoading, error } = useLogin();
+  const { login } = useLogin();
   const [loadingLogin, setLoadingLogin] = useState<boolean>(false);
 
   const handelOpenModalLogin = async () => {
