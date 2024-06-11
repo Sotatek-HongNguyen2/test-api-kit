@@ -230,23 +230,3 @@ export const formatIntBalance = (
     return `${formatter.format(Number(balanceSplit[0]))}.${balanceSplit[1]}`;
   }
 };
-
-export const shortenString2 = (
-  str?: string,
-  maxLength = 30,
-  isNumber?: boolean
-) => {
-  if (!str) return str;
-  if (str.length > maxLength) {
-    if (isNumber) {
-      const replaceAll = str.replaceAll(",", "");
-      let num = replaceAll.slice(0, maxLength);
-      if (num.includes(".")) {
-        num = replaceAll.slice(0, maxLength + 1);
-      }
-      return `${formatIntBalance(num)}...`;
-    }
-    return `${str.slice(0, maxLength)}`;
-  }
-  return str;
-};
