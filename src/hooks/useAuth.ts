@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AuthServices } from "@/services/auth-service";
 import { useAppDispatch } from "@/store";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
-import WillToast from "@/components/atoms/Toast";
+// import WillToast from "@/components/atoms/Toast";
 // Adjust the import based on your project structure
 
 const useLogin = () => {
@@ -32,7 +32,7 @@ const useLogin = () => {
             loginResults.data.data.refreshToken
           )
         );
-        WillToast.success("Login success");
+        // WillToast.success("Login success");
       }
       return loginResults;
     } catch (err: any) {
@@ -60,7 +60,7 @@ const useLogout = () => {
         logoutResults.data.status === 200
       ) {
         dispatch(authInstanceSlideActions.deleteAuth());
-        WillToast.success("Logout success");
+        // WillToast.success("Logout success");
       }
       return logoutResults;
     } catch (err: any) {
