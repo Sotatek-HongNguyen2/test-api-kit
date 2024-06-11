@@ -2,7 +2,13 @@ import "./styles.scss";
 import { RightOutlined } from "@ant-design/icons";
 import NETWORKS from "@/models/network";
 import WALLETS from "@/models/wallet";
-import { getWalletSlice, useAppDispatch, useAppSelector } from "@/store";
+import {
+  getAuthSlide,
+  getWalletInstanceSlice,
+  getWalletSlice,
+  useAppDispatch,
+  useAppSelector,
+} from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import { useMemo } from "react";
 import { AppButton } from "@/components/atoms/button";
@@ -15,6 +21,9 @@ interface IPropsConnectButton {
 
 export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
   const { isConnected, walletKey, address } = useAppSelector(getWalletSlice);
+  const { accessToken } = useAppSelector(getAuthSlide);
+  const { balance } = useAppSelector(getWalletInstanceSlice);
+
   const displayedAddress = useMemo(
     () =>
       `${address?.substring(0, 10)}...${address?.substring(
@@ -31,13 +40,13 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
 
   return (
     <>
-      {a ? (
+      {accessToken ? (
         <div className="connected-btn">
           <AppButton type="connect-btn" onClick={onToggle}>
             {displayedAddress}
           </AppButton>
           <div className={clsx("user-balance", { visible: isOpen })}>
-            0.00 ETH
+            {balance}
           </div>
         </div>
       ) : (

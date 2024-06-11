@@ -1,52 +1,61 @@
-import { Suspense, useMemo } from 'react';
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { ProtectedRoute } from './protected-route';
-import { Flex, Spin } from 'antd';
-import { lazyImport } from '@/helpers';
-import LayoutComponent from '@/components/templates/layout';
-import { APP_ROUTES_PATHS } from '@/constants';
+import { Suspense, useMemo } from "react";
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ProtectedRoute } from "./protected-route";
+import { Flex, Spin } from "antd";
+import { lazyImport } from "@/helpers";
+import LayoutComponent from "@/components/templates/layout";
+import { APP_ROUTES_PATHS } from "@/constants";
 
-const { HomePage } = lazyImport(() => import('@/pages/HomePage'), 'HomePage');
-const { ConfigWillPage } = lazyImport(() => import('@/pages/ConfigWillPage'), 'ConfigWillPage');
-const { NotFound } = lazyImport(() => import('@/routes/components/NotFound'), 'NotFound');
-const { ErrorPage } = lazyImport(() => import('@/routes/components/ErrorPage'), 'ErrorPage');
+const { HomePage } = lazyImport(() => import("@/pages/HomePage"), "HomePage");
+const { ConfigWillPage } = lazyImport(
+  () => import("@/pages/ConfigWillPage"),
+  "ConfigWillPage"
+);
+const { NotFound } = lazyImport(
+  () => import("@/routes/components/NotFound"),
+  "NotFound"
+);
+const { ErrorPage } = lazyImport(
+  () => import("@/routes/components/ErrorPage"),
+  "ErrorPage"
+);
 
 export function AppRoutes() {
   const router = useMemo(
     () =>
       createBrowserRouter([
         {
-          path: '/',
+          path: "/",
           errorElement: <ErrorPage />,
           element: <LayoutComponent />,
           children: [
             {
-              path: '/',
+              path: "/",
               element: <Outlet />, // public route
               children: [
                 {
                   index: true,
                   path: APP_ROUTES_PATHS.HOME,
-                  element: <HomePage />
+                  element: <HomePage />,
                 },
-              ]
+              ],
             },
             {
               path: APP_ROUTES_PATHS.CONFIG_WILL,
               element: <ProtectedRoute />,
               children: [
                 {
-                  path: ':willType',
-                  element: <ConfigWillPage />
+                  path: ":willType",
+                  element: <ConfigWillPage />,
                 },
-              ]
+              ],
             },
             {
-              path: '*',
-              element: <NotFound />
-            }
-          ]
-        }
+              path: "*",
+              element: <NotFound />,
+            },
+          ],
+        },
       ]),
     []
   );

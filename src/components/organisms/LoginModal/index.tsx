@@ -7,12 +7,14 @@ interface IWillModalLogin {
   handleOk?: () => void;
   handleCancel?: () => void;
   clickOptionLogin: (key: string) => void;
+  loading: boolean;
 }
 const LoginModal = ({
   open,
   handleOk,
   handleCancel,
   clickOptionLogin,
+  loading,
 }: IWillModalLogin) => {
   const handelClickOptionLogin = async (key: string) => {
     clickOptionLogin(key);
@@ -27,7 +29,10 @@ const LoginModal = ({
       className="will-modal-login"
       hideFooter={true}
     >
-      <OptionLogin clickOptionLogin={handelClickOptionLogin} />
+      <OptionLogin
+        loading={loading}
+        clickOptionLogin={handelClickOptionLogin}
+      />
     </WillModal>
   );
 };

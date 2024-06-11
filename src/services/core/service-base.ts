@@ -38,8 +38,8 @@ export class ServiceBase extends HttpClient {
     return this.getDataResult(response);
   };
 
-  post = async (url: string, params: any): Promise<DataResult> => {
-    const response = await this.axiosInstance.post(url, params);
+  post = async (url: string, params?: any): Promise<DataResult> => {
+    const response = await this.axiosInstance.post(url, params && params);
     return this.getDataResult(response);
   };
 

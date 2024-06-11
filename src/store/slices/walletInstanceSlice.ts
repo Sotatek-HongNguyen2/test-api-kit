@@ -6,6 +6,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type WalletState = {
   walletInstance: Wallet | null;
   networkInstance: Network | null;
+  balance: string | number | null | undefined;
 };
 
 export type initInstancePayload = {
@@ -17,6 +18,7 @@ export type initInstancePayload = {
 const initialState: WalletState = {
   walletInstance: null,
   networkInstance: null,
+  balance: null,
 };
 
 // slice create
@@ -30,6 +32,12 @@ export const WalletInstanceSlice = createSlice({
     initializeInstance(state, action: PayloadAction<initInstancePayload>) {
       state.walletInstance = WALLETS[action.payload.walletKey];
       state.networkInstance = NETWORKS[action.payload.networkName];
+    },
+    setBalance(
+      state,
+      action: PayloadAction<string | number | null | undefined>
+    ) {
+      state.balance = action.payload;
     },
     removeInstances(state) {
       state.walletInstance = null;

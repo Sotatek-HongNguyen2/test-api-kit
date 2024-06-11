@@ -12,9 +12,10 @@ interface IOptionLogin {
 
 interface PropsOptionLogin {
   clickOptionLogin: (key: string) => void;
+  loading: boolean;
 }
 
-const OptionLogin = ({ clickOptionLogin }: PropsOptionLogin) => {
+const OptionLogin = ({ clickOptionLogin, loading }: PropsOptionLogin) => {
   const arr: IOptionLogin[] = [
     {
       name: "MetaMask",
@@ -34,24 +35,30 @@ const OptionLogin = ({ clickOptionLogin }: PropsOptionLogin) => {
 
   return (
     <div>
-      {arr.map((item: IOptionLogin) => {
-        return (
-          <Row
-            className="item-option-login"
-            key={item.key}
-            onClick={() => {
-              handleClickOptionLogin(item);
-            }}
-          >
-            <Col span={8} className="option-image">
-              <WillImage>{item.icon}</WillImage>
-            </Col>
-            <Col span={12} offset={4} className="option-name">
-              <WillText className="text-option-name">{item.name}</WillText>
-            </Col>
-          </Row>
-        );
-      })}
+      {!loading ? (
+        arr.map((item: IOptionLogin) => {
+          return (
+            <Row
+              className="item-option-login"
+              key={item.key}
+              onClick={() => {
+                handleClickOptionLogin(item);
+              }}
+            >
+              <Col span={8} className="option-image">
+                <WillImage>{item.icon}</WillImage>
+              </Col>
+              <Col span={12} offset={4} className="option-name">
+                <WillText className="text-option-name">{item.name}</WillText>
+              </Col>
+            </Row>
+          );
+        })
+      ) : (
+        <div className="position-loading">
+          <span className="loader"></span>
+        </div>
+      )}
     </div>
   );
 };
