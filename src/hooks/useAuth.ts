@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AuthServices } from "@/services/auth-service";
 import { useAppDispatch } from "@/store";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
-import { WillToast } from "@/components/atoms/Toast";
+import WillToast from "@/components/atoms/Toast";
 // Adjust the import based on your project structure
 
 const useLogin = () => {

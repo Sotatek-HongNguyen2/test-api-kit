@@ -18,7 +18,7 @@ import NETWORKS from "@/models/network";
 import { defaultAvatar } from "@/assets/images";
 import { useLogin } from "@/hooks/useAuth";
 import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
-import { WillToast } from "@/components/atoms/Toast";
+import WillToast from "@/components/atoms/Toast";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

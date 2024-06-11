@@ -9,7 +9,7 @@ export enum TOAST_TYPE {
   INFO = "info",
 }
 
-export const WillToast = (() => {
+const WillToast = (() => {
   const toastClone = _.cloneDeep(toast);
 
   const toastRender = (type: TOAST_TYPE) => {
@@ -36,3 +36,5 @@ export const WillToast = (() => {
     [TOAST_TYPE.SUCCESS]: toastRender(TOAST_TYPE.SUCCESS),
   };
 })();
+
+export default WillToast;
