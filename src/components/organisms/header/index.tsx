@@ -1,17 +1,15 @@
-import { Flex } from "antd";
-
+import { Flex } from "antd"
 import "./styles.scss";
+import { FAQIcon } from "@/assets/icons/custom-icon"
+import { AppButton, IconButton } from "@/components/atoms/button"
 import { useState } from "react";
 
 import { ConnectButton } from "@/components/molecules";
-import { AppButton, IconButton } from "@/components/atoms/button";
-import { FAQIcon } from "@/components/atoms/icons";
 import { getWalletSlice, useAppDispatch, useAppSelector } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import { DECIMALS, KEY_OPTION_LOIN } from "@/constants";
 import WALLETS from "@/models/wallet";
 import NETWORKS from "@/models/network";
-import { defaultAvatar } from "@/assets/images";
 import { useLogin } from "@/hooks/useAuth";
 import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 import WillToast from "@/components/atoms/ToastMessage";
@@ -105,9 +103,9 @@ export const Header = () => {
       </IconButton>
 
       <ConnectButton clickLogin={handelOpenModalLogin} />
-      <AppButton className="none-styles">
+      {/* <AppButton className="none-styles">
         <img src={defaultAvatar} />
-      </AppButton>
+      </AppButton> */}
       <LoginModal
         loading={loadingLogin}
         clickOptionLogin={handelClickOptionLogin}

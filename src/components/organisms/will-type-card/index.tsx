@@ -1,8 +1,8 @@
 import { Card } from "@/components/atoms/card";
-import { ConfigIcon } from "@/components/atoms/icons";
+import { ConfigIcon } from "@/assets/icons/custom-icon";
 import { Text } from "@/components/atoms/text";
 import { APP_ROUTES_PATHS } from "@/constants";
-import { Flex, Typography } from "antd";
+import { Flex } from "antd";
 import { useMemo } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom"
 
