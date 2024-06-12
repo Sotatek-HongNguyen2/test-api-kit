@@ -27,6 +27,6 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts", ".eslintrc.cjs", "src", "global.d.ts"],
+  "include": ["vite.config.ts", ".eslintrc.cjs", "src", "global.d.ts","declarations.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

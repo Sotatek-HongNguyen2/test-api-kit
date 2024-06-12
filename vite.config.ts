@@ -9,6 +9,10 @@ export default ({ mode }: { mode: string }) => {
     server: {
       port: Number(process.env.VITE_PORT),
     },
+    preview: {
+      host: "0.0.0.0",
+      port: Number(process.env.VITE_PORT),
+    },
     plugins: [react()],
     resolve: {
       alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],

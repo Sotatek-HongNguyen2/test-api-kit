@@ -1,9 +1,9 @@
-import { useClipboard } from 'use-clipboard-copy';
+// import { useClipboard } from 'use-clipboard-copy';
 
 export function useCopy() {
-  const clipboard = useClipboard({
-    copiedTimeout: 1000,
-  });
+  // const clipboard = useClipboard({
+  //   copiedTimeout: 1000,
+  // });
 
-  return clipboard;
+  return "";
 }

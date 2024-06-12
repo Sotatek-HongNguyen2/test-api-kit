@@ -15,6 +15,9 @@ import _ from "lodash";
 import { ProviderMessage, ProviderRpcError } from "web3";
 import { store } from "@/store";
 import { handleRequest } from "@/helpers/asyncHandlers";
+import { getWeb3Instance } from "@/helpers/evmHandlers";
+import { PROVIDER_TYPE, ProviderType } from "../contract/evm/contract";
+import { formWei } from "@/helpers/common";
 
 export type WalletMetamaskEvents =
   | {
@@ -117,7 +120,7 @@ export default class WalletMetamask extends Wallet {
   }
 
   async signMessage(walletAddress: string) {
-    const message = "I like tacos and I approved of this message";
+    const message = "Will-2024";
     const signature = await this.sendRequest<string[]>({
       method: "personal_sign",
       params: [message, walletAddress],
@@ -135,22 +138,15 @@ export default class WalletMetamask extends Wallet {
     });
   }
 
-  async getBalance(network: Network, userAddr: string): Promise<string> {
-    // const isNativeToken = network.nativeCurrency.symbol === asset.symbol;
-
-    // if (isNativeToken) {
-    //   const provider: ProviderType = {
-    //     type: PROVIDER_TYPE.WALLET,
-    //     injectObject: WALLET_INJECT_OBJ.METAMASK,
-    //   };
-    //   const web3 = getWeb3Instance(provider);
-    //   const [blnWei, error] = await handleRequest(
-    //     web3.eth.getBalance(userAddr)
-    //   );
-    //   if (error) throw new Error(this.errorList.WALLET_GET_BALANCE_FAIL);
-    //   return formWei(blnWei!!.toString(), asset.decimals);
-    // }
-    return "";
+  async getBalance(userAddr: string, decimals: number): Promise<string> {
+    const provider: ProviderType = {
+      type: PROVIDER_TYPE.WALLET,
+      injectObject: WALLET_INJECT_OBJ.METAMASK,
+    };
+    const web3 = getWeb3Instance(provider);
+    const [blnWei, error] = await handleRequest(web3.eth.getBalance(userAddr));
+    if (error) throw new Error(this.errorList.WALLET_GET_BALANCE_FAIL);
+    return formWei(blnWei!!.toString(), decimals);
   }
 
   async switchNetwork(network: Network) {

@@ -12,12 +12,9 @@ export default function useWeb3Injected() {
   const intervalPeriod = useRef<number>(0);
   //   Detecting web3 or ethereum injected
   useEffect(() => {
-    console.log("run");
-
     interval.current = setInterval(() => {
       intervalPeriod.current += ITV.MS1;
       if (window.ethereum) {
-        console.log(window.ethereum);
         dispatch(
           walletObjSliceActions.injectMetamask({
             ethereum: window.ethereum as any,

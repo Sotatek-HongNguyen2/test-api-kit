@@ -45,6 +45,7 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const getWalletSlice = (state: RootState) => state.wallet;
+export const getAuthSlide = (state: RootState) => state.authSlides;
 export const getWalletObjSlice = (state: RootState) => state.walletObj;
 export const getWalletInstanceSlice = (state: RootState) =>
   state.walletInstance;
