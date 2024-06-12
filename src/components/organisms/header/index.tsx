@@ -1,6 +1,6 @@
 import { Flex } from "antd"
 import "./header.scss"
-import { FAQIcon } from "@/components/atoms/icons"
+import { FAQIcon } from "@/assets/icons/custom-icon"
 import { AppButton, IconButton } from "@/components/atoms/button"
 import defaultAvatar from '@/assets/images/default-avt.png';
 import { ConnectButton } from "@/components/molecules";
