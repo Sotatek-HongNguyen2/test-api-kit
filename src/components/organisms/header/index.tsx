@@ -16,6 +16,7 @@ import NETWORKS from "@/models/network";
 import { useLogin } from "@/hooks/useAuth";
 import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 import WillToast from "@/components/atoms/ToastMessage";
+import { ConnectorKey } from "@/connectors";
 
 import LoginModal from "../LoginModal";
 
@@ -25,7 +26,7 @@ export const Header = () => {
   const dispatch = useAppDispatch();
   const { isConnected, address } = useAppSelector(getWalletSlice);
   const { signMessage, getBalance, connectWallet } = walletSliceActions;
-  const { login } = useLogin();
+  const { login, walletConnect } = useLogin();
   const [loadingLogin, setLoadingLogin] = useState<boolean>(false);
 
   const handelOpenModalLogin = async () => {
@@ -38,8 +39,14 @@ export const Header = () => {
         connectToMetamask();
         break;
       case KEY_OPTION_LOIN.walletConnect:
+        a();
         break;
     }
+  };
+
+  const a = async () => {
+    const loginResults = await walletConnect(ConnectorKey.walletConnect);
+    console.log(loginResults);
   };
 
   const connectToMetamask = async () => {
