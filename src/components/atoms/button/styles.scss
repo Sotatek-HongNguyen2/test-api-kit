@@ -7,24 +7,65 @@
   :hover {
     svg {
       path {
-        fill: #1053FF;
+        stroke: #3BBFCF;
+      }
+    }
+  }
+}
 
+.icon-button--primary-outlined {
+  background-color: white;
+  padding: 8px;
+  border: 1px solid #3BBFCF;
+  border-radius: 8px;
+  width: 40px !important;
+  height: 40px;
+  box-sizing: border-box;
+
+  svg {
+    path {
+      stroke: #3BBFCF;
+    }
+  }
+
+  &:hover {
+    svg {
+      path {
+        stroke: #646CFF;
       }
     }
   }
 }
 
 .app-button--primary {
-  background-color: #136AF3;
+  background-color: #3BBFCF;
   height: 40px;
   padding: 12px 24px;
   box-sizing: border-box;
 }
 
-.app-button--connect-btn {
-  background-color: #FDEBB6;
-  height: 32px;
-  padding: 8px 18px;
+.app-button--primary-outlined {
+  background-color: white;
+  height: 40px;
+  padding: 10px 16px;
   box-sizing: border-box;
-  border: none;
+  border: 1px solid #3BBFCF;
+  color: #0A0B0C;
+  font-weight: 600;
+
+  svg {
+    path {
+      stroke: #3BBFCF;
+    }
+  }
+
+  &:hover {
+    svg {
+      path {
+        stroke: #646CFF;
+      }
+    }
+  }
+
+
 }

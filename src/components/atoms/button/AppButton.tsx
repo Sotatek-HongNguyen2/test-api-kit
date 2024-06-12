@@ -3,8 +3,8 @@ import { Button, ButtonProps } from "antd"
 import { ButtonType } from "antd/es/button";
 import clsx from "clsx";
 
-interface AppButtonProps extends Omit<ButtonProps, 'type'> {
-  type?: ButtonType | "connect-btn"
+export interface AppButtonProps extends Omit<ButtonProps, 'type'> {
+  type?: ButtonType | "primary-outlined"
   rightIcon?: React.ReactNode
 }
 

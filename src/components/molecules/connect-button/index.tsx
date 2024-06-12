@@ -11,9 +11,12 @@ import {
 } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import { useMemo } from "react";
-import { AppButton } from "@/components/atoms/button";
+import { AppButton, IconButton } from "@/components/atoms/button";
 import useDisclosure from "@/hooks/useDisclosure";
 import clsx from "clsx";
+import { WalletIcon } from "@/assets/icons/custom-icon";
+import { Flex } from "antd";
+import { UserIcon } from "@/assets/icons/custom-icon/user-icon";
 
 interface IPropsConnectButton {
   clickLogin: () => void;
@@ -33,7 +36,7 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
     [address]
   );
   const { isOpen, onToggle } = useDisclosure();
-  const a = false;
+
   const handleClickLogin = async () => {
     clickLogin();
   };
@@ -42,18 +45,22 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
     <>
       {accessToken ? (
         <div className="connected-btn">
-          <AppButton type="connect-btn" onClick={onToggle}>
-            {displayedAddress}
-          </AppButton>
+          <Flex align="center" gap={10}>
+            <IconButton type="primary-outlined">
+              <UserIcon />
+            </IconButton>
+            <AppButton type="primary-outlined" icon={<WalletIcon />} onClick={onToggle}>
+              {displayedAddress}
+            </AppButton>
+          </Flex>
           <div className={clsx("user-balance", { visible: isOpen })}>
-            {balance}
+            {balance ?? 0}
           </div>
         </div>
       ) : (
         <AppButton
           type="primary"
           onClick={handleClickLogin}
-          rightIcon={<RightOutlined />}
         >
           Login
         </AppButton>
