@@ -1,4 +1,5 @@
-import { Col, Flex, Row } from "antd";
+import { Col, Row } from "antd";
+
 import "./styles.scss";
 import WillText from "@/components/atoms/WillText";
 import WillImage from "@/components/atoms/Image";
@@ -55,9 +56,12 @@ const OptionLogin = ({ clickOptionLogin, loading }: PropsOptionLogin) => {
           );
         })
       ) : (
-        <div className="position-loading">
-          <span className="loader"></span>
-        </div>
+        <>
+          <div className="position-loading">
+            <span className="loader"></span>
+          </div>
+          <div className="initializing">Initializing...</div>
+        </>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { getStorageJwtToken, setStorageJwtToken } from "@/helpers/storage";
+
 import { store } from "@/store";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
 
@@ -7,7 +7,7 @@ export class HttpClient {
   axiosInstance: AxiosInstance;
 
   constructor() {
-    let configs: AxiosRequestConfig = {
+    const configs: AxiosRequestConfig = {
       baseURL: import.meta.env.VITE_BASE_URL_API,
       headers: {
         "Content-Type": "application/json",

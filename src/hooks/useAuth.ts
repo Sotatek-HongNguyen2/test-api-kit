@@ -17,7 +17,6 @@ const useLogin = () => {
       const loginResults = await authService.login({
         signature: `${resSignMessage.payload}`,
       });
-
       if (
         loginResults.data.status === 201 ||
         loginResults.data.status === 200
@@ -32,7 +31,6 @@ const useLogin = () => {
             loginResults.data.data.refreshToken
           )
         );
-        // WillToast.success("Login success");
       }
       return loginResults;
     } catch (err: any) {
