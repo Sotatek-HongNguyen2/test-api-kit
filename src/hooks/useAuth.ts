@@ -4,7 +4,7 @@ import { AuthServices } from "@/services/auth-service";
 import { useAppDispatch } from "@/store";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
 import { ConnectorKey, connectors } from "@/connectors";
-import { ETH_CHAIN_ID } from "@/constants/envs";
+import { BSC_CHAIN_ID } from "@/const/envs";
 
 const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,10 +14,9 @@ const useLogin = () => {
   async function walletConnect(connectorKey: ConnectorKey) {
     const connector = connectors[connectorKey];
     try {
-      const objAddNetWork = Number(ETH_CHAIN_ID);
+      const objAddNetWork = Number(BSC_CHAIN_ID);
       await connector.activate(objAddNetWork);
     } catch (error: any) {
-      console.log(error);
       throw new Error(error.message);
     }
   }
