@@ -5,8 +5,7 @@ import { APP_ROUTES_PATHS } from "@/constants";
 import { Flex } from "antd";
 import { useMemo } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom"
-
-export type WillType = "inheritance" | 'forwarding' | 'destruction'
+import { WillType } from "@/types";
 
 export const WillTypeCard = () => {
   const { willType } = useParams<{ willType: WillType }>();

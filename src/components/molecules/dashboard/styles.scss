@@ -1,0 +1,10 @@
+.dashboard-page {
+  background-image: url('@/assets/images/layout/dashboard.png');
+  min-height: 15vh;
+  text-transform: uppercase;
+
+  h1 {
+    color: white;
+    font-size: 2.5rem;
+  }
+}

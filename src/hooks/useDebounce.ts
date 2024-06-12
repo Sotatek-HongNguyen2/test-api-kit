@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-function useDebounce(value: any, delay: number) {
-  const [valueInput, setValueInput] = useState(value);
+export function useDebounce<T>(initialValue: T, time = 600): [T, React.Dispatch<T>, T] {
+  const [valueInput, setValueInput] = useState<T>(initialValue);
+  const [debouncedValue, setDebouncedValue] = useState<T>(initialValue);
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      setValueInput(value);
-    }, delay);
+    const debounce = setTimeout(() => {
+      setDebouncedValue(valueInput);
+    }, time);
 
     return () => {
-      clearTimeout(timerId);
+      clearTimeout(debounce);
     };
-  }, [value, delay]);
+  }, [valueInput, time]);
 
-  return valueInput;
+  return useMemo(() => [debouncedValue, setValueInput, valueInput], [debouncedValue, valueInput]);
 }
-
-export default useDebounce;

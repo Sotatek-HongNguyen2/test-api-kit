@@ -1,0 +1,30 @@
+.ant-input-group-wrapper {
+  border: 1px solid #DCE0EA;
+  border-radius: 8px;
+  height: 46px;
+
+  .ant-input-wrapper {
+    height: 100%;
+
+    .ant-input-group-addon {
+      background-color: white !important;
+      border: none !important;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .ant-input {
+      border: none;
+      height: 100%;
+      padding-left: 0px;
+
+      &::placeholder {
+        font-size: 1rem;
+        color: #979BAA;
+      }
+    }
+  }
+}

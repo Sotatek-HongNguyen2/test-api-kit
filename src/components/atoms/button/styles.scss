@@ -1,3 +1,4 @@
+// ============icon-button-color================
 .app-icon-button {
   border: none;
   box-shadow: none;
@@ -37,6 +38,7 @@
   }
 }
 
+// ============ app-button-color ================
 .app-button--primary {
   background-color: #3BBFCF;
   height: 40px;
@@ -66,6 +68,10 @@
       }
     }
   }
+}
 
-
+// ============ app-button-size ================
+.app-button--xl {
+  height: 46px;
+  padding: 11px 20px 11px 24px;
 }

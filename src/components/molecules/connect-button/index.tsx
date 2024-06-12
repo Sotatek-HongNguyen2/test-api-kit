@@ -1,5 +1,4 @@
 import "./styles.scss";
-import { RightOutlined } from "@ant-design/icons";
 import NETWORKS from "@/models/network";
 import WALLETS from "@/models/wallet";
 import {
