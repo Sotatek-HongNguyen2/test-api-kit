@@ -1,7 +1,9 @@
 import { AppButton } from "@/components/atoms/button";
+import { Dashboard } from "@/components/molecules/dashboard";
 import { WillTabs } from "@/components/organisms/wil-tabs";
 import { WrapperContainer } from "@/components/organisms/wrapper-container";
 import { useLogout } from "@/hooks/useAuth";
+import { Flex } from "antd";
 
 export function HomePage() {
   const { logout, isLoading, error } = useLogout();
@@ -9,11 +11,11 @@ export function HomePage() {
     await logout();
   };
   return (
-    <WrapperContainer title="Dashboard">
+    <Flex vertical gap="5vh">
       <WillTabs />
       <AppButton type="primary" onClick={handleClickLogout}>
         Logout
       </AppButton>
-    </WrapperContainer>
+    </Flex>
   );
 }

@@ -58,6 +58,7 @@
   width: fit-content;
 }
 
+// ========app-text=======
 .font-medium {
   font-weight: 500 !important;
 }
@@ -69,6 +70,20 @@
 .font-bold {
   font-weight: 700 !important;
 }
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+// ========app-text=======
 
 .wrapper-toast {
   position: relative;

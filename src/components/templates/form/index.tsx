@@ -1,8 +1,8 @@
-import { WillType } from "@/components/organisms";
 import { useParams } from "react-router-dom";
 import { InHeritanceForm } from "./inheritance-form";
 import { ForwardingForm } from "./forwarding-form";
 import { DestructionForm } from "./destruction-form";
+import { WillType } from "@/types";
 
 export const WillForm = () => {
 

@@ -1,7 +1,8 @@
 import { Flex, Layout } from "antd";
 import "./styles.scss";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Header } from "@/components/organisms";
+import { Dashboard } from "@/components/molecules/dashboard";
 
 const { Content } = Layout;
 
@@ -17,6 +18,8 @@ export enum ThemesMode {
 }
 
 const LayoutComponent: React.FC<ILayoutProps> = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
   return (
     <div id="app-layout">
       <Layout className="container">
@@ -24,9 +27,14 @@ const LayoutComponent: React.FC<ILayoutProps> = () => {
           <Content className="site-layout-background">
             <Flex vertical>
               <Header />
-              <div className="app-page">
+              {
+                isHomePage && (
+                  <Dashboard title="My will list" />
+                )
+              }
+              <Flex vertical className="app-page">
                 <Outlet />
-              </div>
+              </Flex>
             </Flex>
           </Content>
         </Layout>

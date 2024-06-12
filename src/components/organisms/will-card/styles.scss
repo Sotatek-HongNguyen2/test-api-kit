@@ -1,0 +1,25 @@
+.will-card {
+  box-shadow: 0px 10px 12px rgba(0, 0, 0, 0.07);
+
+  .card-item--assets {
+    width: 35%;
+  }
+
+  .card-item--right-content {
+    width: 60%;
+
+    .user-icon {
+      width: 26px;
+      height: 26px;
+      border: 1px solid #3BBFCF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+
+      svg {
+        fill: #3BBFCF;
+      }
+    }
+  }
+}

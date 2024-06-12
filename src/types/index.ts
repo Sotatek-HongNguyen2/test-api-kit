@@ -1,3 +1,5 @@
+export * from './will.interface';
+
 export type BOOLEAN_REACT_DOM = 1 | 0;
 
 const KeyToVal = {
