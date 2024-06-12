@@ -1,12 +1,14 @@
-import { Button } from "antd";
 import "./styles.scss"
+import { AppButton, AppButtonProps } from "./AppButton";
+import clsx from "clsx";
 
-interface IconButtonProps {
+interface IconButtonProps extends AppButtonProps {
   children: React.ReactNode;
 }
 
 export const IconButton = (props: IconButtonProps) => {
+  const { children, type, ...restProps } = props;
   return (
-    <Button className="app-icon-button none-styles" icon={props.children} />
+    <AppButton className={clsx("app-icon-button none-styles", `icon-button--${type}`)} icon={children} {...restProps} />
   )
 }

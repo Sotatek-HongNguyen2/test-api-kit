@@ -1,8 +1,10 @@
 import { Flex } from "antd"
 import "./styles.scss";
-import { FAQIcon } from "@/assets/icons/custom-icon"
+import { ConfigIcon, FAQIcon } from "@/assets/icons/custom-icon"
 import { AppButton, IconButton } from "@/components/atoms/button"
 import { useState } from "react";
+import WillImage from "@/components/atoms/Image";
+import logo from "@/assets/images/layout/logo.png";
 
 import { ConnectButton } from "@/components/molecules";
 import { getWalletSlice, useAppDispatch, useAppSelector } from "@/store";
@@ -97,23 +99,28 @@ export const Header = () => {
   };
 
   return (
-    <Flex id="app-header" justify="flex-end" align="center" gap={10}>
-      <IconButton>
-        <FAQIcon />
-      </IconButton>
+    <Flex id="app-header" justify="space-between" align="center">
+      <WillImage src={logo} />
+      <Flex gap={20} align="center">
+        <ConnectButton clickLogin={handelOpenModalLogin} />
+        <Flex align="center">
+          <IconButton>
+            <ConfigIcon />
+          </IconButton>
+          <IconButton>
+            <FAQIcon />
+          </IconButton>
+        </Flex>
 
-      <ConnectButton clickLogin={handelOpenModalLogin} />
-      {/* <AppButton className="none-styles">
-        <img src={defaultAvatar} />
-      </AppButton> */}
-      <LoginModal
-        loading={loadingLogin}
-        clickOptionLogin={handelClickOptionLogin}
-        open={isOpen}
-        handleCancel={() => {
-          setIsOpen(false);
-        }}
-      />
+        <LoginModal
+          loading={loadingLogin}
+          clickOptionLogin={handelClickOptionLogin}
+          open={isOpen}
+          handleCancel={() => {
+            setIsOpen(false);
+          }}
+        />
+      </Flex>
     </Flex>
   );
 };

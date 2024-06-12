@@ -3,9 +3,11 @@
 
   .user-balance {
     position: absolute;
-    background-color: yellow;
+    background-color: #3BBFCF;
+    color: white;
     height: 0;
-    top: 30;
+    top: 40;
+    right: 0;
     padding: 0 18px;
     border-radius: 8px;
     overflow: hidden;
@@ -13,8 +15,11 @@
   }
 
   .user-balance.visible {
-    height: 30px;
-    top: 37px;
-    padding: 8px 18px;
+    height: 40px;
+    top: 47px;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
