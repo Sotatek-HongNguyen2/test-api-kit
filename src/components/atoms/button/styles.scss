@@ -70,6 +70,15 @@
   }
 }
 
+.app-button--normal {
+  width: fit-content;
+  padding: 0;
+
+  &:hover {
+    border-color: transparent
+  }
+}
+
 // ============ app-button-size ================
 .app-button--xl {
   height: 46px;

@@ -22,4 +22,5 @@ export interface WillData {
   activeDate: string;
   createdDate: string;
   minimumSignatures: number;
+  noteToBeneficiaries?: string;
 }

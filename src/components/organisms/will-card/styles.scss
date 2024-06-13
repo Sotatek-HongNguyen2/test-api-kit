@@ -1,5 +1,13 @@
 .will-card {
-  box-shadow: 0px 10px 12px rgba(0, 0, 0, 0.07);
+  border: none;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.07);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+  }
 
   .card-item--assets {
     width: 35%;

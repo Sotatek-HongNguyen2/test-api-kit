@@ -42,7 +42,7 @@ const beneficiaryTemp: BeneficiaryData[] = [
   }
 ]
 
-const willsData: WillData[] = [
+export const willsData: WillData[] = [
   {
     willId: 1,
     willName: 'Family will',
@@ -51,7 +51,8 @@ const willsData: WillData[] = [
     beneficiaries: beneficiaryTemp,
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
-    minimumSignatures: 2
+    minimumSignatures: 2,
+    noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom."
   },
   {
     willId: 2,
@@ -61,7 +62,8 @@ const willsData: WillData[] = [
     beneficiaries: beneficiaryTemp,
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
-    minimumSignatures: 2
+    minimumSignatures: 2,
+    noteToBeneficiaries: "note 2"
   },
   {
     willId: 3,
@@ -71,7 +73,8 @@ const willsData: WillData[] = [
     beneficiaries: beneficiaryTemp,
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
-    minimumSignatures: 2
+    minimumSignatures: 2,
+    noteToBeneficiaries: "note 3"
 
   }
 ]
