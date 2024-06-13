@@ -191,3 +191,12 @@
 .wrapper-info-toast .Toastify__progress-bar--info {
   background: #414459;
 }
+
+
+.ant-modal-mask{
+  z-index: inherit !important;
+}
+.ant-modal-wrap{
+  z-index: inherit !important;
+
+}

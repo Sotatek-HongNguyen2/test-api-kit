@@ -1,15 +1,26 @@
 import { useState } from "react";
+
 import { AuthServices } from "@/services/auth-service";
 import { useAppDispatch } from "@/store";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
-// import WillToast from "@/components/atoms/Toast";
-// Adjust the import based on your project structure
+import { ConnectorKey, connectors } from "@/connectors";
+import { BSC_CHAIN_ID } from "@/const/envs";
 
 const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [error, setError] = useState(null);
   const authService = new AuthServices();
+  async function walletConnect(connectorKey: ConnectorKey) {
+    const connector = connectors[connectorKey];
+    try {
+      const objAddNetWork = Number(BSC_CHAIN_ID);
+      await connector.activate(objAddNetWork);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   const login = async (resSignMessage: any) => {
     setIsLoading(true);
     setError(null);
@@ -17,7 +28,6 @@ const useLogin = () => {
       const loginResults = await authService.login({
         signature: `${resSignMessage.payload}`,
       });
-
       if (
         loginResults.data.status === 201 ||
         loginResults.data.status === 200
@@ -32,7 +42,6 @@ const useLogin = () => {
             loginResults.data.data.refreshToken
           )
         );
-        // WillToast.success("Login success");
       }
       return loginResults;
     } catch (err: any) {
@@ -43,7 +52,7 @@ const useLogin = () => {
     }
   };
 
-  return { login, isLoading, error };
+  return { login, walletConnect, isLoading, error };
 };
 const useLogout = () => {
   const [isLoading, setIsLoading] = useState(false);

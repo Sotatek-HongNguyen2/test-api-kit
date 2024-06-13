@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { walletInstanceSliceActions } from "./walletInstanceSlice";
-import { createAppThunk } from "..";
+
 import NETWORKS, { Network, NETWORK_NAME } from "@/models/network";
 import WALLETS, { Wallet, WALLET_NAME } from "@/models/wallet";
 import { WALLET_EVENT_NAME } from "@/models/wallet/wallet.abstract";
+
+import { createAppThunk } from "..";
+import { walletInstanceSliceActions } from "./walletInstanceSlice";
 
 // state type
 export type WalletStateConnected = {
@@ -123,10 +125,10 @@ const disconnect = createAppThunk()(
   async (_, { dispatch, getState }) => {
     const { walletInstance } = getState().walletInstance;
     // remove all listener before disconnect
-    walletInstance!!.removeListener(WALLET_EVENT_NAME.ACCOUNTS_CHANGED);
-    walletInstance!!.removeListener(WALLET_EVENT_NAME.CHAIN_CHANGED);
-    walletInstance!!.removeListener(WALLET_EVENT_NAME.DISCONNECT);
-    walletInstance!!.removeListener(WALLET_EVENT_NAME.MESSAGE);
+    walletInstance!.removeListener(WALLET_EVENT_NAME.ACCOUNTS_CHANGED);
+    walletInstance!.removeListener(WALLET_EVENT_NAME.CHAIN_CHANGED);
+    walletInstance!.removeListener(WALLET_EVENT_NAME.DISCONNECT);
+    walletInstance!.removeListener(WALLET_EVENT_NAME.MESSAGE);
     dispatch(walletSlicePrvActions.disconnectWallet());
     dispatch(walletInstanceSliceActions.removeInstances());
     return true;
