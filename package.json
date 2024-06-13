@@ -12,6 +12,7 @@
     "start": "vite start"
   },
   "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
     "@loadable/component": "^5.15.2",
     "@metamask/providers": "^17.0.0",
     "@redux-devtools/extension": "^3.3.0",

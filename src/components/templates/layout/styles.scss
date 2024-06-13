@@ -10,5 +10,9 @@
 
 .app-page {
   width: 100%;
-  background-color: transparent;
+  padding: 7vh 5vw;
+  // background-color: transparent;
+  min-height: calc(100vh - 72px);
+  background: #F6F7FB;
+
 }

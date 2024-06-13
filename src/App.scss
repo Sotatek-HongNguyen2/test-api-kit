@@ -9,7 +9,8 @@
 }
 
 * {
-  font-family: "Exo 2",
+  font-family: "Exo 2";
+  // min-height: 100vh
 }
 
 .logo {
@@ -193,10 +194,11 @@
 }
 
 
-.ant-modal-mask{
+.ant-modal-mask {
   z-index: inherit !important;
 }
-.ant-modal-wrap{
+
+.ant-modal-wrap {
   z-index: inherit !important;
 
 }

@@ -3,6 +3,8 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { store } from "@/store";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
 
+import { API_CONFIG } from "../api-config";
+
 export class HttpClient {
   axiosInstance: AxiosInstance;
 
@@ -53,7 +55,9 @@ export class HttpClient {
           try {
             const refreshToken = store.getState().authSlides.refreshToken;
             const response = await axios.post(
-              `${import.meta.env.VITE_BASE_URL_API}/refresh-token`,
+              `${import.meta.env.VITE_BASE_URL_API}${
+                API_CONFIG.auth.refreshToken
+              }`,
               { refreshToken }
             );
             const newAccessToken = response.data.accessToken;

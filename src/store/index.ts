@@ -2,8 +2,9 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import { configureStore, createAsyncThunk } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
-import rootReducer from "./slices";
 import { PersistPartial } from "redux-persist/es/persistReducer";
+
+import rootReducer from "./slices";
 
 export type RootState = ReturnType<typeof rootReducer>;
 
