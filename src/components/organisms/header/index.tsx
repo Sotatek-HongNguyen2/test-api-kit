@@ -39,12 +39,12 @@ export const Header = () => {
         connectToMetamask();
         break;
       case KEY_OPTION_LOIN.walletConnect:
-        a();
+        connect();
         break;
     }
   };
 
-  const a = async () => {
+  const connect = async () => {
     const loginResults = await walletConnect(ConnectorKey.walletConnect);
     console.log(loginResults);
   };
