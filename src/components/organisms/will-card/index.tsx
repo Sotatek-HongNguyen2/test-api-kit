@@ -7,6 +7,8 @@ import { Assets } from "./Assets";
 import { Beneficiaries } from "./Beneficiaries";
 import { WillProgress } from "./WillProgress";
 import { WillData } from "@/types";
+import { useNavigate } from "react-router-dom";
+import { APP_ROUTES_PATHS } from "@/constants";
 
 
 interface WillCardProps {
@@ -14,9 +16,10 @@ interface WillCardProps {
 }
 
 export const WillCard = ({ will }: WillCardProps) => {
+  const navigate = useNavigate();
   return (
-    <Card className="will-card">
-      <Flex vertical>
+    <Card className="will-card" onClick={() => navigate(`${APP_ROUTES_PATHS.DETAIL_WILL}/${will?.willId}`)}>
+      <Flex vertical className="">
         <Flex align="center" justify="space-between">
           <Flex vertical>
             <Text size="text-xl" className="font-bold">{will?.willName}</Text>

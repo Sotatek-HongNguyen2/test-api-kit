@@ -1,0 +1,37 @@
+.ant-table-container {
+  border: 1px solid #E6E8EC;
+  border-radius: 8px;
+
+  .ant-table-thead {
+
+    th {
+      background-color: #F6F7FB !important;
+      border-bottom: none !important;
+      text-transform: uppercase;
+      color: #6F7688 !important;
+      font-weight: 600;
+
+      &:first-child {
+        &::before {
+          display: none;
+        }
+      }
+
+      &:last-child {
+        text-align: end;
+      }
+    }
+  }
+
+  .ant-table-tbody {
+    tr {
+      td {
+        border: none !important;
+
+        &:last-child {
+          text-align: end;
+        }
+      }
+    }
+  }
+}

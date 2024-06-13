@@ -4,6 +4,7 @@ import { Flex } from "antd"
 import { WillCard } from "../../will-card"
 import { WillFilter } from "./WillFilter"
 import { WillData } from "@/types"
+import AppPagination from "@/components/molecules/Pagination"
 
 interface WillListProps {
   wills: WillData[];
@@ -25,17 +26,21 @@ export const WillList = (props: WillListProps) => {
   }
 
   return (
-    <Flex gap="5vw" justify="space-between">
+    <Flex justify="space-between" gap="5vw">
       <WillFilter />
-      <Flex vertical gap="32px" className="app-will--list">
-        <Text size="text-lg">{getTitle()}</Text>
-        {
-          wills?.map((will) => (
-            <WillCard key={`will-item-${will?.willId}`} will={will} />
-          ))
-        }
+      <Flex vertical gap="5vh" className="app-will--list">
+        <Flex vertical gap="32px">
+          <Text size="text-lg">{getTitle()}</Text>
+          {
+            wills?.map((will) => (
+              <WillCard key={`will-item-${will?.willId}`} will={will} />
+            ))
+          }
+        </Flex>
+        <Flex justify="flex-end">
+          <AppPagination total={200} />
+        </Flex>
       </Flex>
-
     </Flex>
   )
 }
