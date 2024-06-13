@@ -11,6 +11,10 @@ const { ConfigWillPage } = lazyImport(
   () => import("@/pages/ConfigWillPage"),
   "ConfigWillPage"
 );
+const { DetailsPage } = lazyImport(
+  () => import("@/pages/DetailsPage"),
+  "DetailsPage"
+);
 const { NotFound } = lazyImport(
   () => import("@/routes/components/NotFound"),
   "NotFound"
@@ -37,6 +41,17 @@ export function AppRoutes() {
                   index: true,
                   path: APP_ROUTES_PATHS.HOME,
                   element: <HomePage />,
+                },
+              ],
+            },
+
+            {
+              path: APP_ROUTES_PATHS.DETAIL_WILL,
+              element: <Outlet />,
+              children: [
+                {
+                  path: ":willId",
+                  element: <DetailsPage />,
                 },
               ],
             },

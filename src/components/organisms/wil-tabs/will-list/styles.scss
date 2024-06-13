@@ -1,13 +1,14 @@
 // ========= will filter =========
 .will-filter--container {
-  width: 30%;
+  width: 25%;
   background-color: #F6F7FB;
   padding: 20px;
   border-radius: 10px;
+  height: min-content;
+  max-width: 312px;
 }
 
 // ========= will list =========
 .app-will--list {
-  width: 65%;
-  padding: 20px;
+  width: 100%;
 }

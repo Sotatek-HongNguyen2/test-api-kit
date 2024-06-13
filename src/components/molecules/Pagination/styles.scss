@@ -1,0 +1,41 @@
+.ant-pagination {
+  a {
+    color: #8F9AA9 !important;
+    font-size: 1rem;
+  }
+
+  .ant-pagination-prev {
+    svg {
+      fill: #3BBFCF;
+      width: 15px !important;
+      height: 15px !important;
+    }
+  }
+
+  .ant-pagination-next {
+    svg {
+      fill: #3BBFCF;
+      width: 15px !important;
+      height: 15px !important;
+    }
+  }
+
+  .ant-pagination-disabled {
+    svg {
+      fill: #6F7688
+    }
+  }
+
+  .ant-pagination-item-active {
+    border-color: #3BBFCF;
+    background-color: #3BBFCF;
+
+    a {
+      color: white !important;
+    }
+
+    &:hover {
+      border-color: #3BBFCF;
+    }
+  }
+}

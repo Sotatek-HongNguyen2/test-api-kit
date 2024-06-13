@@ -1,3 +1,4 @@
+import "./styles.scss";
 import { AppButton } from "@/components/atoms/button";
 import { Dashboard } from "@/components/molecules/dashboard";
 import { WillTabs } from "@/components/organisms/wil-tabs";
@@ -11,7 +12,7 @@ export function HomePage() {
     await logout();
   };
   return (
-    <Flex vertical gap="5vh">
+    <Flex vertical gap="5vh" className="home-page">
       <WillTabs />
       <AppButton type="primary" onClick={handleClickLogout}>
         Logout

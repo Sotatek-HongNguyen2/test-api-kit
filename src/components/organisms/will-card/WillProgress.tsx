@@ -2,7 +2,7 @@ import { AppProgress } from "@/components/atoms/progress";
 import { Text } from "@/components/atoms/text";
 import { Flex } from "antd";
 
-interface WillProgressProps {
+export interface WillProgressProps {
   minimumSignatures: number;
   activeDate: string;
   createdDate: string;
