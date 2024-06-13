@@ -1,5 +1,13 @@
-import Network, { NETWORK_NAME, NETWORK_TYPE } from "../network/network";
+import Web3, { ProviderMessage, ProviderRpcError } from "web3";
+import { MetaMaskInpageProvider, RequestArguments } from "@metamask/providers";
+import _ from "lodash";
 
+import { store } from "@/store";
+import { handleRequest } from "@/helpers/asyncHandlers";
+import { getWeb3Instance } from "@/helpers/evmHandlers";
+import { formWei } from "@/helpers/common";
+
+import { PROVIDER_TYPE, ProviderType } from "../contract/evm/contract";
 import Wallet, {
   URL_INSTALL_ANDROID,
   URL_INSTALL_EXTENSION,
@@ -8,16 +16,7 @@ import Wallet, {
   WALLET_INJECT_OBJ,
   WALLET_NAME,
 } from "./wallet.abstract";
-import Web3 from "web3";
-import { MetaMaskInpageProvider, RequestArguments } from "@metamask/providers";
-import _ from "lodash";
-
-import { ProviderMessage, ProviderRpcError } from "web3";
-import { store } from "@/store";
-import { handleRequest } from "@/helpers/asyncHandlers";
-import { getWeb3Instance } from "@/helpers/evmHandlers";
-import { PROVIDER_TYPE, ProviderType } from "../contract/evm/contract";
-import { formWei } from "@/helpers/common";
+import Network, { NETWORK_NAME, NETWORK_TYPE } from "../network/network";
 
 export type WalletMetamaskEvents =
   | {
@@ -72,7 +71,7 @@ export default class WalletMetamask extends Wallet {
     const metadata = store.getState().walletObj.metamask;
     if (!metadata.isInjected)
       throw new Error(this.errorList.WALLET_NOT_INSTALLED);
-    return metadata.ethereum!!;
+    return metadata.ethereum!;
   }
 
   getProvider() {
@@ -146,7 +145,7 @@ export default class WalletMetamask extends Wallet {
     const web3 = getWeb3Instance(provider);
     const [blnWei, error] = await handleRequest(web3.eth.getBalance(userAddr));
     if (error) throw new Error(this.errorList.WALLET_GET_BALANCE_FAIL);
-    return formWei(blnWei!!.toString(), decimals);
+    return formWei(blnWei!.toString(), decimals);
   }
 
   async switchNetwork(network: Network) {

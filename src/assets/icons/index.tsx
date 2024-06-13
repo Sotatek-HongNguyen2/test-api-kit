@@ -15,3 +15,7 @@ export const ToastInfoIcon = () => (
 export const MetamaskUnavailable = () => (
   <ReactSVG src={"/icons/login/metamask-unavailable.svg"} />
 );
+
+export const NotifyNoAuth = () => (
+  <ReactSVG src={"/icons/no-auth/notify.svg"} />
+);

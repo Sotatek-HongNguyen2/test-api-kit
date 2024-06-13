@@ -1,25 +1,65 @@
 import { useState } from "react";
+// import { useWeb3React } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
 
 import { AuthServices } from "@/services/auth-service";
 import { useAppDispatch } from "@/store";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
+import { walletSliceActions } from "@/store/slices/walletSlice";
 import { ConnectorKey, connectors } from "@/connectors";
-import { BSC_CHAIN_ID } from "@/const/envs";
+import { ETH_CHAIN_ID } from "@/const/envs";
+import { NETWORK_NAME } from "@/models/network";
+import { WALLET_NAME } from "@/models/wallet";
+import { useNavigate } from "react-router-dom";
+import { APP_ROUTES_PATHS } from "@/constants";
 
 const useLogin = () => {
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [error, setError] = useState(null);
   const authService = new AuthServices();
+
   async function walletConnect(connectorKey: ConnectorKey) {
     const connector = connectors[connectorKey];
     try {
-      const objAddNetWork = Number(BSC_CHAIN_ID);
+      const objAddNetWork = Number(ETH_CHAIN_ID);
       await connector.activate(objAddNetWork);
+      const res = await handleSignMessage(connectorKey);
+      return res;
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
+
+  const handleSignMessage = async (walletType: ConnectorKey) => {
+    try {
+      const connector = connectors[walletType];
+      if (connector?.provider) {
+        const signer = new Web3Provider(connector?.provider).getSigner();
+        const accountSigner = await signer.getAddress();
+        dispatch(
+          walletSliceActions.updateAccountConnectApp({
+            address: accountSigner,
+            networkName: NETWORK_NAME.ETHEREUM,
+            walletKey: WALLET_NAME.METAMASK,
+          })
+        );
+        const signature = await signer.signMessage(
+          import.meta.env.VITE_AUTH_MESSAGE_SIGN
+        );
+        const response = await login({ payload: signature });
+        return response;
+      }
+    } catch (error: any) {
+      if (error.code === "ACTION_REJECTED") {
+        throw new Error("User denied message signature");
+      } else {
+        throw new Error(error.message);
+      }
+    }
+  };
 
   const login = async (resSignMessage: any) => {
     setIsLoading(true);
@@ -43,6 +83,8 @@ const useLogin = () => {
           )
         );
       }
+      navigate(APP_ROUTES_PATHS.HOME);
+
       return loginResults;
     } catch (err: any) {
       setError(err);

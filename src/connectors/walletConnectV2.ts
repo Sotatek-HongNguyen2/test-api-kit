@@ -1,11 +1,12 @@
-import { initializeConnector } from '@web3-react/core';
-import { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2';
+import { initializeConnector } from "@web3-react/core";
+import { WalletConnect as WalletConnectV2 } from "@web3-react/walletconnect-v2";
 
-import { BSC_CHAIN_ID, BSC_RPC_URL } from '@/const/envs';
+import { ETH_CHAIN_ID, ETH_RPC_URL } from "@/const/envs";
 
-import { CHAINS } from './chain';
+import { CHAINS } from "./chain";
 
 const [mainnet] = Object.keys(CHAINS).map(Number);
+
 export const [walletConnect, walletConnectHooks] =
   initializeConnector<WalletConnectV2>(
     (actions) =>
@@ -17,19 +18,16 @@ export const [walletConnect, walletConnectHooks] =
           showQrModal: true,
           // methods: ['personal_sign', 'eth_requestAccounts', 'eth_sign'],
           rpcMap: {
-            [BSC_CHAIN_ID]: BSC_RPC_URL,
+            [ETH_CHAIN_ID]: ETH_RPC_URL,
           },
-          qrModalOptions: {
-
-          },
+          qrModalOptions: {},
           metadata: {
-            name: 'Computing-Will',
-            description: 'Computing Will',
-            url: 'https://mydapp.com',
-            icons: ['https://mydapp.com/icon.png'],
+            name: "Computing-Will",
+            description: "Computing Will",
+            url: "https://computing-will.sotatek.works/",
+            icons: ["https://mydapp.com/icon.png"],
           },
-          events: ['accountsChanged', 'chainChanged'],
+          events: ["accountsChanged", "chainChanged"],
         },
-
-      }),
+      })
   );

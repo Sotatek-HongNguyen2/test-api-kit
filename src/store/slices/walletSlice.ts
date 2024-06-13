@@ -225,6 +225,7 @@ export const WalletSlice = createSlice({
 const walletSlicePrvActions = WalletSlice.actions;
 export const walletSliceActions = {
   updateAccount: walletSlicePrvActions.updateAccount,
+  updateAccountConnectApp: walletSlicePrvActions.connected,
   connectWallet,
   rehydrateNetworkInstance,
   changeNetwork,
