@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import "./styles.scss"
 
-type sizeType = "small" | "medium" | "large";
+type sizeType = "none" | "small" | "medium" | "large";
 
 interface CardProps {
   boxShadow?: sizeType;

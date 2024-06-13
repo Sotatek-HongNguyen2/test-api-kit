@@ -47,7 +47,7 @@ export function AppRoutes() {
 
             {
               path: APP_ROUTES_PATHS.DETAIL_WILL,
-              element: <Outlet />,
+              element: <ProtectedRoute />,
               children: [
                 {
                   path: ":willId",
