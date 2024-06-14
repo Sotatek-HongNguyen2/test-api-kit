@@ -12,6 +12,7 @@ import { NETWORK_NAME } from "@/models/network";
 import { WALLET_NAME } from "@/models/wallet";
 import { useNavigate } from "react-router-dom";
 import { APP_ROUTES_PATHS } from "@/constants";
+import WillToast from "@/components/atoms/ToastMessage";
 
 const useLogin = () => {
   const navigate = useNavigate();
@@ -26,9 +27,11 @@ const useLogin = () => {
     try {
       const objAddNetWork = Number(ETH_CHAIN_ID);
       await connector.activate(objAddNetWork);
+
       const res = await handleSignMessage(connectorKey);
       return res;
     } catch (error: any) {
+      WillToast.error(error.message);
       throw new Error(error.message);
     }
   }

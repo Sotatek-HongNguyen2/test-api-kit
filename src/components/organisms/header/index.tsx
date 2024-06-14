@@ -7,7 +7,6 @@ import { IconButton } from "@/components/atoms/button";
 import WillImage from "@/components/atoms/Image";
 import logo from "@/assets/images/layout/logo.png";
 import { ConnectButton } from "@/components/molecules";
-
 import { useHandleLogin } from "@/hooks/useHandleLogin";
 
 import LoginModal from "../LoginModal";

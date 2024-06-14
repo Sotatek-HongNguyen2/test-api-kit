@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { ToastOptions, toast } from "react-toastify";
+
 import ToastWrapper from "./ToastContainer";
 
 export enum TOAST_TYPE {

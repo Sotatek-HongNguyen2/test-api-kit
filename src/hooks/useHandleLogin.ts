@@ -34,6 +34,7 @@ export const useHandleLogin = () => {
   const connect = async () => {
     try {
       const loginResults = await walletConnect(ConnectorKey.walletConnect);
+      console.log(loginResults);
       if (
         loginResults?.data.status === 201 ||
         loginResults?.data.status === 200

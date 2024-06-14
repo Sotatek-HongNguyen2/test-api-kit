@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Flex } from "antd";
 
 import { TOAST_TYPE } from "..";
@@ -11,12 +10,9 @@ interface IToastWrapper {
 }
 
 const ToastWrapper: React.FC<IToastWrapper> = ({
-  type,
   bodyContent,
   headContent,
 }) => {
-  const { t } = useTranslation();
-
   const isHeadContentString = typeof headContent === "string";
 
   const splitedContent = isHeadContentString
@@ -37,7 +33,6 @@ const ToastWrapper: React.FC<IToastWrapper> = ({
 
   return (
     <div className="toast-body">
-      <div className={`toast-type-${type}`}>{type}</div>
       {isHeadContentString &&
       splitedContent?.length > 1 &&
       (headContent as string)?.length > 50 ? (

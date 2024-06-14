@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import WillModal from "@/components/atoms/modal";
 import OptionLogin from "@/components/molecules/OptionLogin";
@@ -17,8 +17,17 @@ const LoginModal = ({
   clickOptionLogin,
   loading,
 }: IWillModalLogin) => {
+  const [openNoMetamask, setOpenNoMetamask] = useState<boolean>(false);
   const handelClickOptionLogin = async (key: string) => {
-    clickOptionLogin(key);
+    if (key !== "metamask") {
+      clickOptionLogin(key);
+      return;
+    }
+    if (window.ethereum && window.ethereum.isMetaMask) {
+      clickOptionLogin(key);
+    } else {
+      setOpenNoMetamask(true);
+    }
   };
 
   const hasMetamask: boolean = useMemo(() => {
@@ -37,14 +46,26 @@ const LoginModal = ({
       className="will-modal-login"
       hideFooter={true}
     >
-      {hasMetamask ? (
-        <OptionLogin
-          loading={loading}
-          clickOptionLogin={handelClickOptionLogin}
+      <OptionLogin
+        loading={loading}
+        clickOptionLogin={handelClickOptionLogin}
+      />
+      <WillModal
+        width={448}
+        open={openNoMetamask}
+        title={"Connect Wallet"}
+        handleCancel={() => {
+          setOpenNoMetamask(false);
+        }}
+        className="will-modal-login"
+        hideFooter={true}
+      >
+        <MetaMaskUnavailable
+          cancel={() => {
+            setOpenNoMetamask(false);
+          }}
         />
-      ) : (
-        <MetaMaskUnavailable cancel={handleCancel} />
-      )}
+      </WillModal>
     </WillModal>
   );
 };
