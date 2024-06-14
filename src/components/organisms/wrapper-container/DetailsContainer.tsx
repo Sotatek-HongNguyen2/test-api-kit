@@ -5,21 +5,26 @@ import { ArrowOutlinedIcon } from "@/assets/icons/custom-icon";
 import { Text } from "@/components/atoms/text";
 import { RightOutlined, EditOutlined } from "@ant-design/icons";
 import { AppBadge } from "@/components/atoms/badge";
-import { WillType } from "@/types";
+import { WillMethod, WillType } from "@/types";
+import { useNavigate } from "react-router-dom";
 
 interface DetailsContainerProps {
   children: React.ReactNode;
   willName: string;
   willType: WillType;
   description: string;
-  active: boolean;
+  active: false | {
+    textSignatures: string;
+  };
+  method: WillMethod;
 }
 
 export const DetailsContainer = (props: DetailsContainerProps) => {
-  const { children, willName, willType, description } = props;
+  const { children, willName, willType, description, active, method } = props;
+  const navigate = useNavigate();
   return (
     <Flex vertical className="app-details-container" gap="32px">
-      <AppButton type="normal" >
+      <AppButton type="normal" onClick={() => navigate(-1)}>
         <Flex gap="16px">
           <ArrowOutlinedIcon />
           <Text size="text-lg" className="font-semibold">Back</Text>
@@ -35,14 +40,23 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
         </Flex>
         {children}
       </Flex>
-      <Flex justify="space-between" align="center" className="details-container--footer">
-        <AppButton size="xl" rightIcon={<RightOutlined />}>
-          <Text size="text-lg" className="uppercase neutral-1 font-bold">View smart contract</Text>
-        </AppButton>
-        <AppButton type="primary" size="xl" icon={<EditOutlined />}>
-          <Text size="text-lg" className="uppercase white font-bold">Edit will</Text>
-        </AppButton>
-      </Flex>
+      {
+        method === "created" ? (
+          <Flex justify="space-between" align="center" className="details-container--footer">
+            <AppButton size="xl" rightIcon={<RightOutlined />}>
+              <Text size="text-lg" className="uppercase neutral-1 font-bold">View smart contract</Text>
+            </AppButton>
+            <AppButton type="primary" size="xl" icon={<EditOutlined />}>
+              <Text size="text-lg" className="uppercase white font-bold">Edit will</Text>
+            </AppButton>
+          </Flex>
+        ) : active ? ( // inherited and active
+          <Flex vertical align="flex-end" gap={10}>
+            <Text className="neutral-2">{active?.textSignatures}</Text>
+            <AppButton type="primary" size="xl"><Text size="text-lg" className="uppercase font-bold">Sign to receive fund</Text></AppButton>
+          </Flex>
+        ) : null // inherited and inactive
+      }
     </Flex>
   )
 }

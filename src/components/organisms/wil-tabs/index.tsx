@@ -29,16 +29,73 @@ const assetTemp = [
 
 const beneficiaryTemp: BeneficiaryData[] = [
   {
+    id: 1,
     name: "Son",
-    walletAddress: "0x1234567890Ha2"
+    walletAddress: "0x1234567890Ha2",
+    percentage: [
+      {
+        name: 'Bitcoin',
+        sign: 'BTC',
+        percentage: 30,
+        assetIcon: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png'
+      },
+      {
+        name: 'Ethereum',
+        sign: 'ETH',
+        percentage: 30,
+        assetIcon: 'https://cryptologos.cc/logos/ethereum-eth-logo.png'
+      },
+    ]
   },
   {
+    id: 2,
     name: "Daughter",
-    walletAddress: "0x1234567890Ha3"
+    walletAddress: "0x1234567890Ha3",
+    percentage: [
+      {
+        name: 'Bitcoin',
+        sign: 'BTC',
+        percentage: 30,
+        assetIcon: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png'
+      },
+      {
+        name: 'Ethereum',
+        sign: 'ETH',
+        percentage: 30,
+        assetIcon: 'https://cryptologos.cc/logos/ethereum-eth-logo.png'
+      },
+      {
+        name: 'DMarket',
+        sign: 'DMT',
+        percentage: 50,
+        assetIcon: 'https://cryptologos.cc/logos/dmarket-dmt-logo.png?v=002'
+      }
+    ]
   },
   {
+    id: 3,
     name: "Wife",
-    walletAddress: "0x1234567890Ha4"
+    walletAddress: "0x1234567890Ha4",
+    percentage: [
+      {
+        name: 'Bitcoin',
+        sign: 'BTC',
+        percentage: 40,
+        assetIcon: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png'
+      },
+      {
+        name: 'Ethereum',
+        sign: 'ETH',
+        percentage: 40,
+        assetIcon: 'https://cryptologos.cc/logos/ethereum-eth-logo.png'
+      },
+      {
+        name: 'DMarket',
+        sign: 'DMT',
+        percentage: 50,
+        assetIcon: 'https://cryptologos.cc/logos/dmarket-dmt-logo.png?v=002'
+      }
+    ]
   }
 ]
 
@@ -52,8 +109,10 @@ export const willsData: WillData[] = [
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
     minimumSignatures: 2,
+    totalSignatures: 2,
     noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom.",
-    method: 'created'
+    method: 'created',
+    active: false
   },
   {
     willId: 2,
@@ -64,20 +123,38 @@ export const willsData: WillData[] = [
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
     minimumSignatures: 2,
+    totalSignatures: 3,
     noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom.",
-    method: 'inherited'
+    method: 'inherited',
+    active: true
   },
   {
     willId: 3,
     willName: 'Personal will',
-    willType: 'inheritance',
+    willType: 'forwarding',
     assets: assetTemp,
     beneficiaries: beneficiaryTemp,
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
     minimumSignatures: 2,
+    totalSignatures: 3,
     noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom.",
-    method: 'created'
+    method: 'created',
+    active: false
+  },
+  {
+    willId: 4,
+    willName: 'Dad will',
+    willType: 'forwarding',
+    assets: assetTemp,
+    beneficiaries: beneficiaryTemp,
+    activeDate: '2024-07-24T00:00:00Z',
+    createdDate: '2021-06-24T00:00:00Z',
+    minimumSignatures: 2,
+    totalSignatures: 3,
+    noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom.",
+    method: 'inherited',
+    active: false
   }
 ]
 

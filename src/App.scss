@@ -202,3 +202,15 @@
   z-index: inherit !important;
 
 }
+
+// scroll
+::-webkit-scrollbar {
+  background-color: #F6F7FB;
+  height: 5px;
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DCE0EA;
+  border-radius: 8px;
+}
