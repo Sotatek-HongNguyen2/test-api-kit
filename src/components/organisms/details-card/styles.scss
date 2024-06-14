@@ -16,3 +16,9 @@
     fill: #3BBFCF;
   }
 }
+
+.beneficiary-list {
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  padding-bottom: 8px;
+}

@@ -8,12 +8,13 @@ interface CardProps {
   radius?: sizeType;
   className?: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
 export const Card = (props: CardProps) => {
-  const { boxShadow = "small", radius = "small", className, children } = props;
+  const { boxShadow = "small", radius = "small", className, children, onClick } = props;
   return (
-    <div className={clsx(`app-card box-shadow-${boxShadow} radius-${radius}`, className)}>
+    <div className={clsx(`app-card box-shadow-${boxShadow} radius-${radius}`, className)} onClick={onClick}>
       {children}
     </div>
   )

@@ -14,6 +14,15 @@
   border: 1px solid #DCE0EA;
 }
 
+// ========== radius ==========
+.radius-small {
+  border-radius: 4px; // large
+}
+
+.radius-medium {
+  border-radius: 8px; // large
+}
+
 .radius-large {
   border-radius: 15px; // large
 }

@@ -14,7 +14,7 @@ interface ProgressCardProps extends WillProgressProps {
 
 export const ProgressCard = (props: ProgressCardProps) => {
   const { method, ...restProps } = props;
-  console.log('check', import.meta.env.VITE_PUBLIC_URL)
+
   return (
     <>
       {
