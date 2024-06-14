@@ -52,7 +52,8 @@ export const willsData: WillData[] = [
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
     minimumSignatures: 2,
-    noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom."
+    noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom.",
+    method: 'created'
   },
   {
     willId: 2,
@@ -63,7 +64,8 @@ export const willsData: WillData[] = [
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
     minimumSignatures: 2,
-    noteToBeneficiaries: "note 2"
+    noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom.",
+    method: 'inherited'
   },
   {
     willId: 3,
@@ -74,8 +76,8 @@ export const willsData: WillData[] = [
     activeDate: '2024-07-24T00:00:00Z',
     createdDate: '2021-06-24T00:00:00Z',
     minimumSignatures: 2,
-    noteToBeneficiaries: "note 3"
-
+    noteToBeneficiaries: "Kids, be nice.Don’t play Succession over this.Love - Mom.",
+    method: 'created'
   }
 ]
 
@@ -85,12 +87,12 @@ export const WillTabs = () => {
     {
       key: '1',
       label: 'My wills',
-      children: <WillList wills={willsData} type="created" />,
+      children: <WillList wills={willsData?.filter(will => will?.method === "created")} type="created" />,
     },
     {
       key: '2',
       label: 'My inherited wills',
-      children: <WillList wills={willsData} type="inherited" />,
+      children: <WillList wills={willsData?.filter(will => will?.method === "inherited")} type="inherited" />,
     },
   ];
 

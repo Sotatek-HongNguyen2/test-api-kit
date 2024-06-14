@@ -52,7 +52,11 @@ export const BeneficiariesCard = ({ beneficiaries }: BeneficiariesCardProps) => 
       title={`List of beneficiaries (${beneficiaries?.length ?? 0})`}
       iconTitle={<DiamondIcon />}
     >
-      <AppTable dataSource={beneficiaries} columns={columns} pagination={false} />
+      <Flex vertical gap={24}>
+        <AppTable dataSource={beneficiaries} columns={columns} pagination={false} />
+        <Text className="neutral-2">Your will consists of the following addresses as the beneficiaries once your will is activated.</Text>
+      </Flex>
+
     </CartItemContainer>
   )
 }

@@ -1,6 +1,8 @@
 
 export type WillType = "inheritance" | "forwarding" | "destruction"
 
+export type WillMethod = "inherited" | "created"
+
 export interface AssetData {
   assetIcon: string;
   name: string;
@@ -23,4 +25,5 @@ export interface WillData {
   createdDate: string;
   minimumSignatures: number;
   noteToBeneficiaries?: string;
+  method: WillMethod;
 }

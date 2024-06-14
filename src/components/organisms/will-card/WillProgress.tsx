@@ -6,10 +6,11 @@ export interface WillProgressProps {
   minimumSignatures: number;
   activeDate: string;
   createdDate: string;
+  title?: string;
 }
 
 export const WillProgress = (props: WillProgressProps) => {
-  const { minimumSignatures, activeDate, createdDate } = props;
+  const { minimumSignatures, activeDate, createdDate, title } = props;
 
   const getDays = (fromDate: string, toDate: string) => Math.floor((new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 60 * 60 * 24));
 
@@ -19,7 +20,11 @@ export const WillProgress = (props: WillProgressProps) => {
 
   return (
     <Flex vertical gap="8px">
-      <Text>This will requires a minimum of {minimumSignatures} signature{minimumSignatures > 0 ? 's' : ''} for wallet access.</Text>
+      <Text className="neutral-1">
+        {
+          title ? title : `This will requires a minimum of ${minimumSignatures} signature${minimumSignatures > 0 ? 's' : ''} for wallet access.`
+        }
+      </Text>
       <AppProgress percent={progress} />
       <Text size="text-sm" className="neutral-2">{progress}% time till activation</Text>
     </Flex>
