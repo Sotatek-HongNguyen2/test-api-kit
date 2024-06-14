@@ -4,6 +4,7 @@ import "./styles.scss";
 import WillText from "@/components/atoms/WillText";
 import WillImage from "@/components/atoms/Image";
 import { ConnectWallet, LogoMetamask } from "@/assets/icons";
+import { useLogin } from "@/hooks/useAuth";
 
 interface IOptionLogin {
   name: string;
@@ -34,6 +35,9 @@ const OptionLogin = ({ clickOptionLogin, loading }: PropsOptionLogin) => {
     clickOptionLogin(item.key);
   };
 
+  const { isUnMatchNetwork } = useLogin();
+
+  console.log(isUnMatchNetwork);
   return (
     <div>
       {!loading ? (

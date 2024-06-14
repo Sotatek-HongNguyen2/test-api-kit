@@ -82,19 +82,13 @@ export default class WalletMetamask extends Wallet {
     return (await this.getInjectedObject().request<T>(args)) as T;
   }
 
-  addListener(params: WalletMetamaskEvents, nwType?: NETWORK_TYPE) {
+  addListener(params: WalletMetamaskEvents) {
     this.getInjectedObject().on(params.eventName, params.handler as any);
   }
-  removeListener(e: WALLET_EVENT_NAME, nwType?: NETWORK_TYPE, id?: any) {
+  removeListener(e: WALLET_EVENT_NAME) {
     this.getInjectedObject().removeAllListeners(e);
   }
-  async connect(
-    network: Network,
-    onStart?: () => void,
-    onFinish?: () => void,
-    onError?: () => void,
-    whileHandle?: () => void
-  ) {
+  async connect() {
     let account: string = "";
 
     const accountArr = await this.sendRequest<string[]>({
@@ -131,7 +125,7 @@ export default class WalletMetamask extends Wallet {
     return "";
   }
 
-  async getNetwork() {
+  getNetwork() {
     return this.sendRequest<string>({
       method: "eth_chainId",
     });

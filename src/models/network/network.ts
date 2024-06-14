@@ -11,6 +11,7 @@ export enum NETWORK_TYPE {
 
 export enum EVM_CHAIN {
   MAINNET = "mainnet",
+  SEPOLIA = "sepolia",
 }
 
 export enum CHAIN_TYPE {
@@ -55,7 +56,7 @@ export const EVM_CHAINS_METADATA: Record<
   NetworkEVMChainMetadataType
 > = {
   [EVM_CHAIN.MAINNET]: {
-    chainId: "0x1",
+    chainId: "1",
     chainType: CHAIN_TYPE.MAINNET,
     chainName: "ethereum",
     provider: {
@@ -63,6 +64,16 @@ export const EVM_CHAINS_METADATA: Record<
       uri: "https://mainnet.infura.io/v3/",
     },
     scanUrl: "https://etherscan.io",
+  },
+  [EVM_CHAIN.SEPOLIA]: {
+    chainId: "11155111",
+    chainType: CHAIN_TYPE.TESTNET,
+    chainName: "sepolia",
+    provider: {
+      type: PROVIDER_TYPE.HTTPS,
+      uri: "https://rpc.sepolia.ethpandaops.io",
+    },
+    scanUrl: "https://sepolia.etherscan.io",
   },
 };
 

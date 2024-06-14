@@ -10,12 +10,14 @@ interface IWillModalLogin {
   handleCancel?: () => void;
   clickOptionLogin: (key: string) => void;
   loading: boolean;
+  children?: React.ReactNode;
 }
 const LoginModal = ({
   open,
   handleCancel,
   clickOptionLogin,
   loading,
+  children,
 }: IWillModalLogin) => {
   const [openNoMetamask, setOpenNoMetamask] = useState<boolean>(false);
   const handelClickOptionLogin = async (key: string) => {
@@ -66,6 +68,7 @@ const LoginModal = ({
           }}
         />
       </WillModal>
+      {children}
     </WillModal>
   );
 };
