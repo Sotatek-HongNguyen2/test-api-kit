@@ -58,39 +58,20 @@ export function AppRoutes() {
         {
           path: "/",
           errorElement: <ErrorPage />,
-          element: <LayoutComponent />,
+          element: <ProtectedRoute><LayoutComponent /></ProtectedRoute>,
           children: [
             {
-              path: "/",
-              element: <ProtectedRoute />,
-              children: [
-                {
-                  index: true,
-                  path: APP_ROUTES_PATHS.HOME,
-                  element: <HomePage />,
-                },
-              ],
-            },
-
-            {
-              path: APP_ROUTES_PATHS.DETAIL_WILL,
-              element: <ProtectedRoute />,
-              children: [
-                {
-                  path: ":willId",
-                  element: <DetailsPage />,
-                },
-              ],
+              index: true,
+              path: APP_ROUTES_PATHS.HOME,
+              element: <HomePage />,
             },
             {
-              path: APP_ROUTES_PATHS.CONFIG_WILL,
-              element: <ProtectedRoute />,
-              children: [
-                {
-                  path: ":willType",
-                  element: <ConfigWillPage />,
-                },
-              ],
+              path: `${APP_ROUTES_PATHS.DETAIL_WILL}/:willId`,
+              element: <DetailsPage />,
+            },
+            {
+              path: `${APP_ROUTES_PATHS.CONFIG_WILL}/:willId`,
+              element: <ConfigWillPage />,
             },
 
             {

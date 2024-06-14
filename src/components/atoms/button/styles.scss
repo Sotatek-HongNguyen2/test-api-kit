@@ -28,14 +28,6 @@
       stroke: #3BBFCF;
     }
   }
-
-  &:hover {
-    svg {
-      path {
-        stroke: #646CFF;
-      }
-    }
-  }
 }
 
 // ============ app-button-color ================
@@ -54,6 +46,7 @@
   border: 1px solid #3BBFCF;
   color: #0A0B0C;
   font-weight: 600;
+  transition: all 0.3s ease;
 
   svg {
     path {
@@ -62,11 +55,7 @@
   }
 
   &:hover {
-    svg {
-      path {
-        stroke: #646CFF;
-      }
-    }
+    border-color: #646CFF;
   }
 }
 

@@ -7,6 +7,7 @@ import { RightOutlined, EditOutlined } from "@ant-design/icons";
 import { AppBadge } from "@/components/atoms/badge";
 import { WillMethod, WillType } from "@/types";
 import { useNavigate } from "react-router-dom";
+import { APP_ROUTES_PATHS } from "@/constants";
 
 interface DetailsContainerProps {
   children: React.ReactNode;
@@ -17,11 +18,24 @@ interface DetailsContainerProps {
     textSignatures: string;
   };
   method: WillMethod;
+  contractId: string;
+  willId: string;
 }
 
 export const DetailsContainer = (props: DetailsContainerProps) => {
-  const { children, willName, willType, description, active, method } = props;
+  const { children, willName, willType, description, active, method, contractId, willId } = props;
   const navigate = useNavigate();
+
+  const viewSmartContract = () => {
+    if (contractId) {
+      window.open(`${import.meta.env.VITE_TEST_NETWORK as string}/address/${contractId}`, '_blank');
+    }
+  }
+
+  const goToEdit = () => {
+    navigate(`${APP_ROUTES_PATHS.CONFIG_WILL}/${willId}`);
+  }
+
   return (
     <Flex vertical className="app-details-container" gap="32px">
       <AppButton type="normal" onClick={() => navigate(-1)}>
@@ -43,10 +57,10 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
       {
         method === "created" ? (
           <Flex justify="space-between" align="center" className="details-container--footer">
-            <AppButton size="xl" rightIcon={<RightOutlined />}>
+            <AppButton size="xl" rightIcon={<RightOutlined />} onClick={viewSmartContract}>
               <Text size="text-lg" className="uppercase neutral-1 font-bold">View smart contract</Text>
             </AppButton>
-            <AppButton type="primary" size="xl" icon={<EditOutlined />}>
+            <AppButton type="primary" size="xl" icon={<EditOutlined />} onClick={goToEdit}>
               <Text size="text-lg" className="uppercase white font-bold">Edit will</Text>
             </AppButton>
           </Flex>

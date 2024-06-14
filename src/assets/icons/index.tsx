@@ -19,3 +19,7 @@ export const MetamaskUnavailable = () => (
 export const NotifyNoAuth = () => (
   <ReactSVG src={"/icons/no-auth/notify.svg"} />
 );
+
+export const NoData = () => (
+  <ReactSVG src={"/images/lists/no-data.svg"} />
+);

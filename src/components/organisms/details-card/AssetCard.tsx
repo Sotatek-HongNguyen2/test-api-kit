@@ -5,6 +5,7 @@ import { AppTable } from "@/components/molecules/table";
 import { ColumnsType } from "antd/es/table";
 import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { Text } from "@/components/atoms/text";
+import { assetTemp } from "../wil-tabs";
 
 interface AssetCardProps {
   assets: AssetData[];
@@ -29,10 +30,10 @@ export const AssetCard = ({ assets }: AssetCardProps) => {
 
   return (
     <CartItemContainer
-      title={`Assets (${assets?.length ?? 0})`}
+      title={`Assets (${assetTemp?.length ?? 0})`}
       iconTitle={<DiamondIcon />}
     >
-      <AppTable dataSource={assets} columns={columns} pagination={false} />
+      <AppTable dataSource={assetTemp} columns={columns} pagination={false} />
     </CartItemContainer>
   )
 }

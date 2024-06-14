@@ -18,12 +18,12 @@ interface WillCardProps {
 export const WillCard = ({ will }: WillCardProps) => {
   const navigate = useNavigate();
   return (
-    <Card className="will-card" onClick={() => navigate(`${APP_ROUTES_PATHS.DETAIL_WILL}/${will?.willId}`)}>
+    <Card className="will-card" onClick={() => navigate(`${APP_ROUTES_PATHS.DETAIL_WILL}/${will?.id}`)}>
       <Flex vertical className="">
         <Flex align="center" justify="space-between">
           <Flex vertical>
-            <Text size="text-xl" className="font-bold">{will?.willName}</Text>
-            <Text size="text-md" className="capitalize neutral-2">{will?.willType}</Text>
+            <Text size="text-xl" className="font-bold">{will?.name}</Text>
+            <Text size="text-md" className="capitalize neutral-2">{will?.type}</Text>
           </Flex>
           <IconButton>
             <RightOutlined />
@@ -31,11 +31,11 @@ export const WillCard = ({ will }: WillCardProps) => {
         </Flex>
         <Divider />
         <Flex justify="space-between" gap="10px">
-          <Assets assets={will?.assets} />
+          <Assets assets={will?.willAsset} />
           <Flex vertical className="card-item--right-content" gap="12px">
-            <Beneficiaries beneficiaries={will?.beneficiaries} />
+            <Beneficiaries beneficiaries={will?.willDetail} />
             <Divider />
-            <WillProgress activeDate={will?.activeDate} createdDate={will?.createdDate} minimumSignatures={will?.minimumSignatures} />
+            <WillProgress activeDate={will?.expTime} createdDate={will?.createdAt} minimumSignatures={will?.minSignature} />
           </Flex>
         </Flex>
       </Flex>
