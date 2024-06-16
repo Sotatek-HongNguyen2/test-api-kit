@@ -1,10 +1,15 @@
 import { Col, Row } from "antd";
 
 import "./styles.scss";
+import { useDispatch, useSelector } from "react-redux";
+
 import WillText from "@/components/atoms/WillText";
 import WillImage from "@/components/atoms/Image";
 import { ConnectWallet, LogoMetamask } from "@/assets/icons";
-import { useLogin } from "@/hooks/useAuth";
+import { getCommonSlides } from "@/store";
+import { commonInstanceSlideActions } from "@/store/slices/common";
+
+import NetworkUnSupport from "../NetworkUnSupport";
 
 interface IOptionLogin {
   name: string;
@@ -18,6 +23,8 @@ interface PropsOptionLogin {
 }
 
 const OptionLogin = ({ clickOptionLogin, loading }: PropsOptionLogin) => {
+  const dispatch = useDispatch();
+  const { isMatchNetwork } = useSelector(getCommonSlides);
   const arr: IOptionLogin[] = [
     {
       name: "MetaMask",
@@ -35,37 +42,52 @@ const OptionLogin = ({ clickOptionLogin, loading }: PropsOptionLogin) => {
     clickOptionLogin(item.key);
   };
 
-  const { isUnMatchNetwork } = useLogin();
+  const disconnectWallet = () => {
+    dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true));
+    console.log("isMatchNetwork", isMatchNetwork);
+    localStorage.clear();
+  };
 
-  console.log(isUnMatchNetwork);
+  const renderOptions = () => {
+    return (
+      <>
+        {!loading ? (
+          arr.map((item: IOptionLogin) => {
+            return (
+              <Row
+                className="item-option-login"
+                key={item.key}
+                onClick={() => {
+                  handleClickOptionLogin(item);
+                }}
+              >
+                <Col span={8} className="option-image">
+                  <WillImage>{item.icon}</WillImage>
+                </Col>
+                <Col span={12} offset={4} className="option-name">
+                  <WillText className="text-option-name">{item.name}</WillText>
+                </Col>
+              </Row>
+            );
+          })
+        ) : (
+          <>
+            <div className="position-loading">
+              <span className="loader"></span>
+            </div>
+            <div className="initializing">Initializing...</div>
+          </>
+        )}
+      </>
+    );
+  };
+
   return (
     <div>
-      {!loading ? (
-        arr.map((item: IOptionLogin) => {
-          return (
-            <Row
-              className="item-option-login"
-              key={item.key}
-              onClick={() => {
-                handleClickOptionLogin(item);
-              }}
-            >
-              <Col span={8} className="option-image">
-                <WillImage>{item.icon}</WillImage>
-              </Col>
-              <Col span={12} offset={4} className="option-name">
-                <WillText className="text-option-name">{item.name}</WillText>
-              </Col>
-            </Row>
-          );
-        })
+      {isMatchNetwork ? (
+        renderOptions()
       ) : (
-        <>
-          <div className="position-loading">
-            <span className="loader"></span>
-          </div>
-          <div className="initializing">Initializing...</div>
-        </>
+        <NetworkUnSupport cancel={disconnectWallet} />
       )}
     </div>
   );

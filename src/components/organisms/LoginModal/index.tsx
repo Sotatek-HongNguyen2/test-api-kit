@@ -55,7 +55,7 @@ const LoginModal = ({
       <WillModal
         width={448}
         open={openNoMetamask}
-        title={"Connect Wallet"}
+        title={""}
         handleCancel={() => {
           setOpenNoMetamask(false);
         }}

@@ -14,6 +14,7 @@ import { WALLET_NAME } from "@/models/wallet";
 import { APP_ROUTES_PATHS } from "@/constants";
 import WillToast from "@/components/atoms/ToastMessage";
 import { EVM_CHAINS_METADATA } from "@/models/network/network";
+import { commonInstanceSlideActions } from "@/store/slices/common";
 
 const useLogin = () => {
   const navigate = useNavigate();
@@ -32,8 +33,12 @@ const useLogin = () => {
       await connector.activate(objAddNetWork);
 
       const res = await handleSignMessage(connectorKey);
+      await connector.resetState()
+
       return res;
     } catch (error: any) {
+      await connector.resetState()
+
       WillToast.error(error.message);
       throw new Error(error.message);
     }
@@ -48,17 +53,13 @@ const useLogin = () => {
         const signerNetwork = await signer.getChainId();
 
         const isMatch =
-          `${signerNetwork}` !== EVM_CHAINS_METADATA.mainnet.chainId;
-        // ||
-        // `${signerNetwork}` !== EVM_CHAINS_METADATA.sepolia.chainId;
-        console.log(
-          `${signerNetwork}` !== EVM_CHAINS_METADATA.mainnet.chainId,
-          EVM_CHAINS_METADATA.mainnet.chainId,
-          EVM_CHAINS_METADATA.sepolia.chainId,
-          isMatch
-        );
+          `${signerNetwork}` === EVM_CHAINS_METADATA.mainnet.chainId ||
+          `${signerNetwork}` === EVM_CHAINS_METADATA.sepolia.chainId;
+
         setIsUnMatchNetwork(isMatch);
-        console.log(isUnMatchNetwork, "isUnMatchNetwork");
+
+        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(isMatch))
+
         dispatch(
           walletSliceActions.updateAccountConnectApp({
             address: accountSigner,
@@ -70,9 +71,12 @@ const useLogin = () => {
           import.meta.env.VITE_AUTH_MESSAGE_SIGN
         );
         const response = await login({ payload: signature });
+        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true))
+
         return response;
       }
     } catch (error: any) {
+      dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true))
       if (error.code === "ACTION_REJECTED") {
         throw new Error("User denied message signature");
       } else {

@@ -1,5 +1,4 @@
 import { MetamaskUnavailable } from "@/assets/icons";
-
 import { AppButton } from "@/components/atoms/button";
 import "./styles.scss";
 
