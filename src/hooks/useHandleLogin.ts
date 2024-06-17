@@ -24,6 +24,7 @@ export const useHandleLogin = () => {
   const handelClickOptionLogin = (key: string) => {
     switch (key) {
       case KEY_OPTION_LOIN.metaMask:
+        console.log("object");
         connectToMetamask();
         break;
       case KEY_OPTION_LOIN.walletConnect:
@@ -51,6 +52,7 @@ export const useHandleLogin = () => {
 
   const connectToMetamask = async () => {
     setLoadingLogin(true);
+
     if (!isConnected) {
       const connectResult = (await dispatch(
         connectWallet({
@@ -84,8 +86,8 @@ export const useHandleLogin = () => {
         )) as any;
         const netWorkID = await WALLETS.metamask.getNetwork();
         if (
-          netWorkID !== EVM_CHAINS_METADATA.mainnet.chainId ||
-          netWorkID !== EVM_CHAINS_METADATA.sepolia.chainId
+          netWorkID !== EVM_CHAINS_METADATA.mainnet.hexChainId &&
+          netWorkID !== EVM_CHAINS_METADATA.sepolia.hexChainId
         ) {
           setUnSupportNetwork(true);
           return;

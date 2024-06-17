@@ -40,6 +40,7 @@ export type NativeCurrency = {
 
 export type NetworkEVMChainMetadataType = {
   chainId: string;
+  hexChainId: string;
   chainType: CHAIN_TYPE;
   chainName: string;
   provider: NetworkEVMProviderType;
@@ -57,6 +58,7 @@ export const EVM_CHAINS_METADATA: Record<
 > = {
   [EVM_CHAIN.MAINNET]: {
     chainId: "1",
+    hexChainId: "0x1",
     chainType: CHAIN_TYPE.MAINNET,
     chainName: "ethereum",
     provider: {
@@ -67,6 +69,8 @@ export const EVM_CHAINS_METADATA: Record<
   },
   [EVM_CHAIN.SEPOLIA]: {
     chainId: "11155111",
+    hexChainId: "0xaa36a7",
+
     chainType: CHAIN_TYPE.TESTNET,
     chainName: "sepolia",
     provider: {

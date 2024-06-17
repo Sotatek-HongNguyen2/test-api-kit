@@ -33,12 +33,9 @@ const useLogin = () => {
       await connector.activate(objAddNetWork);
 
       const res = await handleSignMessage(connectorKey);
-      await connector.resetState()
-
       return res;
     } catch (error: any) {
-      await connector.resetState()
-
+      connector.deactivate && (await connector.deactivate());
       WillToast.error(error.message);
       throw new Error(error.message);
     }
@@ -47,6 +44,7 @@ const useLogin = () => {
   const handleSignMessage = async (walletType: ConnectorKey) => {
     try {
       const connector = connectors[walletType];
+      console.log(connector);
       if (connector?.provider) {
         const signer = new Web3Provider(connector?.provider).getSigner();
         const accountSigner = await signer.getAddress();
@@ -58,7 +56,7 @@ const useLogin = () => {
 
         setIsUnMatchNetwork(isMatch);
 
-        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(isMatch))
+        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(isMatch));
 
         dispatch(
           walletSliceActions.updateAccountConnectApp({
@@ -71,12 +69,12 @@ const useLogin = () => {
           import.meta.env.VITE_AUTH_MESSAGE_SIGN
         );
         const response = await login({ payload: signature });
-        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true))
+        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true));
 
         return response;
       }
     } catch (error: any) {
-      dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true))
+      dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true));
       if (error.code === "ACTION_REJECTED") {
         throw new Error("User denied message signature");
       } else {
