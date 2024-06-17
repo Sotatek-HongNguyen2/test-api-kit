@@ -1,14 +1,14 @@
-import { PaginationParams } from "@/types/global";
+import { SearchParams } from "@/types/global";
 import { API_CONFIG } from "./api-config";
 import { ServiceBase } from "./core/service-base";
 
 export class WillServices extends ServiceBase {
-  getMyWill = async (params: PaginationParams) => {
+  getMyWill = async (params: SearchParams) => {
     const res: any = await this.get(API_CONFIG.will.myWill, params);
     return res?.data?.data;
   };
 
-  getMyInheritedWill = async (params: PaginationParams) => {
+  getMyInheritedWill = async (params: SearchParams) => {
     const res: any = await this.get(API_CONFIG.will.myInheritedWill, params);
     return res?.data?.data;
   };

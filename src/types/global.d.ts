@@ -39,7 +39,8 @@ interface Window {
   themes: IThemes;
 }
 
-export interface PaginationParams {
+export interface SearchParams {
   limit: number;
   page: number;
+  [key: string]: any;
 }

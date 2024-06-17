@@ -1,4 +1,3 @@
-import { Text } from "@/components/atoms/text"
 import { CustomRadioItemProps, RadioGroup } from "@/components/molecules/radio-group"
 import { SearchInput } from "@/components/molecules/search-input"
 import { Flex } from "antd"
@@ -26,11 +25,16 @@ const items: CustomRadioItemProps[] = [
   }
 ]
 
-export const WillFilter = () => {
+interface WillFilterProps {
+  onSearch: (value: string | undefined) => void;
+  onFilter: (value: CustomRadioItemProps['value']) => void;
+}
+
+export const WillFilter = ({ onSearch, onFilter }: WillFilterProps) => {
   return (
     <Flex vertical className="will-filter--container" gap="24px">
-      <SearchInput placeholder="Search by will name" onHandleSearch={() => { }} />
-      <RadioGroup title="Type" items={items} />
+      <SearchInput placeholder="Search by will name" onHandleSearch={onSearch} />
+      <RadioGroup title="Type" items={items} onChange={onFilter} />
     </Flex>
   )
 }
