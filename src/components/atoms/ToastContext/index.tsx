@@ -53,7 +53,7 @@ const ToastContext = () => {
       closeOnClick
       autoClose={5000}
       draggable={false}
-      hideProgressBar={false}
+      // hideProgressBar={false}
       pauseOnHover={false}
       position="top-right"
       limit={5}

@@ -224,3 +224,7 @@
   background: #DCE0EA;
   border-radius: 8px;
 }
+
+:where(.css-dev-only-do-not-override-3rel02).ant-modal .ant-modal-close:hover {
+  border-radius: 50%;
+}

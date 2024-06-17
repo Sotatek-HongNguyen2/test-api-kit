@@ -58,7 +58,11 @@ export function AppRoutes() {
         {
           path: "/",
           errorElement: <ErrorPage />,
-          element: <ProtectedRoute><LayoutComponent /></ProtectedRoute>,
+          element: (
+            <ProtectedRoute>
+              <LayoutComponent />
+            </ProtectedRoute>
+          ),
           children: [
             {
               index: true,

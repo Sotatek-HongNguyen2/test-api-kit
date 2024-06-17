@@ -4,6 +4,8 @@ import WillModal from "@/components/atoms/modal";
 import OptionLogin from "@/components/molecules/OptionLogin";
 import MetaMaskUnavailable from "@/components/molecules/MetamaskUnavailable";
 
+import "./styles.scss";
+
 interface IWillModalLogin {
   open: boolean;
   handleOk?: () => void;
@@ -34,9 +36,9 @@ const LoginModal = ({
 
   const hasMetamask: boolean = useMemo(() => {
     if (window.ethereum && window.ethereum.isMetaMask) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }, [open]);
 
   return (

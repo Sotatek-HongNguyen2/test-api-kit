@@ -34,8 +34,14 @@
 .app-button--primary {
   background-color: #3BBFCF;
   height: 40px;
-  padding: 12px 24px;
+  padding: 8px 16px;
   box-sizing: border-box;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: left;
+
 }
 
 .app-button--primary-outlined {

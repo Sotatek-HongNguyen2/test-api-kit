@@ -10,7 +10,7 @@ export function ProtectedRoute({ children }: { children?: JSX.Element }) {
   const { accessToken } = useAppSelector(getAuthSlide);
   const { logout } = useLogout();
   useEffect(() => {
-    if (!window?.ethereum?.isMetaMask) {
+    if (!window?.ethereum?.isMetaMask && accessToken) {
       logout();
     }
   }, [window?.ethereum?.isMetaMask]);
