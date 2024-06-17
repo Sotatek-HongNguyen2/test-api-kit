@@ -34,6 +34,7 @@ export default function useWalletEvents() {
               decimals: DECIMALS.ETH,
             })
           );
+          console.log(resGetBalance);
           await dispatch(
             walletInstanceSliceActions.setBalance(`${resGetBalance.payload}`)
           );

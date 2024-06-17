@@ -1,7 +1,8 @@
+import { useEffect, useRef } from "react";
+
 import ITV from "@/constants/time";
 import { getWalletObjSlice, useAppDispatch, useAppSelector } from "@/store";
 import { walletObjSliceActions } from "@/store/slices/walletObjSlice";
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
 
 const maxIntervalPeriod = 5000;
 

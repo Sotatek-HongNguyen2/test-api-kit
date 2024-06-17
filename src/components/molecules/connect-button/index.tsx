@@ -15,7 +15,7 @@ import { AppButton, IconButton } from "@/components/atoms/button";
 // import useDisclosure from "@/hooks/useDisclosure";
 import { WalletIcon } from "@/assets/icons/custom-icon";
 import { UserIcon } from "@/assets/icons/custom-icon/user-icon";
-import { Logout, Wallet } from "@/assets/icons";
+import { LogoETH, Logout, Wallet } from "@/assets/icons";
 import { ConnectorKey, connectors } from "@/connectors";
 import { WALLET_NAME } from "@/models/wallet";
 import { walletSliceActions } from "@/store/slices/walletSlice";
@@ -74,7 +74,42 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
     },
     {
       key: "2",
-      label: <div className={clsx("user-balance")}>{balance ?? 0}</div>,
+      label: (
+        <div className="item-menu space-between">
+          <span className="d-flex align-center g-8">
+            <LogoETH />
+            <span>Ethereum</span>
+            <span className="symbol">ETH</span>
+          </span>
+          <span>{balance}</span>
+        </div>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <div className="item-menu space-between">
+          <span className="d-flex align-center g-8">
+            <LogoETH />
+            <span>Ethereum</span>
+            <span className="symbol">ETH</span>
+          </span>
+          <span>{balance}</span>
+        </div>
+      ),
+    },
+    {
+      key: "4",
+      label: (
+        <div className="item-menu space-between">
+          <span className="d-flex align-center g-8">
+            <LogoETH />
+            <span>Ethereum</span>
+            <span className="symbol">ETH</span>
+          </span>
+          <span>{balance}</span>
+        </div>
+      ),
     },
   ];
 
