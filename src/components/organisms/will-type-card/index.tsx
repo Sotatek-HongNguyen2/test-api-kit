@@ -1,5 +1,5 @@
 import { Card } from "@/components/atoms/card";
-import { ConfigIcon } from "@/assets/icons/custom-icon";
+import { ConfigIcon, DiamondIcon } from "@/assets/icons/custom-icon";
 import { Text } from "@/components/atoms/text";
 import { APP_ROUTES_PATHS } from "@/constants";
 import { Flex } from "antd";
@@ -25,7 +25,10 @@ export const WillTypeCard = () => {
     if (willType === 'inheritance')
       return {
         title: "Inheritance",
-        description: "When activated, a minimum number of co-signatures will be required for beneficiaries to access your wallet."
+        description: <Flex vertical>
+          <Text size="text-sm" className="neutral-2">When activated, your fund will be deposited into the Safe wallet.</Text>
+          <Text size="text-sm" className="neutral-2">A minimum number of co-signatures will be required for beneficiaries to claim the fund in Safe.</Text>
+        </Flex>
       }
     if (willType === 'forwarding')
       return {
@@ -41,12 +44,17 @@ export const WillTypeCard = () => {
 
   return (
     <Card>
-      <Flex vertical gap={20}>
-        <Flex gap={10} align="center">
-          <ConfigIcon />
-          <Text>{willTypeData?.title}</Text>
+      <Flex gap={20}>
+        <DiamondIcon />
+        <Flex vertical gap={10}>
+          <Text size="text-lg" className="font-semibold neutral-1">{willTypeData?.title}</Text>
+          {
+            willTypeData?.description && typeof willTypeData?.description === 'string' ?
+              <Text size="text-sm" className="neutral-2">{willTypeData?.description}</Text>
+              :
+              willTypeData?.description
+          }
         </Flex>
-        <Text>{willTypeData?.description}</Text>
       </Flex>
     </Card>
   )

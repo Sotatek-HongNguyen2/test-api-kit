@@ -4,7 +4,7 @@ export enum HomePaths {
 }
 
 export enum WillPaths {
-  CREATE_WILL = "/create-will",
+  EDIT_WILL = "/edit",
   DETAIL_WILL = "/detail",
   CONFIG_WILL = "/config",
 }

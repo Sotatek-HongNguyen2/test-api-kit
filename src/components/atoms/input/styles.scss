@@ -1,0 +1,27 @@
+.ant-input {
+  border: 1px solid #DCE0EA;
+  min-height: 46px;
+  border-radius: 8px;
+  font-size: 1rem;
+
+  &::placeholder {
+    color: #6F7688;
+    font-size: 1rem;
+  }
+
+  &:focus {
+    border-color: #3BBFCF;
+    box-shadow: none;
+  }
+
+  // hide number input arrows
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+
+  &[type=number] {
+    -moz-appearance: textfield !important;
+  }
+}

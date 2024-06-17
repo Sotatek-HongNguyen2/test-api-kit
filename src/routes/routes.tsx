@@ -74,7 +74,7 @@ export function AppRoutes() {
               element: <DetailsPage />,
             },
             {
-              path: `${APP_ROUTES_PATHS.CONFIG_WILL}/:willId`,
+              path: `${APP_ROUTES_PATHS.CONFIG_WILL}/:willType`,
               element: <ConfigWillPage />,
             },
 

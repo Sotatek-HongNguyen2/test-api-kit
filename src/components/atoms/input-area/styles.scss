@@ -1,0 +1,14 @@
+.app-text-area {
+  min-height: 88px !important;
+  font-size: 1rem;
+
+  &::placeholder {
+    font-size: 1rem;
+    color: #BCC0CD
+  }
+
+  &:focus {
+    border-color: #3BBFCF;
+    box-shadow: none;
+  }
+}
