@@ -1,6 +1,7 @@
 import { useState } from "react";
 // import { useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
+import { useNavigate } from "react-router-dom";
 
 import { AuthServices } from "@/services/auth-service";
 import { useAppDispatch } from "@/store";
@@ -10,9 +11,10 @@ import { ConnectorKey, connectors } from "@/connectors";
 import { ETH_CHAIN_ID } from "@/const/envs";
 import { NETWORK_NAME } from "@/models/network";
 import { WALLET_NAME } from "@/models/wallet";
-import { useNavigate } from "react-router-dom";
 import { APP_ROUTES_PATHS } from "@/constants";
 import WillToast from "@/components/atoms/ToastMessage";
+import { EVM_CHAINS_METADATA } from "@/models/network/network";
+import { commonInstanceSlideActions } from "@/store/slices/common";
 
 const useLogin = () => {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ const useLogin = () => {
   const [error, setError] = useState(null);
   const authService = new AuthServices();
 
+  const [isUnMatchNetwork, setIsUnMatchNetwork] = useState<boolean>(false);
+
   async function walletConnect(connectorKey: ConnectorKey) {
     const connector = connectors[connectorKey];
     try {
@@ -29,8 +33,12 @@ const useLogin = () => {
       await connector.activate(objAddNetWork);
 
       const res = await handleSignMessage(connectorKey);
+      await connector.resetState()
+
       return res;
     } catch (error: any) {
+      await connector.resetState()
+
       WillToast.error(error.message);
       throw new Error(error.message);
     }
@@ -42,6 +50,16 @@ const useLogin = () => {
       if (connector?.provider) {
         const signer = new Web3Provider(connector?.provider).getSigner();
         const accountSigner = await signer.getAddress();
+        const signerNetwork = await signer.getChainId();
+
+        const isMatch =
+          `${signerNetwork}` === EVM_CHAINS_METADATA.mainnet.chainId ||
+          `${signerNetwork}` === EVM_CHAINS_METADATA.sepolia.chainId;
+
+        setIsUnMatchNetwork(isMatch);
+
+        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(isMatch))
+
         dispatch(
           walletSliceActions.updateAccountConnectApp({
             address: accountSigner,
@@ -53,9 +71,12 @@ const useLogin = () => {
           import.meta.env.VITE_AUTH_MESSAGE_SIGN
         );
         const response = await login({ payload: signature });
+        dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true))
+
         return response;
       }
     } catch (error: any) {
+      dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true))
       if (error.code === "ACTION_REJECTED") {
         throw new Error("User denied message signature");
       } else {
@@ -97,7 +118,7 @@ const useLogin = () => {
     }
   };
 
-  return { login, walletConnect, isLoading, error };
+  return { login, walletConnect, isLoading, error, isUnMatchNetwork };
 };
 const useLogout = () => {
   const [isLoading, setIsLoading] = useState(false);

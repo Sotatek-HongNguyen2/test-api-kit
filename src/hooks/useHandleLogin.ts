@@ -10,6 +10,7 @@ import { getWalletSlice, useAppDispatch } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import WillToast from "@/components/atoms/ToastMessage";
 import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
+import { EVM_CHAINS_METADATA } from "@/models/network/network";
 
 export const useHandleLogin = () => {
   const [loadingLogin, setLoadingLogin] = useState(false);
@@ -18,6 +19,7 @@ export const useHandleLogin = () => {
   const { signMessage, getBalance, connectWallet } = walletSliceActions;
   const { login, walletConnect } = useLogin();
   const [isOpen, setIsOpen] = useState(false);
+  const [unSupportNotwork, setUnSupportNetwork] = useState<boolean>(false);
 
   const handelClickOptionLogin = (key: string) => {
     switch (key) {
@@ -34,7 +36,6 @@ export const useHandleLogin = () => {
   const connect = async () => {
     try {
       const loginResults = await walletConnect(ConnectorKey.walletConnect);
-      console.log(loginResults);
       if (
         loginResults?.data.status === 201 ||
         loginResults?.data.status === 200
@@ -81,6 +82,15 @@ export const useHandleLogin = () => {
             address: strAddress,
           })
         )) as any;
+        const netWorkID = await WALLETS.metamask.getNetwork();
+        if (
+          netWorkID !== EVM_CHAINS_METADATA.mainnet.chainId ||
+          netWorkID !== EVM_CHAINS_METADATA.sepolia.chainId
+        ) {
+          setUnSupportNetwork(true);
+          return;
+        }
+
         if (resSignMessage?.error) {
           setLoadingLogin(false);
           WillToast.error(resSignMessage.error.message);
@@ -121,5 +131,7 @@ export const useHandleLogin = () => {
     setIsOpen,
     loadingLogin,
     setLoadingLogin,
+    unSupportNotwork,
+    setUnSupportNetwork,
   };
 };

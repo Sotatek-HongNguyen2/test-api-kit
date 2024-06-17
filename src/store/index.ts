@@ -12,7 +12,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: ["walletObj", "walletInstance"],
+  blacklist: ["walletObj", "walletInstance", "commonSlides"],
 };
 
 export const store = configureStore<RootState & PersistPartial>({
@@ -48,5 +48,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const getWalletSlice = (state: RootState) => state.wallet;
 export const getAuthSlide = (state: RootState) => state.authSlides;
 export const getWalletObjSlice = (state: RootState) => state.walletObj;
+export const getCommonSlides = (state: RootState) => state.commonSlides;
+
 export const getWalletInstanceSlice = (state: RootState) =>
   state.walletInstance;

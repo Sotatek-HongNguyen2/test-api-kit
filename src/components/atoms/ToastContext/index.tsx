@@ -1,6 +1,11 @@
 import { IconProps, ToastContainer } from "react-toastify";
 
-import { ToastCloseIcon, ToastInfoIcon } from "@/assets/icons";
+import {
+  IconError,
+  IconSuccess,
+  ToastCloseIcon,
+  ToastInfoIcon,
+} from "@/assets/icons";
 
 const ToastContext = () => {
   return (
@@ -10,15 +15,15 @@ const ToastContext = () => {
           case "info":
             return <ToastInfoIcon />;
           case "error":
-            return <ToastInfoIcon />;
+            return <IconError />;
           case "success":
-            return <ToastInfoIcon />;
+            return <IconSuccess />;
           case "warning":
             return <ToastInfoIcon />;
           case "default":
-            return <ToastInfoIcon />;
+            return <IconSuccess />;
           default:
-            return <ToastInfoIcon />;
+            return <IconSuccess />;
         }
       }}
       closeButton={() => (

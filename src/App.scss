@@ -147,19 +147,29 @@
 }
 
 .wrapper-error-toast {
-  background: #a30000;
+  background: #FFE8E7;
+  border: thin dashed #FF463D;
 }
 
 .wrapper-error-toast .toast-body__top {
-  color: #eef4ff;
+  color: #0A0B0C;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: left;
 }
 
 .wrapper-success-toast {
-  background: green;
+  background: #EEF7E1;
+  border: thin dashed #7ABF1A
 }
 
 .wrapper-success-toast .toast-body__top {
-  color: #eef4ff;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: left;
+  color: #0A0B0C;
 }
 
 .wrapper-dark-toast {

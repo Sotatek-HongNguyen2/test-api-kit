@@ -1,5 +1,3 @@
-import NETWORKS, { Network, NETWORK_NAME } from "@/models/network";
-import WALLETS, { Wallet, WALLET_NAME } from "@/models/wallet";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // state type
