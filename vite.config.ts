@@ -7,11 +7,11 @@ export default ({ mode }: { mode: string }) => {
 
   return defineConfig({
     server: {
-      port: 3009, //Number(process.env.VITE_PORT),
+      port: Number(process.env.VITE_PORT),
     },
     preview: {
       host: "0.0.0.0",
-      port: 3009, //Number(process.env.VITE_PORT),
+      port: Number(process.env.VITE_PORT),
     },
     plugins: [react()],
     resolve: {
