@@ -226,6 +226,7 @@ const walletSlicePrvActions = WalletSlice.actions;
 export const walletSliceActions = {
   updateAccount: walletSlicePrvActions.updateAccount,
   updateAccountConnectApp: walletSlicePrvActions.connected,
+  logout: walletSlicePrvActions.disconnectWallet,
   connectWallet,
   rehydrateNetworkInstance,
   changeNetwork,
