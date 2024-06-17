@@ -24,7 +24,6 @@ export const useHandleLogin = () => {
   const handelClickOptionLogin = (key: string) => {
     switch (key) {
       case KEY_OPTION_LOIN.metaMask:
-        console.log("object");
         connectToMetamask();
         break;
       case KEY_OPTION_LOIN.walletConnect:

@@ -70,7 +70,6 @@ export const EVM_CHAINS_METADATA: Record<
   [EVM_CHAIN.SEPOLIA]: {
     chainId: "11155111",
     hexChainId: "0xaa36a7",
-
     chainType: CHAIN_TYPE.TESTNET,
     chainName: "sepolia",
     provider: {

@@ -10,6 +10,7 @@ export enum WALLET_EVENT_NAME {
 
 export enum WALLET_NAME {
   METAMASK = "metamask",
+  WALLET_CONNECT = "wallet_connect",
 }
 
 export enum WALLET_INJECT_OBJ {

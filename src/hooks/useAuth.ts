@@ -28,6 +28,7 @@ const useLogin = () => {
 
   async function walletConnect(connectorKey: ConnectorKey) {
     const connector = connectors[connectorKey];
+
     try {
       const objAddNetWork = Number(ETH_CHAIN_ID);
       await connector.activate(objAddNetWork);
@@ -44,7 +45,6 @@ const useLogin = () => {
   const handleSignMessage = async (walletType: ConnectorKey) => {
     try {
       const connector = connectors[walletType];
-      console.log(connector);
       if (connector?.provider) {
         const signer = new Web3Provider(connector?.provider).getSigner();
         const accountSigner = await signer.getAddress();
@@ -62,7 +62,7 @@ const useLogin = () => {
           walletSliceActions.updateAccountConnectApp({
             address: accountSigner,
             networkName: NETWORK_NAME.ETHEREUM,
-            walletKey: WALLET_NAME.METAMASK,
+            walletKey: WALLET_NAME.WALLET_CONNECT,
           })
         );
         const signature = await signer.signMessage(
