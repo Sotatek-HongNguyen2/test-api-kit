@@ -17,7 +17,7 @@ interface RadioGroupProps {
 
 export const RadioGroup = (props: RadioGroupProps) => {
   const { title, titleClassName, items, onChange } = props;
-  const [value, setValue] = useState<CustomRadioItemProps['value'] | null>(null);
+  const [value, setValue] = useState<CustomRadioItemProps['value']>('all');
 
   return (
     <Flex vertical gap="1rem">
