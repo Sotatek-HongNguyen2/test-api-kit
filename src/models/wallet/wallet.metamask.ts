@@ -139,6 +139,7 @@ export default class WalletMetamask extends Wallet {
     const web3 = getWeb3Instance(provider);
     const [blnWei, error] = await handleRequest(web3.eth.getBalance(userAddr));
     if (error) throw new Error(this.errorList.WALLET_GET_BALANCE_FAIL);
+
     return formWei(blnWei!.toString(), decimals);
   }
 

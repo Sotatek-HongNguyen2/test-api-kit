@@ -1,21 +1,20 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect } from "react";
 
-import {
-  WALLET_EVENT_NAME,
-  WALLET_NAME,
-} from "@/models/wallet/wallet.abstract";
+import { WALLET_EVENT_NAME } from "@/models/wallet/wallet.abstract";
 import {
   getWalletInstanceSlice,
-  store,
   useAppDispatch,
   useAppSelector,
 } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
-import { Wallet } from "@/models/wallet";
-import { Network } from "@/models/network";
+import WALLETS from "@/models/wallet";
+import { DECIMALS } from "@/constants";
+import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 
 export default function useWalletEvents() {
   const { walletInstance } = useAppSelector(getWalletInstanceSlice);
+  const { getBalance } = walletSliceActions;
+
   const dispatch = useAppDispatch();
 
   // native event
@@ -25,8 +24,19 @@ export default function useWalletEvents() {
 
     walletInstance.addListener({
       eventName: WALLET_EVENT_NAME.ACCOUNTS_CHANGED,
-      handler(accounts) {
+      async handler(accounts) {
+        console.log(accounts);
         if (accounts && accounts.length > 0) {
+          const resGetBalance = await dispatch(
+            getBalance({
+              wallet: WALLETS.metamask,
+              address: accounts[0],
+              decimals: DECIMALS.ETH,
+            })
+          );
+          await dispatch(
+            walletInstanceSliceActions.setBalance(`${resGetBalance.payload}`)
+          );
           return dispatch(walletSliceActions.updateAccount(accounts[0]));
         }
         return dispatch(walletSliceActions.disconnect());

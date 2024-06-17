@@ -2,6 +2,7 @@ import "./styles.scss";
 import { useMemo } from "react";
 import clsx from "clsx";
 import { Dropdown, Flex, MenuProps } from "antd";
+import { useNavigate } from "react-router-dom";
 
 import {
   getAuthSlide,
@@ -19,7 +20,6 @@ import { ConnectorKey, connectors } from "@/connectors";
 import { WALLET_NAME } from "@/models/wallet";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import { useLogout } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import { APP_ROUTES_PATHS } from "@/constants";
 
 interface IPropsConnectButton {
@@ -62,16 +62,19 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <div className={clsx("user-balance")}>{balance ?? 0}</div>,
-    },
-    {
-      key: "2",
       label: (
         <div className="item-menu" onClick={handleLogout}>
           <Logout />
           <span>Disconnect</span>
         </div>
       ),
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "2",
+      label: <div className={clsx("user-balance")}>{balance ?? 0}</div>,
     },
   ];
 
@@ -83,7 +86,7 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
             <IconButton type="primary-outlined">
               <UserIcon />
             </IconButton>
-            <Dropdown menu={{ items }} placement="bottomLeft">
+            <Dropdown menu={{ items }} placement="bottomRight">
               <AppButton type="primary-outlined" icon={<WalletIcon />}>
                 {displayedAddress}
               </AppButton>
