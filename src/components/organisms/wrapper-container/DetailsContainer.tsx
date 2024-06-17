@@ -28,7 +28,7 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
 
   const viewSmartContract = () => {
     if (contractId) {
-      window.open(`${import.meta.env.VITE_TEST_NETWORK as string}/address/${contractId}`, '_blank');
+      window.open(`${import.meta.env.VITE_TEST_NETWORK as string}/tx/${contractId}`, '_blank');
     }
   }
 
