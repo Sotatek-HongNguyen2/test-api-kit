@@ -1,4 +1,4 @@
-import { BeneficiaryData } from "@/types"
+import { AssetDetailData } from "@/types"
 import { CartItemContainer } from "./CardItemContainer"
 import { CopyIcon, DiamondIcon } from "@/assets/icons/custom-icon";
 import { AppTable } from "@/components/molecules/table";
@@ -10,7 +10,7 @@ import { IconButton } from "@/components/atoms/button";
 import { useCopyToClipBoard } from "@/hooks/useCopyToClipboard";
 
 interface BeneficiariesCardProps {
-  beneficiaries: BeneficiaryData[];
+  beneficiaries: AssetDetailData[];
 }
 
 const NameWithAvt = ({ name }: { name: string }) => {
@@ -25,7 +25,7 @@ const NameWithAvt = ({ name }: { name: string }) => {
 export const BeneficiariesCard = ({ beneficiaries }: BeneficiariesCardProps) => {
   const { handleCopyToClipboard } = useCopyToClipBoard();
 
-  const columns: ColumnsType<BeneficiaryData> = [
+  const columns: ColumnsType<AssetDetailData> = [
     {
       title: 'Name',
       dataIndex: 'name',

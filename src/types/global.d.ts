@@ -38,3 +38,8 @@ interface Window {
   layout: ILayout;
   themes: IThemes;
 }
+
+export interface PaginationParams {
+  limit: number;
+  page: number;
+}

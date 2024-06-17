@@ -1,9 +1,9 @@
 import { Text } from "@/components/atoms/text"
-import { BeneficiaryData } from "@/types"
+import { AssetDetailData } from "@/types"
 import { Flex } from "antd"
 import { UserOutlined } from "@ant-design/icons";
 
-export const Beneficiaries = ({ beneficiaries }: { beneficiaries: BeneficiaryData[] }) => {
+export const Beneficiaries = ({ beneficiaries }: { beneficiaries: AssetDetailData[] }) => {
   return (
     <Flex vertical gap="12px">
       <Text className="font-semibold">Beneficiaries ({beneficiaries?.length ?? 0})</Text>
