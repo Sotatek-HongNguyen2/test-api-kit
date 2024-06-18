@@ -27,3 +27,5 @@ export const IconSuccess = () => (
 );
 
 export const Wallet = () => <ReactSVG src={"/icons/login/Wallet.svg"} />;
+export const Logout = () => <ReactSVG src={"/icons/login/logout.svg"} />;
+export const LogoETH = () => <ReactSVG src={"/icons/network/eth.svg"} />;

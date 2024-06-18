@@ -23,3 +23,31 @@
     align-items: center;
   }
 }
+
+.item-menu {
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  color: #0A0B0C;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: left;
+}
+
+.symbol {
+  color: #6F7688;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: left;
+
+}
+
+.ant-dropdown {
+  width: 272px;
+}
+
+.space-between {
+  justify-content: space-between;
+}

@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from "react";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Flex, Spin } from "antd";
 
 import { lazyImport } from "@/helpers";
@@ -7,6 +7,7 @@ import LayoutComponent from "@/components/templates/layout";
 import { APP_ROUTES_PATHS } from "@/constants";
 
 import { ProtectedRoute } from "./protected-route";
+import { ProtectedRouteNoAuth } from "./protected-route-no-auth";
 
 const { HomePage } = lazyImport(() => import("@/pages/HomePage"), "HomePage");
 const { NoAuth } = lazyImport(() => import("@/pages/NoAuth"), "NoAuth");
@@ -35,18 +36,16 @@ export function AppRoutes() {
         {
           path: "/",
           errorElement: <ErrorPage />,
-          element: <LayoutComponent />,
+          element: (
+            <ProtectedRouteNoAuth>
+              <LayoutComponent />
+            </ProtectedRouteNoAuth>
+          ),
           children: [
             {
-              path: "/",
-              element: <Outlet />,
-              children: [
-                {
-                  index: true,
-                  path: APP_ROUTES_PATHS.NO_AUTH,
-                  element: <NoAuth />,
-                },
-              ],
+              index: true,
+              path: APP_ROUTES_PATHS.NO_AUTH,
+              element: <NoAuth />,
             },
 
             {

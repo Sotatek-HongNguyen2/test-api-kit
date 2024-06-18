@@ -36,3 +36,11 @@ export const formWei = (amount: string | number, decimal: string | number) => {
   }
   return zeroCutterEnd(amount.toString());
 };
+
+export const serializeFormQuery = (params: any) => {
+  return Object.keys(params)
+      .map(
+        key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+      )
+      .join('&');
+}

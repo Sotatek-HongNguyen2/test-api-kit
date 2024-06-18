@@ -9,6 +9,10 @@ import { useEffect, useState } from "react"
 import { WillServices } from "@/services/will-service"
 import WillToast from "@/components/atoms/ToastMessage"
 import { NoData } from "@/assets/icons"
+import { useSearchParams } from "react-router-dom"
+import { serializeFormQuery } from "@/helpers/common"
+import { CustomRadioItemProps } from "@/components/molecules/radio-group"
+import { SearchParams } from "@/types/global"
 
 interface WillListProps {
   type?: "created" | "inherited";
@@ -20,14 +24,17 @@ export const WillList = (props: WillListProps) => {
   const [myWills, setMyWills] = useState<WillData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
   const willService = new WillServices();
 
   const getWills = async () => {
     try {
-      const params = {
+      const params: SearchParams = {
         limit: 10,
-        page: currentPage || 1
-      }
+        page: currentPage || 1,
+      };
+      searchParams.get("type") && (params["type"] = searchParams.get("type") === 'all' ? "" : searchParams.get("type") || "");
+      searchParams.get("keyword") && (params["keyword"] = searchParams.get("keyword") || "");
       const data =
         type === "created" ? await willService.getMyWill(params) :
           type === "inherited" ? await willService.getMyInheritedWill(params) : null;
@@ -43,7 +50,7 @@ export const WillList = (props: WillListProps) => {
 
   useEffect(() => {
     getWills();
-  }, [currentPage, type])
+  }, [currentPage, type, searchParams])
 
   const getTitle = () => {
     switch (type) {
@@ -56,9 +63,28 @@ export const WillList = (props: WillListProps) => {
     }
   }
 
+  const onSearch = (value: string | undefined) => {
+    const newValue = value || "";
+    const newParams = {
+      type: searchParams.get("type") || "",
+      keyword: newValue,
+    }
+    const params = serializeFormQuery(newParams);
+    setSearchParams(params);
+  };
+
+  const onFilter = (value: CustomRadioItemProps['value']) => {
+    const newParams = {
+      type: value,
+      keyword: searchParams.get("keyword") || "",
+    }
+    const params = serializeFormQuery(newParams);
+    setSearchParams(params);
+  };
+
   return (
     <Flex justify="space-between" gap="5vw">
-      <WillFilter />
+      <WillFilter onSearch={onSearch} onFilter={onFilter} />
       <Flex vertical className="app-will--list">
         <Flex vertical gap="32px">
           <Text size="text-lg">{getTitle()}</Text>

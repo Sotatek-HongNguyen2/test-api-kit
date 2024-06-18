@@ -41,7 +41,6 @@ const OptionLogin = ({ clickOptionLogin, loading }: PropsOptionLogin) => {
   const handleClickOptionLogin = (item: IOptionLogin) => {
     clickOptionLogin(item.key);
   };
-  console.log(isMatchNetwork);
 
   const disconnectWallet = () => {
     dispatch(commonInstanceSlideActions.updateIsMatchNetwork(true));
@@ -49,7 +48,6 @@ const OptionLogin = ({ clickOptionLogin, loading }: PropsOptionLogin) => {
   };
 
   const renderOptions = () => {
-    console.log("run ");
     return (
       <>
         {!loading ? (
