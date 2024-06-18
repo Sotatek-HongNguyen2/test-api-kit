@@ -9,8 +9,6 @@ import { useEffect, useState } from "react"
 import { WillServices } from "@/services/will-service"
 import WillToast from "@/components/atoms/ToastMessage"
 import { NoData } from "@/assets/icons"
-import { useSearchParams } from "react-router-dom"
-import { serializeFormQuery } from "@/helpers/common"
 import { CustomRadioItemProps } from "@/components/molecules/radio-group"
 import { SearchParams } from "@/types/global"
 
@@ -18,23 +16,31 @@ interface WillListProps {
   type?: "created" | "inherited";
 }
 
+const initSearch: SearchParams = {
+  limit: 10,
+  page: 1,
+  type: "all",
+  keyword: "",
+}
+
 export const WillList = (props: WillListProps) => {
   const { type } = props;
+
 
   const [myWills, setMyWills] = useState<WillData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
   const willService = new WillServices();
 
   const getWills = async () => {
     try {
       const params: SearchParams = {
         limit: 10,
-        page: currentPage || 1,
+        page: searchParams?.page || 1,
       };
-      searchParams.get("type") && (params["type"] = searchParams.get("type") === 'all' ? "" : searchParams.get("type") || "");
-      searchParams.get("keyword") && (params["keyword"] = searchParams.get("keyword") || "");
+      searchParams?.type && (params["type"] = searchParams?.type === 'all' ? "" : searchParams?.type || "");
+      searchParams?.keyword && (params["keyword"] = searchParams?.keyword || "");
       const data =
         type === "created" ? await willService.getMyWill(params) :
           type === "inherited" ? await willService.getMyInheritedWill(params) : null;
@@ -50,7 +56,7 @@ export const WillList = (props: WillListProps) => {
 
   useEffect(() => {
     getWills();
-  }, [currentPage, type, searchParams])
+  }, [searchParams, type])
 
   const getTitle = () => {
     switch (type) {
@@ -66,20 +72,19 @@ export const WillList = (props: WillListProps) => {
   const onSearch = (value: string | undefined) => {
     const newValue = value || "";
     const newParams = {
-      type: searchParams.get("type") || "",
-      keyword: newValue,
+      ...searchParams,
+      keyword: newValue
     }
-    const params = serializeFormQuery(newParams);
-    setSearchParams(params);
+    setSearchParams(newParams);
   };
 
   const onFilter = (value: CustomRadioItemProps['value']) => {
+    if (!value) return;
     const newParams = {
-      type: value,
-      keyword: searchParams.get("keyword") || "",
+      ...searchParams,
+      type: value
     }
-    const params = serializeFormQuery(newParams);
-    setSearchParams(params);
+    setSearchParams(newParams);
   };
 
   return (
