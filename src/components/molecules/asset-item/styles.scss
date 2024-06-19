@@ -60,3 +60,29 @@
 .token-modal--footer-btn {
   width: 100%;
 }
+
+.config-asset {
+  .select-asset {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+
+    .ant-flex {
+      width: 100%;
+
+      .ant-select {
+        min-width: 100%;
+      }
+    }
+
+  }
+
+  .input-percentage {
+    width: 100%;
+
+    .ant-input-affix-wrapper {
+      max-height: 46px;
+    }
+  }
+}

@@ -17,6 +17,7 @@ export interface AssetDetailData {
   name: string;
   walletAddress: string;
   amount: number;
+  fwDetailAsset?: FWDetailAsset[];
 }
 
 export type WillStatus = 'open' | 'active';
@@ -44,4 +45,10 @@ export interface BeneficiaryData {
   id: number;
   name: string;
   address: string;
+  percentage?: number;
+}
+
+export interface FWDetailAsset {
+  asset: string;
+  percent: string;
 }

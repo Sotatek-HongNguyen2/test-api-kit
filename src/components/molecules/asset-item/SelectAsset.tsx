@@ -1,4 +1,3 @@
-import { AppButton } from "@/components/atoms/button"
 import "./styles.scss"
 import { AppSelect } from "@/components/atoms/select"
 import { Text } from "@/components/atoms/text"
@@ -7,9 +6,7 @@ import { Flex } from "antd"
 import { useState } from "react"
 import { DefaultOptionType } from "antd/es/select"
 import { AssetName } from "./AssetName"
-import { TokenModal, TokenModalType } from "./TokenModal"
-import useDisclosure from "@/hooks/useDisclosure"
-import { AssetDataColumn, AssetSelectType } from "@/components/organisms/config-card/AddAssetDistributionForm"
+import { AssetSelectType } from "@/components/organisms/config-card/AddAssetDistributionForm"
 
 interface SelectAssetProps {
   addAsset?: (asset: AssetSelectType) => void;
@@ -25,7 +22,7 @@ export const SelectAsset = ({ addAsset }: SelectAssetProps) => {
   }))
 
   return (
-    <Flex vertical gap={12}>
+    <Flex vertical gap={12} className="select-asset">
       <Text className="font-semibold neutral-1">Asset</Text>
       <Flex align="center" gap={12}>
         <AppSelect

@@ -2,6 +2,10 @@
   background-color: #F6F7FB;
   padding: 0vh 20vw;
 
+  @media (max-width: 1600px) {
+    padding: 0vh 15vw;
+  }
+
   .details-container--footer {
     svg {
       width: 24px !important;
