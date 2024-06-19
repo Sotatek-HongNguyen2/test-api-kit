@@ -48,7 +48,7 @@ export const AddAssetDistributionForm = () => {
       value: asset?.value as string
     }
     const newAssets = [...assets];
-    if (assetIndex > 0) {
+    if (assetIndex > -1) {
       newAssets[assetIndex] = newAsset;
     } else {
       newAssets.push(newAsset);

@@ -158,6 +158,7 @@ export const AssetToBeneficiary = () => {
           {
             watchBeneficiary?.map((beneficiary: any) => (
               <BeneficiaryName
+                key={beneficiary?.address}
                 name={beneficiary?.name}
                 onClick={() => changeCurrentSelected(beneficiary)}
                 isActive={currentSelected?.address === beneficiary?.address}

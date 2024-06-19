@@ -1,8 +1,12 @@
+@import "@/assets/scss/variable.scss";
+
 #app-header {
   width: 100%;
   background-color: white;
-  height: 72px;
+  height: $header-height;
   padding: 1rem 5vw;
   box-sizing: border-box;
-  border-bottom: 1px solid #DCE0EA
+  border-bottom: 1px solid #DCE0EA;
+  position: fixed;
+  z-index: 9;
 }
