@@ -33,7 +33,7 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
   }
 
   const goToEdit = () => {
-    navigate(`${APP_ROUTES_PATHS.CONFIG_WILL}/${willId}`);
+    navigate(`${APP_ROUTES_PATHS.EDIT_WILL}/${willId}`);
   }
 
   return (

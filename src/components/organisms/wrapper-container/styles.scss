@@ -1,6 +1,6 @@
 .app-details-container {
   background-color: #F6F7FB;
-  padding: 0vh 25vw;
+  padding: 0vh 20vw;
 
   .details-container--footer {
     svg {
@@ -8,4 +8,8 @@
       height: 24px !important;
     }
   }
+}
+
+.app-config-container {
+  padding: 0vh 20vw;
 }

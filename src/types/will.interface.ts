@@ -39,3 +39,9 @@ export interface SaveAssetBody {
   willId: number;
   asset: string;
 }
+
+export interface BeneficiaryData {
+  id: number;
+  name: string;
+  address: string;
+}

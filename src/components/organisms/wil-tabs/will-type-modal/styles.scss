@@ -1,0 +1,11 @@
+.ant-modal-content {
+  min-width: 40vw;
+
+  .ant-modal-close {
+    border-radius: 50%;
+
+    &:hover {
+      background-color: #F6F7FB;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import "./styles.scss"
 import { Tabs, TabsProps } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import { Text } from "@/components/atoms/text";
+import { WillTypeModal } from "./will-type-modal";
 
 export const assetTemp = [
   {
@@ -41,9 +42,7 @@ export const WillTabs = () => {
     },
   ];
 
-  const addWill = <AppButton type="primary" size="xl" icon={<PlusOutlined />}>
-    <Text size="text-lg" className="uppercase font-bold" >Create a Will</Text>
-  </AppButton>
+  const addWill = <WillTypeModal />
 
   return (
     <Tabs defaultActiveKey="1" items={items} tabBarExtraContent={addWill} />

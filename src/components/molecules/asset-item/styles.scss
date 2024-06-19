@@ -47,3 +47,16 @@
     }
   }
 }
+
+.select-asset {
+  max-width: 60%;
+
+  .asset-icon--small {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+.token-modal--footer-btn {
+  width: 100%;
+}

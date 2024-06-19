@@ -3,17 +3,20 @@ import { Flex } from "antd";
 import "./styles.scss";
 
 import { ConfigIcon, FAQIcon } from "@/assets/icons/custom-icon";
-import { IconButton } from "@/components/atoms/button";
+import { AppButton, IconButton } from "@/components/atoms/button";
 import WillImage from "@/components/atoms/Image";
 import logo from "@/assets/images/layout/logo.png";
 import { ConnectButton } from "@/components/molecules";
 import { useHandleLogin } from "@/hooks/useHandleLogin";
 
 import LoginModal from "../LoginModal";
+import { useNavigate } from "react-router-dom";
+import { APP_ROUTES_PATHS } from "@/constants";
 
 export const Header = () => {
   const { handelClickOptionLogin, isOpen, setIsOpen, loadingLogin } =
     useHandleLogin();
+  const navigate = useNavigate();
 
   const handelOpenModalLogin = async () => {
     setIsOpen(true);
@@ -21,7 +24,9 @@ export const Header = () => {
 
   return (
     <Flex id="app-header" justify="space-between" align="center">
-      <WillImage src={logo} />
+      <AppButton type="link" className="none-styles" onClick={() => navigate(APP_ROUTES_PATHS.HOME)}>
+        <WillImage src={logo} />
+      </AppButton>
       <Flex gap={20} align="center">
         <ConnectButton clickLogin={handelOpenModalLogin} />
         <Flex align="center">

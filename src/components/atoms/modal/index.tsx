@@ -7,7 +7,7 @@ interface IWillModal {
   handleOk?: () => void;
   handleCancel?: () => void;
   children: React.ReactNode;
-  title?: string;
+  title?: React.ReactNode;
   hideFooter?: boolean;
   width?: number;
 }

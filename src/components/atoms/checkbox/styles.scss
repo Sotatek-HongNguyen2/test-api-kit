@@ -1,0 +1,19 @@
+.ant-checkbox-wrapper {
+  width: fit-content;
+
+  .ant-checkbox {
+    .ant-checkbox-inner {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 1px solid #BCC0CD !important;
+    }
+  }
+
+  .ant-checkbox-checked {
+    .ant-checkbox-inner {
+      background-color: #3BBFCF;
+      border: 1px solid #3BBFCF !important;
+    }
+  }
+}
