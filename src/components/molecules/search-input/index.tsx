@@ -1,7 +1,8 @@
-import "./styles.scss"
-import { Input, InputProps } from "antd"
-import { SearchOutlined } from "@ant-design/icons"
+import "./styles.scss";
+import { Input, InputProps } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { useCallback, useEffect, useRef } from "react";
+
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { useDebounce } from "@/hooks/useDebounce";
 
@@ -15,7 +16,8 @@ export const SearchInput = (props: SearchInputProps) => {
 
   const [debounceSearchValue, setSearchValue, value] = useDebounce(initValue);
 
-  const searchRef = useRef<HTMLInputElement>() as React.RefObject<HTMLInputElement>;
+  const searchRef =
+    useRef<HTMLInputElement>() as React.RefObject<HTMLInputElement>;
   const isMounted = useIsMounted();
 
   const memoHandleSearch = useCallback(onHandleSearch, [onHandleSearch]);
@@ -24,7 +26,7 @@ export const SearchInput = (props: SearchInputProps) => {
   };
 
   useEffect(() => {
-    setSearchValue(initValue || '');
+    setSearchValue(initValue || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initValue]);
 
@@ -40,6 +42,11 @@ export const SearchInput = (props: SearchInputProps) => {
   }, [debounceSearchValue, isMounted]);
 
   return (
-    <Input addonBefore={<SearchOutlined />} value={value} onChange={handleChange} {...restProps} />
-  )
-}
+    <Input
+      addonBefore={<SearchOutlined />}
+      value={value}
+      onChange={handleChange}
+      {...restProps}
+    />
+  );
+};
