@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import NETWORKS, { Network, NETWORK_NAME } from "@/models/network";
 import WALLETS, { Wallet, WALLET_NAME } from "@/models/wallet";
 import { WALLET_EVENT_NAME } from "@/models/wallet/wallet.abstract";
+import { DECIMALS } from "@/constants";
 
 import { createAppThunk } from "..";
 import { walletInstanceSliceActions } from "./walletInstanceSlice";
@@ -13,12 +14,14 @@ export type WalletStateConnected = {
   address: string;
   walletKey: WALLET_NAME;
   networkName: NETWORK_NAME | null;
+  balance: string | number;
 };
 export type WalletStateDisConnected = {
   address?: undefined;
   isConnected: false;
   walletKey: null;
   networkName: NETWORK_NAME | null;
+  balance: string | number;
 };
 export type WalletState = WalletStateConnected | WalletStateDisConnected;
 
@@ -52,6 +55,7 @@ const initialState: WalletState = {
   isConnected: false,
   walletKey: null,
   networkName: null,
+  balance: "0",
 };
 
 // thunk action
@@ -63,26 +67,35 @@ const connectWallet = createAppThunk<{
     {
       wallet,
       network,
-      onCnStart,
-      onCnFinish,
-      whileCnHandle,
-    }: connectWalletPayload,
-    { dispatch, getState }
+    }: // onCnStart,
+    // onCnFinish,
+    // whileCnHandle,
+    connectWalletPayload,
+    { dispatch }
   ) => {
-    const res = await wallet.connect(
-      network,
-      onCnStart,
-      onCnFinish,
-      undefined,
-      whileCnHandle
-    );
+    const res = await wallet
+      .connect
+      // network,
+      // onCnStart,
+      // onCnFinish,
+      // undefined,
+      // whileCnHandle
+      ();
 
     // store wallet and network key which contain serialize data that could use persist
+    const balance = await dispatch(
+      getBalance({
+        wallet: WALLETS.metamask,
+        address: res,
+        decimals: DECIMALS.ETH,
+      })
+    );
     dispatch(
       walletSlicePrvActions.connected({
         walletKey: wallet.name,
         networkName: network.name,
         address: res,
+        balance: `${balance.payload}`,
       })
     );
 
@@ -113,7 +126,7 @@ const rehydrateNetworkInstance = createAppThunk()(
 // when update network, also store network key to related states
 const changeNetwork = createAppThunk()(
   "wallet/thunk/changeNetwork",
-  async (network: Network, { dispatch, getState }) => {
+  async (network: Network, { dispatch }) => {
     dispatch(walletSlicePrvActions.changeNetwork(network.name));
     dispatch(walletInstanceSliceActions.changeNetwork(network.name));
     return true;
@@ -137,23 +150,17 @@ const disconnect = createAppThunk()(
 
 const signMessage = createAppThunk<{
   message: string;
-}>()(
-  "wallet/signMessage",
-  async ({ wallet, address }: signMessagePayload, { dispatch, getState }) => {
-    const res = await wallet.signMessage(address);
+}>()("wallet/signMessage", async ({ wallet, address }: signMessagePayload) => {
+  const res = await wallet.signMessage(address);
 
-    return res;
-  }
-);
+  return res;
+});
 
 const getBalance = createAppThunk<{
   message: string;
 }>()(
   "wallet/getBalance",
-  async (
-    { wallet, address, decimals }: getBalancePayload,
-    { dispatch, getState }
-  ) => {
+  async ({ wallet, address, decimals }: getBalancePayload) => {
     const res = await wallet.getBalance(address, decimals);
     return res;
   }
@@ -211,12 +218,17 @@ export const WalletSlice = createSlice({
       state.walletKey = action.payload.walletKey;
       state.networkName = action.payload.networkName;
       state.address = action.payload.address;
+      state.balance = action.payload.balance;
     },
     disconnectWallet(state) {
       state.address = undefined;
       state.isConnected = false;
       state.walletKey = null;
       state.networkName = null;
+    },
+    updateBalance(state, action: PayloadAction<string>) {
+      // console.log("object");
+      state.balance = action.payload;
     },
   },
 });
@@ -227,6 +239,7 @@ export const walletSliceActions = {
   updateAccount: walletSlicePrvActions.updateAccount,
   updateAccountConnectApp: walletSlicePrvActions.connected,
   logout: walletSlicePrvActions.disconnectWallet,
+  updateBalance: walletSlicePrvActions.updateBalance,
   connectWallet,
   rehydrateNetworkInstance,
   changeNetwork,
