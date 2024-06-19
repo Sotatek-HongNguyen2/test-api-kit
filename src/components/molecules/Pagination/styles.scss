@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .ant-pagination {
   a {
     color: #8F9AA9 !important;
@@ -6,7 +8,7 @@
 
   .ant-pagination-prev {
     svg {
-      fill: #3BBFCF;
+      fill: $primary;
       width: 15px !important;
       height: 15px !important;
     }
@@ -14,7 +16,7 @@
 
   .ant-pagination-next {
     svg {
-      fill: #3BBFCF;
+      fill: $primary;
       width: 15px !important;
       height: 15px !important;
     }
@@ -27,15 +29,15 @@
   }
 
   .ant-pagination-item-active {
-    border-color: #3BBFCF;
-    background-color: #3BBFCF;
+    border-color: $primary;
+    background-color: $primary;
 
     a {
       color: white !important;
     }
 
     &:hover {
-      border-color: #3BBFCF;
+      border-color: $primary;
     }
   }
 }

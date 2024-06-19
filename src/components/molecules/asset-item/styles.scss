@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .asset-icon {
   width: 40px;
   height: 40px;
@@ -9,14 +11,14 @@
   cursor: pointer;
 
   &:hover {
-    border-color: #3BBFCF;
+    border-color: $primary;
     transition: all 0.3s;
 
     .user-icon {
-      border-color: #3BBFCF;
+      border-color: $primary;
 
       svg {
-        fill: #3BBFCF;
+        fill: $primary;
       }
     }
   }
@@ -37,13 +39,13 @@
 }
 
 .beneficiary-card.active-card {
-  border: 2px solid #3BBFCF;
+  border: 2px solid #136AF3;
 
   .user-icon {
-    border-color: #3BBFCF;
+    border-color: $primary;
 
     svg {
-      fill: #3BBFCF;
+      fill: $primary;
     }
   }
 }

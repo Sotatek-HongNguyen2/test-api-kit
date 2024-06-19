@@ -1,9 +1,11 @@
+@import 'src/assets/scss/_colors.scss';
+
 .connected-btn {
   position: relative;
 
   .user-balance {
     position: absolute;
-    background-color: #3BBFCF;
+    background-color: $primary;
     color: white;
     height: 0;
     top: 40;
