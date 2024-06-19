@@ -13,6 +13,7 @@ export function DetailsPage() {
 
   const { address } = useAppSelector(getWalletSlice);
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
+  console.log("willDetail: ", willDetail);
   const willService = new WillServices();
 
   const method: WillMethod | null = useMemo(() => !!willDetail ? willDetail?.ownerAddress === address ? "created" : "inherited" : null, [willDetail, address])
@@ -38,7 +39,7 @@ export function DetailsPage() {
       willName={willDetail?.name}
       willType={willDetail?.type}
       description={`This is a ${willDetail?.type} will you are as a beneficiary.`}
-      active={willDetail?.status !== 'active' ? false : { textSignatures: `There are ${willDetail?.minSignature} of ${willDetail?.minSignature} needed signatures to receive fund` }}
+      active={willDetail?.status !== 'active' ? false : { textSignatures: `There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund` }}
       method={method}
       contractId={willDetail?.txHash}
       willId={willId}

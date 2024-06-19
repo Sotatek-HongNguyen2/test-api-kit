@@ -37,8 +37,8 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
   const displayedAddress = useMemo(
     () =>
       `${address?.substring(0, 10)}...${address?.substring(
-        address?.length - 4,
-        address?.length - 1
+        address?.length - 3,
+        address?.length
       )}`,
     [address]
   );
