@@ -88,3 +88,25 @@
     }
   }
 }
+
+.configured-table {
+  thead {
+    th {
+      &:last-child {
+        max-width: 100px;
+      }
+    }
+  }
+
+  tbody {
+    td {
+      &:last-child {
+        max-width: 100px;
+      }
+    }
+  }
+
+  .btn-action {
+    min-width: 107px;
+  }
+}

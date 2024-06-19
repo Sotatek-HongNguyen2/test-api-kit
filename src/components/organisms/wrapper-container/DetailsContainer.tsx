@@ -56,12 +56,12 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
       </Flex>
       {
         method === "created" ? (
-          <Flex justify="space-between" align="center" className="details-container--footer">
-            <AppButton size="xl" rightIcon={<RightOutlined />} onClick={viewSmartContract}>
-              <Text size="text-lg" className="uppercase neutral-1 font-bold">View smart contract</Text>
-            </AppButton>
+          <Flex align="center" className="details-container--footer" gap={20}>
             <AppButton type="primary" size="xl" icon={<EditOutlined />} onClick={goToEdit}>
               <Text size="text-lg" className="uppercase white font-bold">Edit will</Text>
+            </AppButton>
+            <AppButton size="xl" rightIcon={<RightOutlined />} onClick={viewSmartContract}>
+              <Text size="text-lg" className="uppercase neutral-1 font-bold">View smart contract</Text>
             </AppButton>
           </Flex>
         ) : active ? ( // inherited and active

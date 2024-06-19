@@ -1,3 +1,5 @@
+@import "@/assets/scss/variable.scss";
+
 #app-layout {
   width: 100vw;
   min-height: 100vh;
@@ -8,11 +10,15 @@
   }
 }
 
-.app-page {
-  width: 100%;
-  padding: 7vh 5vw;
-  // background-color: transparent;
-  min-height: calc(100vh - 72px);
-  background: #F6F7FB;
+.app-page--content {
+  margin-top: $header-height;
 
+  .app-page {
+    width: 100%;
+    padding: 7vh 5vw;
+    // background-color: transparent;
+    min-height: calc(100vh - $header-height);
+    background: #F6F7FB;
+
+  }
 }

@@ -37,7 +37,6 @@ const Beneficiaries = (props: AssetCardProps) => {
 export const AssetDetailCard = ({ beneficiaries }: Pick<AssetCardProps, 'beneficiaries'>) => {
   const [currentBeneficiary, setCurrentBeneficiary] = useState<AssetDetailData>(beneficiaries[0]);
   const assets = currentBeneficiary?.fwDetailAsset ?? [] as FWDetailAsset[];
-  console.log("assets: ", assets);
 
   const columns: ColumnsType<FWDetailAsset> = [
     {

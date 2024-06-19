@@ -27,13 +27,15 @@ const LayoutComponent: React.FC<ILayoutProps> = () => {
           <Content className="site-layout-background">
             <Flex vertical>
               <Header />
-              {
-                isHomePage && (
-                  <Dashboard title="My will list" />
-                )
-              }
-              <Flex vertical className="app-page">
-                <Outlet />
+              <Flex vertical className="app-page--content">
+                {
+                  isHomePage && (
+                    <Dashboard title="My will list" />
+                  )
+                }
+                <Flex vertical className="app-page">
+                  <Outlet />
+                </Flex>
               </Flex>
             </Flex>
           </Content>
