@@ -1,7 +1,9 @@
+@import 'src/assets/scss/_colors.scss';
+
 .ant-progress-inner {
-  background-color: rgba($color: #3BBFCF, $alpha: 0.15) !important;
+  background-color: rgba($color: $primary, $alpha: 0.15) !important;
 
   .ant-progress-bg {
-    background-color: #3BBFCF !important;
+    background-color: $primary !important;
   }
 }

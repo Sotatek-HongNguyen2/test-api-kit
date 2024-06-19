@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .app-text-area {
   min-height: 88px !important;
   font-size: 1rem;
@@ -8,7 +10,7 @@
   }
 
   &:focus {
-    border-color: #3BBFCF;
+    border-color: $primary;
     box-shadow: none;
   }
 }

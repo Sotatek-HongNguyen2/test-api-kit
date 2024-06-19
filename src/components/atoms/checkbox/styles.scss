@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .ant-checkbox-wrapper {
   width: fit-content;
 
@@ -12,8 +14,8 @@
 
   .ant-checkbox-checked {
     .ant-checkbox-inner {
-      background-color: #3BBFCF;
-      border: 1px solid #3BBFCF !important;
+      background-color: $primary;
+      border: 1px solid $primary !important;
     }
   }
 }
