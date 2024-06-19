@@ -1,5 +1,5 @@
 import "./styles.scss";
-import { AssetData, BeneficiaryData } from "@/types"
+import { AssetData, AssetDetailData, BeneficiaryData, FWDetailAsset } from "@/types"
 import { CartItemContainer } from "./CardItemContainer"
 import { DiamondIcon } from "@/assets/icons/custom-icon";
 import { AppTable } from "@/components/molecules/table";
@@ -11,9 +11,9 @@ import { Flex } from "antd";
 import { useState } from "react";
 
 interface AssetCardProps {
-  beneficiaries: BeneficiaryData[];
-  currentBeneficiary: BeneficiaryData;
-  setCurrentBeneficiary: (beneficiary: BeneficiaryData) => void;
+  beneficiaries: AssetDetailData[];
+  currentBeneficiary: AssetDetailData;
+  setCurrentBeneficiary: (beneficiary: AssetDetailData) => void;
 }
 
 const Beneficiaries = (props: AssetCardProps) => {
@@ -35,21 +35,22 @@ const Beneficiaries = (props: AssetCardProps) => {
 }
 
 export const AssetDetailCard = ({ beneficiaries }: Pick<AssetCardProps, 'beneficiaries'>) => {
-  const [currentBeneficiary, setCurrentBeneficiary] = useState<BeneficiaryData>(beneficiaries[0]);
-  const assets = currentBeneficiary?.percentage ?? [];
+  const [currentBeneficiary, setCurrentBeneficiary] = useState<AssetDetailData>(beneficiaries[0]);
+  const assets = currentBeneficiary?.fwDetailAsset ?? [] as FWDetailAsset[];
+  console.log("assets: ", assets);
 
-  const columns: ColumnsType<AssetData> = [
+  const columns: ColumnsType<FWDetailAsset> = [
     {
       title: 'Token',
-      dataIndex: 'name',
-      key: 'name',
-      render: (_, asset) => <AssetName asset={asset} />
+      dataIndex: 'asset',
+      key: 'asset',
+      // render: (_, asset) => <AssetName asset={asset} />
     },
     {
       title: 'Inheritance Percentage (%)',
       dataIndex: 'percentage',
       key: 'percentage',
-      render: (percentage) => <Text size="text-md" className="neutral-1 font-semibold">{percentage} %</Text>
+      render: (_, asset) => <Text size="text-md" className="neutral-1 font-semibold">{asset?.percent} %</Text>
     },
   ];
 

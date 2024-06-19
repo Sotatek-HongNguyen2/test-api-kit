@@ -10,8 +10,8 @@ export const ForwardingForm = () => {
     <Flex vertical gap={16}>
       <WillName />
       <ConfigBeneficiaries />
-      <ActivationTrigger />
       <AssetToBeneficiary />
+      <ActivationTrigger />
       <NoteToBeneficiaries />
     </Flex>
   )

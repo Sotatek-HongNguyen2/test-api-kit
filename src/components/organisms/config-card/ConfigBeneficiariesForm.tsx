@@ -141,12 +141,16 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
       <Form.Item name="beneficiariesList">
         <Flex vertical gap={16}>
           <Text className="font-semibold neutral-1">Existing beneficiaries:</Text>
-          <AppTable
-            columns={columns}
-            dataSource={watchBeneficiaries}
-            pagination={false}
-            hasIconAction={true}
-          />
+          {
+            watchBeneficiaries && watchBeneficiaries.length > 0 && (
+              <AppTable
+                columns={columns}
+                dataSource={watchBeneficiaries}
+                pagination={false}
+                hasIconAction={true}
+              />
+            )
+          }
         </Flex>
       </Form.Item>
       <Flex vertical gap={10}>
