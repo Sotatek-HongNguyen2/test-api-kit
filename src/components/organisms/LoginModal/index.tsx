@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import WillModal from "@/components/atoms/modal";
 import OptionLogin from "@/components/molecules/OptionLogin";
@@ -34,18 +34,11 @@ const LoginModal = ({
     }
   };
 
-  const hasMetamask: boolean = useMemo(() => {
-    if (window.ethereum && window.ethereum.isMetaMask) {
-      return false;
-    }
-    return true;
-  }, [open]);
-
   return (
     <WillModal
       width={448}
       open={open}
-      title={loading || !hasMetamask ? "" : "Connect Wallet"}
+      title={loading ? "" : "Connect Wallet"}
       handleCancel={handleCancel}
       className="will-modal-login"
       hideFooter={true}

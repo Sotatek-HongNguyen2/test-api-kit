@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .app-text {
   margin: 0px 0px;
 }
@@ -68,7 +70,7 @@
 }
 
 .primary {
-  color: #3BBFCF
+  color: $primary
 }
 
 .main-text {

@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .ant-input {
   border: 1px solid #DCE0EA;
   min-height: 46px;
@@ -10,7 +12,7 @@
   }
 
   &:focus {
-    border-color: #3BBFCF;
+    border-color: $primary;
     box-shadow: none;
   }
 

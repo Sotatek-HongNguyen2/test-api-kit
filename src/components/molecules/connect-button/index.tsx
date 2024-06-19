@@ -1,12 +1,10 @@
 import "./styles.scss";
 import { useMemo } from "react";
-import clsx from "clsx";
 import { Dropdown, Flex, MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import {
   getAuthSlide,
-  getWalletInstanceSlice,
   getWalletSlice,
   useAppDispatch,
   useAppSelector,
@@ -21,6 +19,7 @@ import { WALLET_NAME } from "@/models/wallet";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import { useLogout } from "@/hooks/useAuth";
 import { APP_ROUTES_PATHS } from "@/constants";
+import useFormattedNumber from "@/hooks/useFormatToken";
 
 interface IPropsConnectButton {
   clickLogin: () => void;
@@ -29,7 +28,7 @@ interface IPropsConnectButton {
 export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
   const { address, walletKey } = useAppSelector(getWalletSlice);
   const { accessToken } = useAppSelector(getAuthSlide);
-  const { balance } = useAppSelector(getWalletInstanceSlice);
+  const { balance } = useAppSelector(getWalletSlice);
   const { logout } = useLogout();
   const navigate = useNavigate();
 
@@ -81,7 +80,7 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
             <span>Ethereum</span>
             <span className="symbol">ETH</span>
           </span>
-          <span>{balance}</span>
+          <span>{useFormattedNumber(Number(balance))}</span>
         </div>
       ),
     },
@@ -94,7 +93,7 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
             <span>Ethereum</span>
             <span className="symbol">ETH</span>
           </span>
-          <span>{balance}</span>
+          <span>{useFormattedNumber(Number(balance))}</span>
         </div>
       ),
     },
@@ -107,7 +106,7 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
             <span>Ethereum</span>
             <span className="symbol">ETH</span>
           </span>
-          <span>{balance}</span>
+          <span>{useFormattedNumber(Number(balance))}</span>
         </div>
       ),
     },

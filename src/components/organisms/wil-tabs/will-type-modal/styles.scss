@@ -1,11 +1,13 @@
-.ant-modal-content {
-  min-width: 40vw;
+.will-tab-modal {
+  .ant-modal-content {
+    min-width: 40vw;
 
-  .ant-modal-close {
-    border-radius: 50%;
+    .ant-modal-close {
+      border-radius: 50%;
 
-    &:hover {
-      background-color: #F6F7FB;
+      &:hover {
+        background-color: #F6F7FB;
+      }
     }
   }
 }

@@ -1,7 +1,8 @@
+@import 'src/assets/scss/_colors.scss';
 // ======== badge color ========
 
 .app-badge-primary {
-  background-color: #3BBFCF;
+  background-color: $primary;
 }
 
 // ======== badge size =========

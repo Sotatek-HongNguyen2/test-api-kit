@@ -9,7 +9,7 @@ import {
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import WALLETS from "@/models/wallet";
 import { DECIMALS } from "@/constants";
-import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
+// import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 
 export default function useWalletEvents() {
   const { walletInstance } = useAppSelector(getWalletInstanceSlice);
@@ -25,7 +25,6 @@ export default function useWalletEvents() {
     walletInstance.addListener({
       eventName: WALLET_EVENT_NAME.ACCOUNTS_CHANGED,
       async handler(accounts) {
-        console.log(accounts);
         if (accounts && accounts.length > 0) {
           const resGetBalance = await dispatch(
             getBalance({
@@ -34,9 +33,9 @@ export default function useWalletEvents() {
               decimals: DECIMALS.ETH,
             })
           );
-          console.log(resGetBalance);
+
           await dispatch(
-            walletInstanceSliceActions.setBalance(`${resGetBalance.payload}`)
+            walletSliceActions.updateBalance(resGetBalance.payload as string)
           );
           return dispatch(walletSliceActions.updateAccount(accounts[0]));
         }

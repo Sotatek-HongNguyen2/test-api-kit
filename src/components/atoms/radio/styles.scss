@@ -1,12 +1,14 @@
+@import 'src/assets/scss/_colors.scss';
+
 .ant-radio-wrapper {
   width: fit-content;
 
   .ant-radio-inner {
     background-color: white !important;
-    border-color: #3BBFCF !important;
+    border-color: $primary !important;
 
     &::after {
-      background-color: #3BBFCF !important;
+      background-color: $primary !important;
       transform: scale(0.6) !important;
     }
   }

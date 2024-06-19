@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .will-type-card {
   cursor: pointer;
 
@@ -7,18 +9,18 @@
 
     svg {
       path {
-        fill: #3BBFCF
+        fill: $primary
       }
     }
   }
 }
 
 .will-type-card.selected {
-  border-color: #3BBFCF;
+  border-color: $primary;
 
   svg {
     path {
-      fill: #3BBFCF
+      fill: $primary
     }
   }
 }
