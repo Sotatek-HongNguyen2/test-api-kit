@@ -34,7 +34,9 @@ export interface WillData {
   minSignature: number;
   note?: string;
   status: WillStatus;
-  willSignature: any[]; // signed signatures
+  willSignature: any[]; // signed signatures;
+  lackSignMessage: number;
+  lackTransaction: number;
 }
 
 export interface SaveAssetBody {
