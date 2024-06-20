@@ -7,13 +7,21 @@ import { Flex } from "antd";
 import { TriggerCard } from "@/components/molecules/trigger-card";
 import NotGoingImage from '../../../../public/images/details/no-outgoing.png'
 import NotSignedImage from '../../../../public/images/details/no-signed.png'
+import { useGetDiffMonth } from "@/hooks/useGetDiffMonths";
 
-interface ProgressCardProps extends WillProgressProps, Pick<WillData, "lackTransaction" | "lackSignMessage"> {
+interface ProgressCardProps extends WillProgressProps, Pick<WillData, "lackTransaction" | "lackSignMessage" | "owner"> {
   method: WillMethod;
 }
 
 export const ProgressCard = (props: ProgressCardProps) => {
-  const { method, lackTransaction, lackSignMessage, ...restProps } = props;
+  const { method, lackTransaction, lackSignMessage, owner, ...restProps } = props;
+
+  const { lastTxTime, lastLoginTime } = owner;
+
+  const getTimeMonths = (time: number | null) => {
+    if (time === null || time === undefined) return "_ months";
+    return time > 1 ? `${time} months` : `${time} month`;
+  }
 
   return (
     <>
@@ -33,8 +41,8 @@ export const ProgressCard = (props: ProgressCardProps) => {
                   lackTransaction && lackTransaction > 0 && (
                     <TriggerCard
                       image={NotGoingImage}
-                      title={`No outgoing transactions in ${lackTransaction} month${lackTransaction > 1 ? 's' : ''}`}
-                      description="You haven’t initiated an outgoing transaction in X months"
+                      title={`No outgoing transactions in ${getTimeMonths(lackTransaction)}`}
+                      description={`You haven’t initiated an outgoing transaction in ${getTimeMonths(useGetDiffMonth(lastTxTime))}`}
                     />
                   )
                 }
@@ -42,8 +50,8 @@ export const ProgressCard = (props: ProgressCardProps) => {
                   lackSignMessage && lackSignMessage > 0 && (
                     <TriggerCard
                       image={NotSignedImage}
-                      title={`No signed messages in ${lackSignMessage} month${lackTransaction > 1 ? 's' : ''}`}
-                      description="You haven’t signed a message in X months"
+                      title={`No signed messages in ${getTimeMonths(lackSignMessage)}`}
+                      description={`You haven’t signed a message in ${getTimeMonths(useGetDiffMonth(lastLoginTime))}`}
                     />
                   )
                 }

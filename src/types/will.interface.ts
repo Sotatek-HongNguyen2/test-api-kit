@@ -22,6 +22,12 @@ export interface AssetDetailData {
   fwDetailAsset?: FWDetailAsset[];
 }
 
+export interface OwnerLastTime {
+  lastLoginTime: string;
+  lastTxTime: string;
+  walletAddress: string;
+}
+
 export type WillStatus = "open" | "active";
 export interface WillData {
   id: string | number;
@@ -38,6 +44,9 @@ export interface WillData {
   status: WillStatus;
   willSignature: any[]; // signed signatures
   ownerBalance: ItemOwnerBalance[];
+  lackSignMessage: number;
+  lackTransaction: number;
+  owner: OwnerLastTime;
 }
 
 export interface ItemOwnerBalance {
