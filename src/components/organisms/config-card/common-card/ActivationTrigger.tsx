@@ -6,7 +6,7 @@ import { CheckboxGroup, CustomCheckboxItemProps } from "@/components/molecules/c
 import { SelectTime } from "@/components/molecules/select-time"
 import { useState } from "react"
 
-export const ActivationTrigger = () => {
+export const ActivationTrigger = ({ type }: { type?: 'destruction' }) => {
 
   const configForm = Form.useFormInstance();
   const { setFieldValue } = configForm;
@@ -17,7 +17,10 @@ export const ActivationTrigger = () => {
       id: 1,
       title: "Lack of outgoing transactions",
       value: 'lack_outgoing_transactions',
-      itemChildren: <Form.Item name="lackOfOutgoingTxRange">
+      itemChildren: <Form.Item
+        name="lackOfOutgoingTxRange"
+        rules={[{ required: true, message: 'Please select an option' }]}
+      >
         <SelectTime
           title="Time of inactivity until will activation"
           handleChangeValue={(value) => setFieldValue('lackOfOutgoingTxRange', value)}
@@ -28,7 +31,10 @@ export const ActivationTrigger = () => {
       id: 2,
       title: "Lack of signed message",
       value: 'lack_signed_message',
-      itemChildren: <Form.Item name="lackOfSignedMsgRange">
+      itemChildren: <Form.Item
+        name="lackOfSignedMsgRange"
+        rules={[{ required: true, message: 'Please select an option' }]}
+      >
         <SelectTime
           title="Time of inactivity until will activation"
           handleChangeValue={(value) => setFieldValue('lackOfSignedMsgRange', value)}
@@ -45,10 +51,15 @@ export const ActivationTrigger = () => {
       <Flex vertical gap={24}>
         <Flex vertical gap={16}>
           <Text className="neutral-1">Select one or both</Text>
-          <CheckboxGroup items={configOptions} onChange={(value) => setSelected(value as string[])} />
+          <Form.Item
+            name="activationTrigger"
+            rules={[{ required: true, message: 'Please select an option' }]}
+          >
+            <CheckboxGroup items={configOptions} onChange={(value) => setSelected(value as string[])} />
+          </Form.Item>
         </Flex>
         {
-          selected?.length === 2 && (
+          type && type === "destruction" && selected?.length === 2 && (
             <Flex align="flex-start" gap={10}>
               <AttentionIcon />
               <Text className="neutral-2">You’ve selected both lack of outgoing transactions and signed transactions as your trigger. Both conditions will need to be met for your will to be activated. Once one of the two activities is authorized, your activation duration will be reset.</Text>
@@ -56,6 +67,6 @@ export const ActivationTrigger = () => {
           )
         }
       </Flex>
-    </CartItemContainer>
+    </CartItemContainer >
   )
 }

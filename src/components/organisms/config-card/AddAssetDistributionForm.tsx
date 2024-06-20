@@ -60,14 +60,12 @@ export const AddAssetDistributionForm = () => {
   return (
     <Flex vertical gap={16}>
       <Text className="neutral-1">You’re a designated assets:</Text>
-      <Form.Item name="assetDistribution">
-        <AppTable
-          columns={columns}
-          dataSource={assets}
-          pagination={false}
-          className="asset-distribution-table"
-        />
-      </Form.Item>
+      <AppTable
+        columns={columns}
+        dataSource={assets}
+        pagination={false}
+        className="asset-distribution-table"
+      />
       <SelectAsset addAsset={(asset) => setAsset(asset)} />
       <AppButton
         className="none-styles uppercase"
@@ -77,6 +75,6 @@ export const AddAssetDistributionForm = () => {
       >
         Save
       </AppButton>
-    </Flex>
+    </Flex >
   )
 }

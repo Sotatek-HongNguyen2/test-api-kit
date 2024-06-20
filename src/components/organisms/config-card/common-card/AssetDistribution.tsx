@@ -9,7 +9,10 @@ export const AssetDistribution = () => {
       title="Configure asset distribution"
       iconTitle={<NoteIcon />}
     >
-      <Form.Item>
+      <Form.Item
+        name="assetDistribution"
+        rules={[{ required: true, message: 'Please select at least an asset and save' }]}
+      >
         <AddAssetDistributionForm />
       </Form.Item>
     </CartItemContainer>

@@ -16,3 +16,4 @@ export * from './name-icon'
 export * from './check-outlined-icon'
 export * from './trash-icon'
 export * from './attention-icon'
+export * from "./modal-delete-icon"

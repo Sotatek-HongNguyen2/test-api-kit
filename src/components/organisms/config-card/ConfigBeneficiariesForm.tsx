@@ -13,6 +13,8 @@ import { UserOutlined } from "@ant-design/icons"
 import { CheckOutlinedIcon, CopyIcon, TrashIcon } from "@/assets/icons/custom-icon"
 import { useCopyToClipBoard } from "@/hooks/useCopyToClipboard"
 import WillToast from "@/components/atoms/ToastMessage"
+import useDisclosure from "@/hooks/useDisclosure"
+import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal"
 
 export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boolean }) => {
 
@@ -24,15 +26,17 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
 
   const { handleCopyToClipboard, isCopied } = useCopyToClipBoard();
   const [indexCopied, setIndexCopied] = useState<number>(-1);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedAddress, setSelectedAddress] = useState<string>('');
 
   const minSignatureOptions = useMemo(() => [...(new Array(watchBeneficiaries?.length || 0))].map((_, index) => ({
     label: index + 1,
     value: index + 1
   })), [watchBeneficiaries?.length]);
 
-  const handleDeleteBeneficiary = (address: string) => {
+  const handleDeleteBeneficiary = () => {
     const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
-    const newBeneficiaries = currentBeneficiaries.filter((beneficiary: BeneficiaryData) => beneficiary?.address !== address);
+    const newBeneficiaries = currentBeneficiaries.filter((beneficiary: BeneficiaryData) => beneficiary?.address !== selectedAddress);
     setFieldValue("beneficiariesList", newBeneficiaries);
   }
 
@@ -70,7 +74,10 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
       title: '',
       key: 'action',
       render: (_, record) => (
-        <IconButton onClick={() => handleDeleteBeneficiary(record?.address)}>
+        <IconButton onClick={() => {
+          setSelectedAddress(record?.address);
+          onOpen();
+        }}>
           <TrashIcon />
         </IconButton>
       )
@@ -106,7 +113,19 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
             <Flex vertical={generate} gap={16} className={clsx("beneficiaries-wrapper", generate && "beneficiaries-wrapper--generate")}>
               <Flex vertical gap={10} className={clsx("beneficiary-name", generate && "generate")}>
                 <Text className="font-semibold neutral-1 text--no-wrap">Beneficiary nickname</Text>
-                <Form.Item name="beneficiaryName" rules={[{ required: true, message: 'Please enter a nickname' }]}>
+                <Form.Item
+                  name="beneficiaryName"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter a nickname'
+                    },
+                    {
+                      max: 15,
+                      message: 'Nickname should not exceed 15 characters'
+                    }
+                  ]}
+                >
                   <AppInput className="input-beneficiary-name" placeholder="Enter nickname" />
                 </Form.Item>
               </Flex>
@@ -157,10 +176,19 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
         <Text className="neutral-1 font-semibold">
           Minimum number of signatures required to access assets once activated:
         </Text>
-        <Form.Item name="minRequiredSignatures">
+        <Form.Item
+          name="minRequiredSignatures"
+          rules={[{ required: true, message: 'Please select a number of signatures' }]}
+        >
           <AppSelect className="select-signature" options={minSignatureOptions} />
         </Form.Item>
       </Flex>
+      <DeleteBeneficiaryModal
+        onClose={onClose}
+        open={isOpen}
+        onDelete={handleDeleteBeneficiary}
+        selectedAddress={selectedAddress}
+      />
     </Flex>
   )
 }

@@ -8,7 +8,7 @@ export const DestructionForm = () => {
     <Flex vertical gap={16}>
       <WillName />
       <AssetDistribution />
-      <ActivationTrigger />
+      <ActivationTrigger type="destruction" />
     </Flex>
   )
 }

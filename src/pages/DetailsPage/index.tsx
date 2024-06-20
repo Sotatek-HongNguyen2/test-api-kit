@@ -13,7 +13,6 @@ export function DetailsPage() {
 
   const { address } = useAppSelector(getWalletSlice);
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
-  console.log("willDetail: ", willDetail);
   const willService = new WillServices();
 
   const method: WillMethod | null = useMemo(() => !!willDetail ? willDetail?.ownerAddress === address ? "created" : "inherited" : null, [willDetail, address])

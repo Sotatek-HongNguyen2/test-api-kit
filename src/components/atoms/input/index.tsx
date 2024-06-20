@@ -1,8 +1,25 @@
 import "./styles.scss"
 import Input, { InputProps } from "antd/es/input/Input"
 
-export const AppInput = (props: InputProps) => {
+interface AppInputProps extends InputProps {
+  onlyNumber?: boolean;
+}
+
+export const AppInput = (props: AppInputProps) => {
+  const { onlyNumber, ...restProps } = props;
   return (
-    <Input {...props} />
+    <Input
+      {
+      ...(onlyNumber && {
+        type: "number",
+        onKeyPress: (event) => {
+          if (!/[0-9]/.test(event.key)) {
+            event.preventDefault();
+          }
+        }
+      })
+      }
+      {...restProps}
+    />
   )
 }

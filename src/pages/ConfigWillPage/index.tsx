@@ -7,15 +7,65 @@ import { WillForm } from "@/components/templates/form";
 import { Flex, Form } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
+import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
+import inheritanceWillContract from "@/models/contract/evm/InheritanceWill";
+import { getWalletSlice, useAppSelector } from "@/store";
+import WillToast from "@/components/atoms/ToastMessage";
+import { BeneficiaryData } from "@/types";
+
+export interface ConfigFormDataType {
+  willName: string;
+  note: string;
+  beneficiariesList: BeneficiaryData[];
+  lackOfOutgoingTxRange: number;
+  lackOfSignedMsgRange: number;
+  minRequiredSignatures: number;
+}
 
 export function ConfigWillPage() {
+  const { address } = useAppSelector(getWalletSlice);
+  console.log("address: ", address);
+
   const navigate = useNavigate();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<ConfigFormDataType>();
   const [isConfigured, setIsConfigured] = useState(false);
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: ConfigFormDataType) => {
     console.log("values: ", values);
-    setIsConfigured(true);
+    if (!address) {
+      WillToast.error("Please connect your wallet first");
+      return;
+    }
+    const contract = new inheritanceWillContract({
+      address: address,
+      provider: {
+        type: PROVIDER_TYPE.WALLET,
+        injectObject: WALLET_INJECT_OBJ.METAMASK,
+      },
+    });
+    console.log("contract", contract)
+    const params = {
+      nameWill: values?.willName,
+      note: values?.note,
+      nickNames: values?.beneficiariesList.map((item) => item.name),
+      beneficiaries: values?.beneficiariesList.map((item) => address),
+      minRequiredSignatures: `${values?.minRequiredSignatures}`,
+      lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange,
+      lackOfSignedMsgRange: values?.lackOfSignedMsgRange,
+    }
+    console.log("params: ", params);
+    // const res = await contract?.createWill(params);
+    // console.log(res);
+    // console.log(
+    //   await res.send({
+    //     from: address,
+    //     gas: "300000",
+    //     value: "0",
+    //   })
+    // );
+
+    // setIsConfigured(true);
   };
   return (
     <WrapperContainer title="Configure your will">
