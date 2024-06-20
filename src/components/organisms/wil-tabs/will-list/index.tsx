@@ -75,6 +75,7 @@ export const WillList = (props: WillListProps) => {
   }, [searchParams, type]);
 
   const getTitle = () => {
+    if (!myWills || (myWills && myWills.length === 0)) return "Your wills will appear here once you have configured.";
     switch (type) {
       case "inherited":
         return "The following wills have you as a beneficiary and a co-signer:";
@@ -108,7 +109,7 @@ export const WillList = (props: WillListProps) => {
       <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
       <Flex vertical className="app-will--list">
         <Flex vertical gap="32px">
-          <Text size="text-lg">{getTitle()}</Text>
+          <Text size="text-lg" className="neutral-1">{getTitle()}</Text>
           {myWills && myWills.length > 0 ? (
             <>
               <>
