@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { WALLET_EVENT_NAME } from "@/models/wallet/wallet.abstract";
 import {
+  getAuthSlide,
   getWalletInstanceSlice,
   useAppDispatch,
   useAppSelector,
@@ -10,6 +11,7 @@ import { walletSliceActions } from "@/store/slices/walletSlice";
 // import WALLETS from "@/models/wallet";
 // import { DECIMALS } from "@/constants";
 import { useLogout } from "./useAuth";
+import { EVM_CHAINS_METADATA } from "@/models/network/network";
 // import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 
 export default function useWalletEvents() {
@@ -18,6 +20,7 @@ export default function useWalletEvents() {
   const { logout } = useLogout();
 
   const dispatch = useAppDispatch();
+  const { accessToken } = useAppSelector(getAuthSlide);
 
   // native event
   useEffect(() => {
@@ -52,7 +55,11 @@ export default function useWalletEvents() {
     walletInstance.addListener({
       eventName: WALLET_EVENT_NAME.CHAIN_CHANGED,
       handler(chain) {
-        if (!chain) return dispatch(walletSliceActions.disconnect());
+        const isMatch =
+          chain !== EVM_CHAINS_METADATA.mainnet.hexChainId &&
+          chain !== EVM_CHAINS_METADATA.sepolia.hexChainId &&
+          accessToken;
+        if (isMatch) return logout();
         console.log("test", chain);
         return;
       },
@@ -61,7 +68,7 @@ export default function useWalletEvents() {
       eventName: WALLET_EVENT_NAME.DISCONNECT,
       handler(error) {
         console.log("🚀 ~ handler ~ error:", error);
-        return dispatch(walletSliceActions.disconnect());
+        return logout();
       },
     });
     walletInstance.addListener({

@@ -77,12 +77,6 @@ export const useHandleLogin = () => {
     try {
       const strAddress = dto ? dto : address;
       if (strAddress) {
-        const resSignMessage = (await dispatch(
-          signMessage({
-            wallet: WALLETS.metamask,
-            address: strAddress,
-          })
-        )) as any;
         const netWorkID = await WALLETS.metamask.getNetwork();
         if (
           netWorkID !== EVM_CHAINS_METADATA.mainnet.hexChainId &&
@@ -91,6 +85,12 @@ export const useHandleLogin = () => {
           setUnSupportNetwork(true);
           return;
         }
+        const resSignMessage = (await dispatch(
+          signMessage({
+            wallet: WALLETS.metamask,
+            address: strAddress,
+          })
+        )) as any;
 
         if (resSignMessage?.error) {
           setLoadingLogin(false);
