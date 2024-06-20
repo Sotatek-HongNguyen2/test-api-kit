@@ -75,7 +75,7 @@ export const WillList = (props: WillListProps) => {
   }, [searchParams, type]);
 
   const getTitle = () => {
-    if (!myWills || (myWills && myWills.length === 0)) return "Your wills will appear here once you have configured.";
+    if (type === "created" && (!myWills || (myWills && myWills.length === 0))) return "Your wills will appear here once you have configured.";
     switch (type) {
       case "inherited":
         return "The following wills have you as a beneficiary and a co-signer:";
@@ -138,7 +138,11 @@ export const WillList = (props: WillListProps) => {
                   No data
                 </Text>
                 <Text size="text-sm" align="center" className="neutral-2">
-                  You currently have no will. Get started by creating a will
+                  {
+                    type === "created"
+                      ? "You currently have no will. Get started by creating a will"
+                      : "Currently there is no will have you as a beneficiary "
+                  }
                 </Text>
               </Flex>
             </Flex>
