@@ -1,29 +1,49 @@
 import "./styles.scss";
-import { Text } from "@/components/atoms/text";
-import { AssetData } from "@/types";
 import { Flex } from "antd";
-import clsx from "clsx";
+
+import { Text } from "@/components/atoms/text";
+import { AssetData, ItemOwnerBalance } from "@/types";
+import { LogoETH200 } from "@/assets/icons";
 
 interface AssetNameProps {
   asset?: AssetData;
   showSign?: boolean;
   iconClassName?: string;
+  ownerBalance: ItemOwnerBalance[];
 }
 
 export const AssetName = (props: AssetNameProps) => {
-  const { asset, showSign = true, iconClassName } = props;
+  const { asset, showSign = true, ownerBalance } = props;
   if (!asset) return null;
+
+  const getToken = () => {
+    for (const item of ownerBalance) {
+      if (asset.asset === item.address) {
+        return (
+          <Flex align="center" gap="10px">
+            <LogoETH200 />
+            <Flex vertical>
+              <Text className="font-semibold neutral-1">{item.name}</Text>
+              {showSign && <Text className="neutral-2">{item?.symbol}</Text>}
+            </Flex>
+          </Flex>
+        );
+      }
+    }
+    return (
+      <Flex align="center" gap="10px">
+        <LogoETH200 />
+        <Flex vertical>
+          <Text className="font-semibold neutral-1">Sepolia</Text>
+          {showSign && <Text className="neutral-2">ETH</Text>}
+        </Flex>
+      </Flex>
+    );
+  };
+
   return (
     <Flex align="center" gap="10px">
-      <img
-        src={asset?.assetIcon}
-        alt="asset-icon"
-        className={clsx("asset-icon", iconClassName)}
-      />
-      <Flex vertical>
-        <Text className="font-semibold neutral-1">{asset?.name}</Text>
-        {showSign && <Text className="neutral-2">{asset?.sign}</Text>}
-      </Flex>
+      {getToken()}
     </Flex>
   );
 };

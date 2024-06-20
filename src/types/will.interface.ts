@@ -37,6 +37,14 @@ export interface WillData {
   note?: string;
   status: WillStatus;
   willSignature: any[]; // signed signatures
+  ownerBalance: ItemOwnerBalance[];
+}
+
+export interface ItemOwnerBalance {
+  address: string;
+  balance: string;
+  name: string;
+  symbol: string;
 }
 
 export interface SaveAssetBody {
