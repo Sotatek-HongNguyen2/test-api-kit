@@ -44,26 +44,20 @@ export function ConfigWillPage() {
         injectObject: WALLET_INJECT_OBJ.METAMASK,
       },
     });
-    console.log("contract", contract)
     const params = {
       nameWill: values?.willName,
       note: values?.note,
       nickNames: values?.beneficiariesList.map((item) => item.name),
       beneficiaries: values?.beneficiariesList.map((item) => address),
-      minRequiredSignatures: `${values?.minRequiredSignatures}`,
-      lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange,
-      lackOfSignedMsgRange: values?.lackOfSignedMsgRange,
+      minRequiredSignatures: values?.minRequiredSignatures,
+      lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
+      lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
     }
-    console.log("params: ", params);
-    // const res = await contract?.createWill(params);
-    // console.log(res);
-    // console.log(
-    //   await res.send({
-    //     from: address,
-    //     gas: "300000",
-    //     value: "0",
-    //   })
-    // );
+    const res = await contract?.createWill(params);
+    const res2 = await res.send({
+      from: address,
+    })
+    console.log('res2', res2)
 
     // setIsConfigured(true);
   };
