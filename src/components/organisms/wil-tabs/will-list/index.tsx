@@ -114,7 +114,7 @@ export const WillList = (props: WillListProps) => {
             <>
               <>
                 {myWills?.map((will) => (
-                  <WillCard key={`will-item-${will?.id}`} will={will} type={type} />
+                  <WillCard key={`will-item-${will?.id}`} will={will} />
                 ))}
               </>
 
