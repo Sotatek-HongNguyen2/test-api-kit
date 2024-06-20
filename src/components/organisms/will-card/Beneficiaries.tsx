@@ -13,7 +13,13 @@ export const Beneficiaries = ({ beneficiaries }: { beneficiaries: AssetDetailDat
             <Flex key={`beneficiary-${index}`} gap="10px">
               <UserOutlined className="user-icon" />
               <Text className="neutral-1">
-                {beneficiary?.walletAddress?.substring(0, 10)}...{beneficiary?.walletAddress?.substring(beneficiary?.walletAddress?.length - 3, beneficiary?.walletAddress?.length)}
+                {
+                  beneficiary?.name && beneficiary?.name !== ""
+                    ?
+                    beneficiary?.name
+                    :
+                    `${beneficiary?.walletAddress?.substring(0, 10)}...${beneficiary?.walletAddress?.substring(beneficiary?.walletAddress?.length - 3, beneficiary?.walletAddress?.length)}`
+                }
               </Text>
             </Flex>
           ))
