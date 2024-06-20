@@ -8,7 +8,7 @@ interface AppBadgeProps extends Omit<BadgeProps, 'size' | 'color'> {
 }
 
 export const AppBadge = (props: AppBadgeProps) => {
-  const { color, size, className, ...restProps } = props;
+  const { color = "primary", size = "default", className, ...restProps } = props;
   return (
     <Badge
       color={color}

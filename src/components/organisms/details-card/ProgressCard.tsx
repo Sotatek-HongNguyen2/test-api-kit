@@ -1,6 +1,6 @@
 import { Card } from "@/components/atoms/card";
 import { WillProgress, WillProgressProps } from "../will-card/WillProgress";
-import { WillMethod } from "@/types";
+import { WillData, WillMethod } from "@/types";
 import { CartItemContainer } from "./CardItemContainer";
 import { TriggerIcon } from "@/assets/icons/custom-icon";
 import { Flex } from "antd";
@@ -8,12 +8,12 @@ import { TriggerCard } from "@/components/molecules/trigger-card";
 import NotGoingImage from '../../../../public/images/details/no-outgoing.png'
 import NotSignedImage from '../../../../public/images/details/no-signed.png'
 
-interface ProgressCardProps extends WillProgressProps {
+interface ProgressCardProps extends WillProgressProps, Pick<WillData, "lackTransaction" | "lackSignMessage"> {
   method: WillMethod;
 }
 
 export const ProgressCard = (props: ProgressCardProps) => {
-  const { method, ...restProps } = props;
+  const { method, lackTransaction, lackSignMessage, ...restProps } = props;
 
   return (
     <>
@@ -29,16 +29,24 @@ export const ProgressCard = (props: ProgressCardProps) => {
                 title="You have configured to activate your will using Outgoing transaction and Signed transaction ."
               />
               <Flex align="center" justify="space-between" gap={24}>
-                <TriggerCard
-                  image={NotGoingImage}
-                  title="No outgoing transactions in 6 months"
-                  description="You haven’t initiated an outgoing transaction in X months"
-                />
-                <TriggerCard
-                  image={NotSignedImage}
-                  title="No signed messages in 6 months"
-                  description="You haven’t signed a message in X months"
-                />
+                {
+                  lackTransaction && lackTransaction > 0 && (
+                    <TriggerCard
+                      image={NotGoingImage}
+                      title={`No outgoing transactions in ${lackTransaction} month${lackTransaction > 1 ? 's' : ''}`}
+                      description="You haven’t initiated an outgoing transaction in X months"
+                    />
+                  )
+                }
+                {
+                  lackSignMessage && lackSignMessage > 0 && (
+                    <TriggerCard
+                      image={NotSignedImage}
+                      title={`No signed messages in ${lackSignMessage} month${lackTransaction > 1 ? 's' : ''}`}
+                      description="You haven’t signed a message in X months"
+                    />
+                  )
+                }
               </Flex>
             </Flex>
           </CartItemContainer>
