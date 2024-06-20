@@ -9,7 +9,7 @@ interface AssetNameProps {
   asset?: AssetData;
   showSign?: boolean;
   iconClassName?: string;
-  ownerBalance: ItemOwnerBalance[];
+  ownerBalance?: ItemOwnerBalance[];
 }
 
 export const AssetName = (props: AssetNameProps) => {
@@ -17,7 +17,7 @@ export const AssetName = (props: AssetNameProps) => {
   if (!asset) return null;
 
   const getToken = () => {
-    for (const item of ownerBalance) {
+    for (const item of (ownerBalance ?? [])) {
       if (asset.asset === item.address) {
         return (
           <Flex align="center" gap="10px">

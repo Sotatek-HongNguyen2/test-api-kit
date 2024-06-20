@@ -16,10 +16,9 @@ import { WillListProps } from "../wil-tabs/will-list";
 
 interface WillCardProps {
   will: WillData;
-  type: WillListProps["type"];
 }
 
-export const WillCard = ({ will, type }: WillCardProps) => {
+export const WillCard = ({ will }: WillCardProps) => {
   const navigate = useNavigate();
   return (
     <Card
