@@ -10,14 +10,13 @@ import {
 import { walletSliceActions } from "@/store/slices/walletSlice";
 // import WALLETS from "@/models/wallet";
 // import { DECIMALS } from "@/constants";
-import { useLogout } from "./useAuth";
 import { EVM_CHAINS_METADATA } from "@/models/network/network";
+import { authInstanceSlideActions } from "@/store/slices/authSlides";
 // import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 
 export default function useWalletEvents() {
   const { walletInstance } = useAppSelector(getWalletInstanceSlice);
   // const { getBalance } = walletSliceActions;
-  const { logout } = useLogout();
 
   const dispatch = useAppDispatch();
   const { accessToken } = useAppSelector(getAuthSlide);
@@ -30,7 +29,8 @@ export default function useWalletEvents() {
     walletInstance.addListener({
       eventName: WALLET_EVENT_NAME.ACCOUNTS_CHANGED,
       async handler() {
-        await logout();
+        dispatch(walletSliceActions.logout());
+        dispatch(authInstanceSlideActions.deleteAuth());
         return;
         // if (accounts && accounts.length > 0) {
         //   const resGetBalance = await dispatch(
@@ -59,7 +59,11 @@ export default function useWalletEvents() {
           chain !== EVM_CHAINS_METADATA.mainnet.hexChainId &&
           chain !== EVM_CHAINS_METADATA.sepolia.hexChainId &&
           accessToken;
-        if (isMatch) return logout();
+        if (isMatch) {
+          dispatch(walletSliceActions.logout());
+          dispatch(authInstanceSlideActions.deleteAuth());
+          return;
+        }
         console.log("test", chain);
         return;
       },
@@ -68,7 +72,10 @@ export default function useWalletEvents() {
       eventName: WALLET_EVENT_NAME.DISCONNECT,
       handler(error) {
         console.log("🚀 ~ handler ~ error:", error);
-        return logout();
+        dispatch(authInstanceSlideActions.deleteAuth());
+        dispatch(walletSliceActions.logout());
+
+        return;
       },
     });
     walletInstance.addListener({
