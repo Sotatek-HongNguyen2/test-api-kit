@@ -12,6 +12,7 @@ import { walletSliceActions } from "@/store/slices/walletSlice";
 // import { DECIMALS } from "@/constants";
 import { EVM_CHAINS_METADATA } from "@/models/network/network";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
+import { commonInstanceSlideActions } from "@/store/slices/common";
 // import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 
 export default function useWalletEvents() {
@@ -55,16 +56,17 @@ export default function useWalletEvents() {
     walletInstance.addListener({
       eventName: WALLET_EVENT_NAME.CHAIN_CHANGED,
       handler(chain) {
-        const isMatch =
+        const isUnMatch =
           chain !== EVM_CHAINS_METADATA.mainnet.hexChainId &&
-          chain !== EVM_CHAINS_METADATA.sepolia.hexChainId &&
-          accessToken;
-        if (isMatch) {
+          chain !== EVM_CHAINS_METADATA.sepolia.hexChainId;
+        if (isUnMatch) {
           dispatch(walletSliceActions.logout());
           dispatch(authInstanceSlideActions.deleteAuth());
+          dispatch(commonInstanceSlideActions.updateIsMatchNetwork(!isUnMatch));
+          dispatch(commonInstanceSlideActions.updateOpen(true));
           return;
         }
-        console.log("test", chain);
+
         return;
       },
     });
