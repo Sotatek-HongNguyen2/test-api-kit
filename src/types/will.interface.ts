@@ -45,6 +45,9 @@ export interface ItemOwnerBalance {
   balance: string;
   name: string;
   symbol: string;
+  willSignature: any[]; // signed signatures;
+  lackSignMessage: number;
+  lackTransaction: number;
 }
 
 export interface SaveAssetBody {
