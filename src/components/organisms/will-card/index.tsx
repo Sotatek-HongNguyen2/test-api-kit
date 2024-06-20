@@ -16,9 +16,10 @@ import { WillListProps } from "../wil-tabs/will-list";
 
 interface WillCardProps {
   will: WillData;
+  type?: WillListProps["type"];
 }
 
-export const WillCard = ({ will }: WillCardProps) => {
+export const WillCard = ({ will, type }: WillCardProps) => {
   const navigate = useNavigate();
   return (
     <Card
@@ -32,7 +33,7 @@ export const WillCard = ({ will }: WillCardProps) => {
               <Text size="text-xl" className="font-bold">
                 {will?.name}
               </Text>
-              {will?.status === "active" ? (
+              {will?.status === "active" && type === "inherited" ? (
                 <AppBadge
                   color="secondary"
                   count={
@@ -41,7 +42,7 @@ export const WillCard = ({ will }: WillCardProps) => {
                     </Text>
                   }
                 />
-              ) : will?.status === "open" ? (
+              ) : will?.status === "open" && type === "inherited" ? (
                 <AppBadge
                   color="error"
                   count={
