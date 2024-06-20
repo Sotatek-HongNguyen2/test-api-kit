@@ -7,13 +7,15 @@ import {
   useAppSelector,
 } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
-import WALLETS from "@/models/wallet";
-import { DECIMALS } from "@/constants";
+// import WALLETS from "@/models/wallet";
+// import { DECIMALS } from "@/constants";
+import { useLogout } from "./useAuth";
 // import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 
 export default function useWalletEvents() {
   const { walletInstance } = useAppSelector(getWalletInstanceSlice);
-  const { getBalance } = walletSliceActions;
+  // const { getBalance } = walletSliceActions;
+  const { logout } = useLogout();
 
   const dispatch = useAppDispatch();
 
@@ -24,22 +26,24 @@ export default function useWalletEvents() {
 
     walletInstance.addListener({
       eventName: WALLET_EVENT_NAME.ACCOUNTS_CHANGED,
-      async handler(accounts) {
-        if (accounts && accounts.length > 0) {
-          const resGetBalance = await dispatch(
-            getBalance({
-              wallet: WALLETS.metamask,
-              address: accounts[0],
-              decimals: DECIMALS.ETH,
-            })
-          );
+      async handler() {
+        await logout();
+        return;
+        // if (accounts && accounts.length > 0) {
+        //   const resGetBalance = await dispatch(
+        //     getBalance({
+        //       wallet: WALLETS.metamask,
+        //       address: accounts[0],
+        //       decimals: DECIMALS.ETH,
+        //     })
+        //   );
 
-          await dispatch(
-            walletSliceActions.updateBalance(resGetBalance.payload as string)
-          );
-          return dispatch(walletSliceActions.updateAccount(accounts[0]));
-        }
-        return dispatch(walletSliceActions.disconnect());
+        //   await dispatch(
+        //     walletSliceActions.updateBalance(resGetBalance.payload as string)
+        //   );
+        //   return dispatch(walletSliceActions.updateAccount(accounts[0]));
+        // }
+        // return dispatch(walletSliceActions.disconnect());
       },
     });
     // display banner when listener was not initialize
