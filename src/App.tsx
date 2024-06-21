@@ -10,11 +10,13 @@ import useWeb3Injected from "./hooks/useWeb3Injected";
 import useLoadWalletInstances from "./hooks/useLoadWalletInstances";
 import ToastContext from "./components/atoms/ToastContext";
 import useWalletEvents from "./hooks/useWalletEvents";
+import useGetBalances from "./hooks/useGetBalances";
 
 const App: React.FC = () => {
   useWeb3Injected();
   useLoadWalletInstances();
   useWalletEvents();
+  useGetBalances();
 
   return (
     <Fragment>
