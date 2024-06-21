@@ -15,10 +15,12 @@
 
   .app-page {
     width: 100%;
-    padding: 7vh 5vw;
-    // background-color: transparent;
+    padding: 7vh 5vw 10vh;
     min-height: calc(100vh - $header-height);
     background: #F6F7FB;
+  }
 
+  .layout--home-page {
+    background: #FFFFFF;
   }
 }

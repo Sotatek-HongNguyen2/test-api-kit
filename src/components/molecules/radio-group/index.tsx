@@ -31,8 +31,8 @@ export const RadioGroup = (props: RadioGroupProps) => {
           (items ?? [])?.map((radio) => {
             const { id, ...rest } = radio;
             return (
-              <>
-                <AppRadio key={`radio-${id}`} {...rest} checked={value === radio?.value} onChange={(e) => {
+              <Flex vertical key={`radio-${id}`} gap={10}>
+                <AppRadio {...rest} checked={value === radio?.value} onChange={(e) => {
                   const newValue = e.target.value as CustomRadioItemProps['value'];
                   setValue(newValue);
                   onChange?.(newValue);
@@ -44,7 +44,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
                     </Flex>
                   ) : null
                 }
-              </>
+              </Flex>
             )
           })
         }

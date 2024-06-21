@@ -13,9 +13,9 @@ interface TriggerCardProps {
 export const TriggerCard = ({ image, title, description }: TriggerCardProps) => {
   return (
     <Card boxShadow="none" className="trigger-card">
-      <Flex gap={16}>
+      <Flex gap={16} align="center">
         <WillImage src={image} />
-        <Flex vertical gap={8}>
+        <Flex vertical gap={8} justify="center">
           <Text className="neutral-1 font-semibold">{title}</Text>
           <Text className="neutral-2">{description}</Text>
         </Flex>
