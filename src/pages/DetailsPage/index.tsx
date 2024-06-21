@@ -37,7 +37,9 @@ export function DetailsPage() {
     <DetailsContainer
       willName={willDetail?.name}
       willType={willDetail?.type}
-      description={`This is a ${willDetail?.type} will you are as a beneficiary.`}
+      description={method === "inherited"
+        ? `This is a ${willDetail?.type} will you are as a beneficiary.`
+        : `This is a ${willDetail?.type} will you created with list of beneficiaries.`}
       active={willDetail?.status !== 'active' ? false : { textSignatures: `There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund` }}
       method={method}
       contractId={willDetail?.txHash}
