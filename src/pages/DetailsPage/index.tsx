@@ -59,6 +59,8 @@ export function DetailsPage() {
         createdDate={willDetail?.createdAt}
         minimumSignatures={willDetail?.minSignature}
         method={method}
+        lackSignMessage={willDetail?.lackSignMessage}
+        lackTransaction={willDetail?.lackTransaction}
       />
       {
         willDetail?.type !== 'destruction' && (

@@ -1,6 +1,6 @@
 export const API_CONFIG = {
   auth: {
-    refreshToken: "/auth/refresh-token",
+    refreshToken: "auth/refresh-token",
     login: "/auth/login/metamask",
     logout: "/auth/logout",
   },
@@ -9,5 +9,5 @@ export const API_CONFIG = {
     myInheritedWill: "/will/my-inheritance",
     detail: "/will/detail",
     saveAsset: "/will/save-asset",
-  }
+  },
 } as const;

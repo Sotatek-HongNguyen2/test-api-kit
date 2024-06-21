@@ -1,7 +1,6 @@
+export type WillType = "inheritance" | "forwarding" | "destruction";
 
-export type WillType = "inheritance" | "forwarding" | "destruction"
-
-export type WillMethod = "inherited" | "created"
+export type WillMethod = "inherited" | "created";
 
 export interface BaseAsset {
   assetIcon: string;
@@ -9,7 +8,10 @@ export interface BaseAsset {
   sign: string;
 }
 export interface AssetData extends BaseAsset {
-  balance: number;
+  balance?: number;
+  amount: string | null;
+  asset: string;
+  willId: string | number;
 }
 
 export interface AssetDetailData {
@@ -20,7 +22,7 @@ export interface AssetDetailData {
   fwDetailAsset?: FWDetailAsset[];
 }
 
-export type WillStatus = 'open' | 'active';
+export type WillStatus = "open" | "active";
 export interface WillData {
   id: string | number;
   name: string;
@@ -35,6 +37,17 @@ export interface WillData {
   note?: string;
   status: WillStatus;
   willSignature: any[]; // signed signatures
+  ownerBalance: ItemOwnerBalance[];
+}
+
+export interface ItemOwnerBalance {
+  address: string;
+  balance: string;
+  name: string;
+  symbol: string;
+  willSignature: any[]; // signed signatures;
+  lackSignMessage: number;
+  lackTransaction: number;
 }
 
 export interface SaveAssetBody {

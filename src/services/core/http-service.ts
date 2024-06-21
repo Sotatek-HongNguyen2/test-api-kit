@@ -61,8 +61,12 @@ export class HttpClient {
               { refreshToken }
             );
             const newAccessToken = response.data.accessToken;
+            const newRefreshToken = response.data.refreshToken;
             store.dispatch(
               authInstanceSlideActions.updateAccessToken(newAccessToken)
+            );
+            store.dispatch(
+              authInstanceSlideActions.updateRefreshToken(newRefreshToken)
             );
             this.axiosInstance.defaults.headers["Authorization"] =
               "Bearer " + newAccessToken;

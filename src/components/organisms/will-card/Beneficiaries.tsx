@@ -12,7 +12,15 @@ export const Beneficiaries = ({ beneficiaries }: { beneficiaries: AssetDetailDat
           (beneficiaries ?? []).map((beneficiary, index) => (
             <Flex key={`beneficiary-${index}`} gap="10px">
               <UserOutlined className="user-icon" />
-              <Text>{beneficiary?.walletAddress?.substring(0, 6)}...{beneficiary?.walletAddress?.substring(beneficiary?.walletAddress?.length - 5, beneficiary?.walletAddress?.length - 1)}</Text>
+              <Text className="neutral-1">
+                {
+                  beneficiary?.name && beneficiary?.name !== ""
+                    ?
+                    beneficiary?.name
+                    :
+                    `${beneficiary?.walletAddress?.substring(0, 10)}...${beneficiary?.walletAddress?.substring(beneficiary?.walletAddress?.length - 3, beneficiary?.walletAddress?.length)}`
+                }
+              </Text>
             </Flex>
           ))
         }

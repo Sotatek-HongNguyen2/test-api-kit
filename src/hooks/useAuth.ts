@@ -63,6 +63,7 @@ const useLogin = () => {
             address: accountSigner,
             networkName: NETWORK_NAME.ETHEREUM,
             walletKey: WALLET_NAME.WALLET_CONNECT,
+            balance: "0",
           })
         );
         const signature = await signer.signMessage(

@@ -15,7 +15,7 @@ import { SearchParams } from "@/types/global";
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 
-interface WillListProps {
+export interface WillListProps {
   type?: "created" | "inherited";
 }
 
@@ -50,8 +50,8 @@ export const WillList = (props: WillListProps) => {
         type === "created"
           ? await willService.getMyWill(params)
           : type === "inherited"
-          ? await willService.getMyInheritedWill(params)
-          : null;
+            ? await willService.getMyInheritedWill(params)
+            : null;
       if (data) {
         setMyWills(data?.data);
         setCurrentPage(data?.metadata?.page);
@@ -75,6 +75,7 @@ export const WillList = (props: WillListProps) => {
   }, [searchParams, type]);
 
   const getTitle = () => {
+    if (type === "created" && (!myWills || (myWills && myWills.length === 0))) return "Your wills will appear here once you have configured.";
     switch (type) {
       case "inherited":
         return "The following wills have you as a beneficiary and a co-signer:";
@@ -105,15 +106,15 @@ export const WillList = (props: WillListProps) => {
 
   return (
     <Flex justify="space-between" gap="5vw">
-      <WillFilter onSearch={onSearch} onFilter={onFilter} />
+      <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
       <Flex vertical className="app-will--list">
         <Flex vertical gap="32px">
-          <Text size="text-lg">{getTitle()}</Text>
+          <Text size="text-lg" className="neutral-1">{getTitle()}</Text>
           {myWills && myWills.length > 0 ? (
             <>
               <>
                 {myWills?.map((will) => (
-                  <WillCard key={`will-item-${will?.id}`} will={will} />
+                  <WillCard key={`will-item-${will?.id}`} will={will} type={type} />
                 ))}
               </>
 
@@ -137,7 +138,11 @@ export const WillList = (props: WillListProps) => {
                   No data
                 </Text>
                 <Text size="text-sm" align="center" className="neutral-2">
-                  You currently have no will. Get started by creating a will
+                  {
+                    type === "created"
+                      ? "You currently have no will. Get started by creating a will"
+                      : "Currently there is no will have you as a beneficiary "
+                  }
                 </Text>
               </Flex>
             </Flex>

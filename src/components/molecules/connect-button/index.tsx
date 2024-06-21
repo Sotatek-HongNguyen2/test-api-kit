@@ -84,32 +84,32 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
         </div>
       ),
     },
-    {
-      key: "3",
-      label: (
-        <div className="item-menu space-between">
-          <span className="d-flex align-center g-8">
-            <LogoETH />
-            <span>Ethereum</span>
-            <span className="symbol">ETH</span>
-          </span>
-          <span>{useFormattedNumber(Number(balance))}</span>
-        </div>
-      ),
-    },
-    {
-      key: "4",
-      label: (
-        <div className="item-menu space-between">
-          <span className="d-flex align-center g-8">
-            <LogoETH />
-            <span>Ethereum</span>
-            <span className="symbol">ETH</span>
-          </span>
-          <span>{useFormattedNumber(Number(balance))}</span>
-        </div>
-      ),
-    },
+    // {
+    //   key: "3",
+    //   label: (
+    //     <div className="item-menu space-between">
+    //       <span className="d-flex align-center g-8">
+    //         <LogoETH />
+    //         <span>Ethereum</span>
+    //         <span className="symbol">ETH</span>
+    //       </span>
+    //       <span>{useFormattedNumber(Number(balance))}</span>
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   key: "4",
+    //   label: (
+    //     <div className="item-menu space-between">
+    //       <span className="d-flex align-center g-8">
+    //         <LogoETH />
+    //         <span>Ethereum</span>
+    //         <span className="symbol">ETH</span>
+    //       </span>
+    //       <span>{useFormattedNumber(Number(balance))}</span>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
