@@ -16,11 +16,11 @@ export const Assets = ({ will }: AssetsProps) => {
         Assets ({will.willAsset.length ?? 0})
       </Text>
       <Flex vertical gap="16px">
-        {will.willAsset.map((asset) => (
+        {will.willAsset.map((asset, index) => (
           <AssetItem
             asset={asset}
             ownerBalance={will.ownerBalance}
-            key={`index-${asset.willId}`}
+            key={`${index}-${asset.willId}`}
           />
         ))}
       </Flex>

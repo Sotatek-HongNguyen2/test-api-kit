@@ -3,6 +3,7 @@ import "./styles.scss";
 import { Outlet, useLocation } from "react-router-dom";
 import { Header } from "@/components/organisms";
 import { Dashboard } from "@/components/molecules/dashboard";
+import clsx from "clsx";
 
 const { Content } = Layout;
 
@@ -33,7 +34,7 @@ const LayoutComponent: React.FC<ILayoutProps> = () => {
                     <Dashboard title="My will list" />
                   )
                 }
-                <Flex vertical className="app-page">
+                <Flex vertical className={clsx("app-page", isHomePage && "layout--home-page")}>
                   <Outlet />
                 </Flex>
               </Flex>

@@ -40,9 +40,7 @@ export const WillTabs = () => {
     },
   ];
 
-  const addWill = <WillTypeModal />;
-
   return (
-    <Tabs defaultActiveKey="1" items={items} tabBarExtraContent={addWill} />
+    <Tabs defaultActiveKey="1" items={items} />
   );
 };

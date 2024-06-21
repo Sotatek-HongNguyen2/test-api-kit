@@ -1,6 +1,6 @@
 import "./styles.scss";
 import { Flex } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 
 import { WillData } from "@/types";
@@ -14,6 +14,8 @@ import { SearchParams } from "@/types/global";
 
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
+import { WillTypeModal } from "../will-type-modal";
+import useDisclosure from "@/hooks/useDisclosure";
 
 export interface WillListProps {
   type?: "created" | "inherited";
@@ -33,6 +35,7 @@ export const WillList = (props: WillListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
+
   const willService = new WillServices();
 
   const getWills = async () => {
@@ -74,6 +77,7 @@ export const WillList = (props: WillListProps) => {
     };
   }, [searchParams, type]);
 
+
   const getTitle = () => {
     if (type === "created" && (!myWills || (myWills && myWills.length === 0))) return "Your wills will appear here once you have configured.";
     switch (type) {
@@ -105,50 +109,54 @@ export const WillList = (props: WillListProps) => {
   };
 
   return (
-    <Flex justify="space-between" gap="5vw">
-      <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
-      <Flex vertical className="app-will--list">
-        <Flex vertical gap="32px">
-          <Text size="text-lg" className="neutral-1">{getTitle()}</Text>
-          {myWills && myWills.length > 0 ? (
-            <>
+    <Flex vertical gap={20} className="home-page">
+      <WillTypeModal />
+      <Flex justify="space-between" gap="5vw">
+        <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
+        <Flex vertical className="app-will--list">
+          <Flex vertical gap="32px">
+            <Text size="text-lg" className="neutral-1">{getTitle()}</Text>
+            {myWills && myWills.length > 0 ? (
               <>
-                {myWills?.map((will) => (
-                  <WillCard key={`will-item-${will?.id}`} will={will} type={type} />
-                ))}
-              </>
+                <>
+                  {myWills?.map((will) => (
+                    <WillCard key={`will-item-${will?.id}`} will={will} type={type} />
+                  ))}
+                </>
 
-              <Flex justify="flex-end">
-                <AppPagination
-                  total={totalPage}
-                  current={currentPage}
-                  onChange={(page) => setCurrentPage(page)}
-                />
+                <Flex justify="flex-end">
+                  <AppPagination
+                    total={totalPage}
+                    current={currentPage}
+                    onChange={(page) => setCurrentPage(page)}
+                  />
+                </Flex>
+              </>
+            ) : (
+              <Flex vertical justify="center" align="center" gap={16}>
+                <NoData />
+                <Flex vertical gap={4}>
+                  <Text
+                    size="text-lg"
+                    align="center"
+                    className="font-semibold neutral-1"
+                  >
+                    No data
+                  </Text>
+                  <Text size="text-sm" align="center" className="neutral-2">
+                    {
+                      type === "created"
+                        ? "You currently have no will. Get started by creating a will"
+                        : "Currently there is no will have you as a beneficiary "
+                    }
+                  </Text>
+                </Flex>
               </Flex>
-            </>
-          ) : (
-            <Flex vertical justify="center" align="center" gap={16}>
-              <NoData />
-              <Flex vertical gap={4}>
-                <Text
-                  size="text-lg"
-                  align="center"
-                  className="font-semibold neutral-1"
-                >
-                  No data
-                </Text>
-                <Text size="text-sm" align="center" className="neutral-2">
-                  {
-                    type === "created"
-                      ? "You currently have no will. Get started by creating a will"
-                      : "Currently there is no will have you as a beneficiary "
-                  }
-                </Text>
-              </Flex>
-            </Flex>
-          )}
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
+
   );
 };

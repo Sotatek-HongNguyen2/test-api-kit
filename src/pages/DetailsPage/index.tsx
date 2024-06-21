@@ -13,7 +13,6 @@ export function DetailsPage() {
 
   const { address } = useAppSelector(getWalletSlice);
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
-  console.log("willDetail: ", willDetail);
   const willService = new WillServices();
 
   const method: WillMethod | null = useMemo(() => !!willDetail ? willDetail?.ownerAddress === address ? "created" : "inherited" : null, [willDetail, address])
@@ -44,7 +43,7 @@ export function DetailsPage() {
       contractId={willDetail?.txHash}
       willId={willId}
     >
-      <AssetCard assets={willDetail?.willAsset} />
+      <AssetCard willDetail={willDetail} />
       {
         willDetail?.type !== 'destruction' && (
           <BeneficiariesCard beneficiaries={willDetail?.willDetail} />
@@ -62,6 +61,7 @@ export function DetailsPage() {
         method={method}
         lackSignMessage={willDetail?.lackSignMessage}
         lackTransaction={willDetail?.lackTransaction}
+        owner={willDetail?.owner}
       />
       {
         willDetail?.type !== 'destruction' && (
