@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 const formatNumber = (number: number): string => {
   const numberStr = number.toString();
@@ -10,13 +10,13 @@ const formatNumber = (number: number): string => {
   return `${integerPart}.${decimalPart}`;
 };
 
-const useFormattedNumber = (number: number): string => {
-  const [formattedNumber, setFormattedNumber] = useState<string>("");
-  useEffect(() => {
-    setFormattedNumber(formatNumber(number));
-  }, [number]);
+// const useFormattedNumber = (number: number): string => {
+//   const [formattedNumber, setFormattedNumber] = useState<string>("");
+//   useEffect(() => {
+//     setFormattedNumber(formatNumber(number));
+//   }, [number]);
 
-  return formattedNumber;
-};
+//   return formattedNumber;
+// };
 
-export default useFormattedNumber;
+export default formatNumber;

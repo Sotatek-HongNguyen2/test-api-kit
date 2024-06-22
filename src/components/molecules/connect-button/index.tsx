@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import {
   getAuthSlide,
+  getBalanceSlide,
   getWalletSlice,
   useAppDispatch,
   useAppSelector,
@@ -19,7 +20,7 @@ import { WALLET_NAME } from "@/models/wallet";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import { useLogout } from "@/hooks/useAuth";
 import { APP_ROUTES_PATHS } from "@/constants";
-import useFormattedNumber from "@/hooks/useFormatToken";
+import formatNumber from "@/helpers/useFormatToken";
 
 interface IPropsConnectButton {
   clickLogin: () => void;
@@ -28,7 +29,9 @@ interface IPropsConnectButton {
 export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
   const { address, walletKey } = useAppSelector(getWalletSlice);
   const { accessToken } = useAppSelector(getAuthSlide);
-  const { balance } = useAppSelector(getWalletSlice);
+  const { listBalances } = useAppSelector(getBalanceSlide);
+
+  // const { balance } = useAppSelector(getWalletSlice);
   const { logout } = useLogout();
   const navigate = useNavigate();
 
@@ -58,59 +61,38 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
     navigate(APP_ROUTES_PATHS.NO_AUTH);
   };
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <div className="item-menu" onClick={handleLogout}>
-          <Logout />
-          <span>Disconnect</span>
-        </div>
-      ),
-    },
-    {
-      type: "divider",
-    },
-    {
-      key: "2",
-      label: (
-        <div className="item-menu space-between">
-          <span className="d-flex align-center g-8">
-            <LogoETH />
-            <span>Ethereum</span>
-            <span className="symbol">ETH</span>
-          </span>
-          <span>{useFormattedNumber(Number(balance))}</span>
-        </div>
-      ),
-    },
-    // {
-    //   key: "3",
-    //   label: (
-    //     <div className="item-menu space-between">
-    //       <span className="d-flex align-center g-8">
-    //         <LogoETH />
-    //         <span>Ethereum</span>
-    //         <span className="symbol">ETH</span>
-    //       </span>
-    //       <span>{useFormattedNumber(Number(balance))}</span>
-    //     </div>
-    //   ),
-    // },
-    // {
-    //   key: "4",
-    //   label: (
-    //     <div className="item-menu space-between">
-    //       <span className="d-flex align-center g-8">
-    //         <LogoETH />
-    //         <span>Ethereum</span>
-    //         <span className="symbol">ETH</span>
-    //       </span>
-    //       <span>{useFormattedNumber(Number(balance))}</span>
-    //     </div>
-    //   ),
-    // },
-  ];
+  const items = useMemo(() => {
+    const arr = [
+      {
+        key: "1",
+        label: (
+          <div className="item-menu" onClick={handleLogout}>
+            <Logout />
+            <span>Disconnect</span>
+          </div>
+        ),
+      },
+      {
+        type: "divider",
+      },
+    ];
+    listBalances.map((item: any, index: number) => {
+      arr.push({
+        key: `${index + 2}`,
+        label: (
+          <div className="item-menu space-between">
+            <span className="d-flex align-center g-8">
+              <LogoETH />
+              <span>{item.name}</span>
+              <span className="symbol">{item.symbol}</span>
+            </span>
+            <span>{formatNumber(item.balance)}</span>
+          </div>
+        ),
+      });
+    });
+    return arr;
+  }, [listBalances]) as MenuProps["items"];
 
   return (
     <>
