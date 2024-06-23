@@ -25,7 +25,6 @@ export interface ConfigFormDataType {
 
 export function ConfigWillPage() {
   const { address } = useAppSelector(getWalletSlice);
-  console.log("address: ", address);
 
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
@@ -48,18 +47,19 @@ export function ConfigWillPage() {
       nameWill: values?.willName,
       note: values?.note,
       nickNames: values?.beneficiariesList.map((item) => item.name),
-      beneficiaries: values?.beneficiariesList.map((item) => address),
+      beneficiaries: values?.beneficiariesList.map((item) => item?.address),
       minRequiredSignatures: values?.minRequiredSignatures,
       lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
       lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
     }
+    console.log('params', params)
     const res = await contract?.createWill(params);
     const res2 = await res.send({
       from: address,
     })
     console.log('res2', res2)
 
-    // setIsConfigured(true);
+    setIsConfigured(true);
   };
   return (
     <WrapperContainer title="Configure your will">

@@ -44,7 +44,7 @@ export const AddAssetDistributionForm = () => {
     const assetIndex = assets.findIndex(item => item.value === asset?.value);
     const newAsset: AssetDataColumn = {
       token: asset?.label,
-      amount: 1000000.51,
+      amount: asset?.amount as number,
       value: asset?.value as string
     }
     const newAssets = [...assets];

@@ -2,48 +2,33 @@ import "./styles.scss";
 import { Flex } from "antd";
 
 import { Text } from "@/components/atoms/text";
-import { AssetData, ItemOwnerBalance } from "@/types";
+import { BaseAsset } from "@/types";
+import { AssetItemData, assetData } from "@/constants/asset";
+import { useMemo } from "react";
 import { LogoETH200 } from "@/assets/icons";
 
 interface AssetNameProps {
-  asset?: AssetData;
+  asset?: BaseAsset;
   showSign?: boolean;
   iconClassName?: string;
-  ownerBalance?: ItemOwnerBalance[];
 }
 
 export const AssetName = (props: AssetNameProps) => {
-  const { asset, showSign = true, ownerBalance } = props;
+  const { asset, showSign = true } = props;
   if (!asset) return null;
 
-  const getToken = () => {
-    for (const item of (ownerBalance ?? [])) {
-      if (asset.asset === item.address) {
-        return (
-          <Flex align="center" gap="10px">
-            <LogoETH200 />
-            <Flex vertical>
-              <Text className="font-semibold neutral-1">{item.name}</Text>
-              {showSign && <Text className="neutral-2">{item?.symbol}</Text>}
-            </Flex>
-          </Flex>
-        );
-      }
-    }
-    return (
-      <Flex align="center" gap="10px">
-        <LogoETH200 />
-        <Flex vertical>
-          <Text className="font-semibold neutral-1">Sepolia</Text>
-          {showSign && <Text className="neutral-2">ETH</Text>}
-        </Flex>
-      </Flex>
-    );
-  };
+
+  const assetDataItem: AssetItemData = useMemo(() => assetData[asset?.symbol ?? 'ETH'], [asset?.symbol]);
 
   return (
     <Flex align="center" gap="10px">
-      {getToken()}
+      <Flex align="center" gap="10px">
+        {assetDataItem?.icon ?? <LogoETH200 />}
+        <Flex vertical>
+          <Text className="font-semibold neutral-1">{asset?.name ?? assetDataItem?.name}</Text>
+          {showSign && <Text className="neutral-2">{asset?.symbol ?? "ETH"}</Text>}
+        </Flex>
+      </Flex>
     </Flex>
   );
 };

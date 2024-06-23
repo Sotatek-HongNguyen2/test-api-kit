@@ -1,12 +1,13 @@
 import "./styles.scss"
 import { AppSelect } from "@/components/atoms/select"
 import { Text } from "@/components/atoms/text"
-import { assetTemp } from "@/components/organisms/wil-tabs"
 import { Flex } from "antd"
 import { useState } from "react"
 import { DefaultOptionType } from "antd/es/select"
 import { AssetName } from "./AssetName"
 import { AssetSelectType } from "@/components/organisms/config-card/AddAssetDistributionForm"
+import { assetDataList } from "@/constants/asset"
+import { getBalanceSlide, useAppSelector } from "@/store"
 
 interface SelectAssetProps {
   addAsset?: (asset: AssetSelectType) => void;
@@ -14,12 +15,17 @@ interface SelectAssetProps {
 
 export const SelectAsset = ({ addAsset }: SelectAssetProps) => {
   const [currentAsset, setCurrentAsset] = useState<DefaultOptionType | null>(null);
+  const { listBalances } = useAppSelector(getBalanceSlide);
 
-  const assetOptions = assetTemp?.map((asset) => ({
-    title: asset?.name,
-    value: asset?.sign,
-    label: <AssetName asset={asset} />
-  }))
+  const assetOptions = (listBalances ?? [])?.map((asset) => {
+    const labelAsset = assetDataList.find(item => item?.symbol === asset?.symbol);
+    return {
+      title: asset?.name,
+      value: asset?.symbol,
+      amount: asset?.balance,
+      label: <AssetName asset={labelAsset} />
+    }
+  })
 
   return (
     <Flex vertical gap={12} className="select-asset">
@@ -34,7 +40,7 @@ export const SelectAsset = ({ addAsset }: SelectAssetProps) => {
           }}
           labelRender={() => {
             return <AssetName
-              asset={assetTemp?.find(item => item?.sign === currentAsset?.value)}
+              asset={assetDataList?.find(item => item?.symbol === currentAsset?.value)}
               showSign={false}
               iconClassName="asset-icon--small"
             />
