@@ -30,56 +30,70 @@ export function ConfigWillPage() {
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
   const [isConfigured, setIsConfigured] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values: ConfigFormDataType) => {
-    if (!willType) {
-      WillToast.error("Something went wrong, please try again later");
-      return;
-    }
-    if (!address) {
-      WillToast.error("Please connect your wallet first");
-      return;
-    }
-    const contractAddress = () => {
-      switch (willType) {
-        case "inheritance":
-          return import.meta.env.VITE_INHERITANCE_ROUTER;
-        case "forwarding":
-          return import.meta.env.VITE_FORWARDING_ROUTER;
-        default:
-          return import.meta.env.VITE_DESTRUCTION_ROUTER;
+    try {
+      setLoading(true);
+      if (!willType) {
+        WillToast.error("Something went wrong, please try again later");
+        return;
       }
-    };
-    const addressData = contractAddress();
-    if (!addressData) {
-      WillToast.error("Something went wrong, please try again later");
-      return;
-    }
+      if (!address) {
+        WillToast.error("Please connect your wallet first");
+        return;
+      }
+      const contractAddress = () => {
+        switch (willType) {
+          case "inheritance":
+            return import.meta.env.VITE_INHERITANCE_ROUTER;
+          case "forwarding":
+            return import.meta.env.VITE_FORWARDING_ROUTER;
+          default:
+            return import.meta.env.VITE_DESTRUCTION_ROUTER;
+        }
+      };
+      const addressData = contractAddress();
+      if (!addressData) {
+        WillToast.error("Something went wrong, please try again later");
+        return;
+      }
 
-    const contract = new inheritanceWillContract({
-      address: addressData,
-      provider: {
-        type: PROVIDER_TYPE.WALLET,
-        injectObject: WALLET_INJECT_OBJ.METAMASK,
-      },
-    });
-    const params = {
-      nameWill: values?.willName,
-      note: values?.note,
-      nickNames: values?.beneficiariesList.map((item) => item.name),
-      beneficiaries: values?.beneficiariesList.map((item) => item?.address),
-      minRequiredSignatures: values?.minRequiredSignatures,
-      lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
-      lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
-    }
-    console.log('params', params)
-    const res = await contract?.createWill(params);
-    const res2 = await res.send({
-      from: address,
-    })
-    console.log('res2', res2)
+      const contract = new inheritanceWillContract({
+        address: addressData,
+        provider: {
+          type: PROVIDER_TYPE.WALLET,
+          injectObject: WALLET_INJECT_OBJ.METAMASK,
+        },
+      });
+      const params = {
+        nameWill: values?.willName,
+        note: values?.note,
+        nickNames: values?.beneficiariesList.map((item) => item.name),
+        beneficiaries: values?.beneficiariesList.map((item) => item?.address),
+        minRequiredSignatures: values?.minRequiredSignatures,
+        lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
+        lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
+      }
+      console.log('params', params)
+      const res = await contract?.createWill(params);
+      console.log("res: ", res);
+      const estGas = await res?.estimateGas();
+      console.log("estGas: ", estGas);
+      // const res2 = await res.send({
+      //   from: address,
+      //   // gas: "100000",
+      //   gas: estGas.toString(),
+      // })
+      // console.log('res2', res2)
 
-    setIsConfigured(true);
+      setIsConfigured(true);
+    } catch (error: any) {
+      WillToast.error(error.message);
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <WrapperContainer title="Configure your will">
@@ -107,6 +121,7 @@ export function ConfigWillPage() {
                     type="primary"
                     className="uppercase font-bold"
                     htmlType="submit"
+                    loading={loading}
                   >
                     Configure will
                   </AppButton>
