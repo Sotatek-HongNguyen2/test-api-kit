@@ -6,7 +6,7 @@ import { WrapperContainer } from "@/components/organisms/wrapper-container";
 import { WillForm } from "@/components/templates/form";
 import { Flex, Form } from "antd";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import inheritanceWillContract from "@/models/contract/evm/InheritanceWill";
@@ -25,19 +25,39 @@ export interface ConfigFormDataType {
 
 export function ConfigWillPage() {
   const { address } = useAppSelector(getWalletSlice);
+  const { willType } = useParams();
 
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
   const [isConfigured, setIsConfigured] = useState(false);
 
   const onFinish = async (values: ConfigFormDataType) => {
-    console.log("values: ", values);
+    if (!willType) {
+      WillToast.error("Something went wrong, please try again later");
+      return;
+    }
     if (!address) {
       WillToast.error("Please connect your wallet first");
       return;
     }
+    const contractAddress = () => {
+      switch (willType) {
+        case "inheritance":
+          return import.meta.env.VITE_INHERITANCE_ROUTER;
+        case "forwarding":
+          return import.meta.env.VITE_FORWARDING_ROUTER;
+        default:
+          return import.meta.env.VITE_DESTRUCTION_ROUTER;
+      }
+    };
+    const addressData = contractAddress();
+    if (!addressData) {
+      WillToast.error("Something went wrong, please try again later");
+      return;
+    }
+
     const contract = new inheritanceWillContract({
-      address: address,
+      address: addressData,
       provider: {
         type: PROVIDER_TYPE.WALLET,
         injectObject: WALLET_INJECT_OBJ.METAMASK,
