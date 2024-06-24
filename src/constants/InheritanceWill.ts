@@ -43,6 +43,7 @@ const InheritanceWillAbi = [
   },
   { inputs: [], name: "NotEnoughEther", type: "error" },
   { inputs: [], name: "SignatureInvalid", type: "error" },
+  { inputs: [], name: "TwoArraysLengthMismatch", type: "error" },
   {
     inputs: [{ internalType: "address", name: "user", type: "address" }],
     name: "WillLimitExceeded",
@@ -57,6 +58,24 @@ const InheritanceWillAbi = [
         internalType: "uint256",
         name: "willId",
         type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "ethAmount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address[]",
+        name: "erc20Addresses",
+        type: "address[]",
+      },
+      {
+        indexed: false,
+        internalType: "uint256[]",
+        name: "erc20Amounts",
+        type: "uint256[]",
       },
       {
         indexed: false,
@@ -82,6 +101,24 @@ const InheritanceWillAbi = [
         internalType: "address",
         name: "beneficiary",
         type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "ethAmount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address[]",
+        name: "erc20Addresses",
+        type: "address[]",
+      },
+      {
+        indexed: false,
+        internalType: "uint256[]",
+        name: "erc20Amounts",
+        type: "uint256[]",
       },
       {
         indexed: false,
@@ -161,6 +198,7 @@ const InheritanceWillAbi = [
             name: "beneficiaries",
             type: "address[]",
           },
+          { internalType: "address[]", name: "assets", type: "address[]" },
         ],
         indexed: false,
         internalType: "struct InheritanceWillRouter.WillMainConfig",
@@ -382,6 +420,7 @@ const InheritanceWillAbi = [
             name: "beneficiaries",
             type: "address[]",
           },
+          { internalType: "address[]", name: "assets", type: "address[]" },
         ],
         internalType: "struct InheritanceWillRouter.WillMainConfig",
         name: "mainConfig_",
