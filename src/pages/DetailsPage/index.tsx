@@ -36,7 +36,7 @@ export function DetailsPage() {
     if (method === "inherited") {
       switch (willDetail?.type) {
         case "inheritance":
-          return willDetail?.status === "active" ? (
+          return ["process", "done"]?.includes(willDetail?.status) ? (
             <>
               This is an <span className="capitalize">{willDetail?.type}</span> will you are a beneficiary of. When this will is activated, a minimum number of co-signatures will be required for you as a beneficiary to claim the fund in the multisig-wallet.
             </>
@@ -74,7 +74,9 @@ export function DetailsPage() {
       willName={willDetail?.name}
       willType={willDetail?.type}
       description={getPageDescription()}
-      active={willDetail?.status !== 'active' ? false : { textSignatures: `There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund` }}
+      active={!["process", "done"]?.includes(willDetail?.status)
+        ? false
+        : { textSignatures: `There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund` }}
       method={method}
       contractId={willDetail?.txHash}
       willId={willId}

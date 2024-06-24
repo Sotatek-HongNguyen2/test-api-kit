@@ -33,7 +33,7 @@ export const WillCard = ({ will, type }: WillCardProps) => {
               <Text size="text-xl" className="font-bold">
                 {will?.name}
               </Text>
-              {will?.status === "active" && type === "inherited" ? (
+              {["process", "done"]?.includes(will?.status) && type === "inherited" ? (
                 <AppBadge
                   color="secondary"
                   count={
