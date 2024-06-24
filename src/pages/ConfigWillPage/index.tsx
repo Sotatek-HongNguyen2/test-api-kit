@@ -1,18 +1,23 @@
+import { Flex, Form } from "antd";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Web3 from "web3";
+
 import { AppButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text";
 import { AssetTableWithAction } from "@/components/molecules/asset-item/AssetTableWithAction";
 import { WillTypeCard } from "@/components/organisms";
 import { WrapperContainer } from "@/components/organisms/wrapper-container";
 import { WillForm } from "@/components/templates/form";
-import { Flex, Form } from "antd";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
+import { PROVIDER_TYPE, ProviderType } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import inheritanceWillContract from "@/models/contract/evm/InheritanceWill";
 import { getWalletSlice, useAppSelector } from "@/store";
 import WillToast from "@/components/atoms/ToastMessage";
 import { BeneficiaryData } from "@/types";
+import { getWeb3Instance } from "@/helpers/evmHandlers";
+import BigNumber from "bignumber.js";
+import { formWei } from "@/helpers/common";
 
 export interface ConfigFormDataType {
   willName: string;
@@ -33,6 +38,11 @@ export function ConfigWillPage() {
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values: ConfigFormDataType) => {
+    const provider: ProviderType = {
+      type: PROVIDER_TYPE.WALLET,
+      injectObject: WALLET_INJECT_OBJ.METAMASK,
+    };
+    const web3 = getWeb3Instance(provider);
     try {
       setLoading(true);
       if (!willType) {
@@ -66,6 +76,7 @@ export function ConfigWillPage() {
           injectObject: WALLET_INJECT_OBJ.METAMASK,
         },
       });
+
       const params = {
         nameWill: values?.willName,
         note: values?.note,
@@ -74,70 +85,68 @@ export function ConfigWillPage() {
         minRequiredSignatures: values?.minRequiredSignatures,
         lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
         lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
-      }
-      console.log('params', params)
+      };
+
       const res = await contract?.createWill(params);
-      console.log("res: ", res);
-      const estGas = await res?.estimateGas();
-      console.log("estGas: ", estGas);
-      // const res2 = await res.send({
-      //   from: address,
-      //   // gas: "100000",
-      //   gas: estGas.toString(),
-      // })
-      // console.log('res2', res2)
+
+      await res?.estimateGas({
+        from: address,
+        value: "0",
+      });
+
+      const res2 = await res.send({
+        from: address,
+        value: "0",
+      });
+      console.log("res2", res2);
 
       setIsConfigured(true);
     } catch (error: any) {
       WillToast.error(error.message);
-      console.error(error.message);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
   return (
     <WrapperContainer title="Configure your will">
-      <Form
-        form={form}
-        onFinish={onFinish}
-        autoComplete="off"
-      >
+      <Form form={form} onFinish={onFinish} autoComplete="off">
         <Flex vertical gap={16}>
-          {
-            isConfigured ? (
-              <>
-                <AssetTableWithAction />
-                <AppButton type="primary" className="none-styles">
-                  <Text size="text-lg" className="font-bold">Save</Text>
+          {isConfigured ? (
+            <>
+              <AssetTableWithAction />
+              <AppButton type="primary" className="none-styles">
+                <Text size="text-lg" className="font-bold">
+                  Save
+                </Text>
+              </AppButton>
+            </>
+          ) : (
+            <>
+              <WillTypeCard />
+              <WillForm />
+              <Flex align="center" gap={16}>
+                <AppButton
+                  size="xl"
+                  type="primary"
+                  className="uppercase font-bold"
+                  htmlType="submit"
+                  loading={loading}
+                >
+                  Configure will
                 </AppButton>
-              </>
-            ) : (
-              <>
-                <WillTypeCard />
-                <WillForm />
-                <Flex align="center" gap={16}>
-                  <AppButton
-                    size="xl"
-                    type="primary"
-                    className="uppercase font-bold"
-                    htmlType="submit"
-                    loading={loading}
-                  >
-                    Configure will
-                  </AppButton>
-                  <AppButton
-                    size="xl"
-                    className="uppercase font-bold neutral-1 transparent"
-                    onClick={() => navigate(-1)}
-                  >
-                    Cancel
-                  </AppButton>
-                </Flex>
-              </>
-            )
-          }
+                <AppButton
+                  size="xl"
+                  className="uppercase font-bold neutral-1 transparent"
+                  onClick={() => navigate(-1)}
+                >
+                  Cancel
+                </AppButton>
+              </Flex>
+            </>
+          )}
         </Flex>
       </Form>
     </WrapperContainer>
   );
-};
+}
