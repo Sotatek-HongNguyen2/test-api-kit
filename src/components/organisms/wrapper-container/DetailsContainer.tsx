@@ -13,7 +13,7 @@ interface DetailsContainerProps {
   children: React.ReactNode;
   willName: string;
   willType: WillType;
-  description: string;
+  description: string | React.ReactNode;
   active: false | {
     textSignatures: string;
   };
