@@ -11,6 +11,16 @@ export const NoteToBeneficiaries = () => {
     >
       <Form.Item
         name="note"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your note!'
+          },
+          {
+            max: 2000,
+            message: 'Note should not exceed 2000 characters'
+          }
+        ]}
       >
         <AppInputArea />
       </Form.Item>

@@ -3,12 +3,12 @@ export type WillType = "inheritance" | "forwarding" | "destruction";
 export type WillMethod = "inherited" | "created";
 
 export interface BaseAsset {
-  assetIcon: string;
+  icon: React.ReactNode;
   name: string;
-  sign: string;
+  symbol: string;
 }
 export interface AssetData extends BaseAsset {
-  balance?: number;
+  balance?: string;
   amount: string | null;
   asset: string;
   willId: string | number;

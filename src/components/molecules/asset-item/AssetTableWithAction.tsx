@@ -1,14 +1,28 @@
 import { Text } from "@/components/atoms/text";
-import { assetTemp } from "@/components/organisms/wil-tabs";
-import { Flex, Table } from "antd";
+import { Flex, Form, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { AssetName } from "./AssetName";
-import { AssetData } from "@/types";
+import { BaseAsset } from "@/types";
 import { AppButton } from "@/components/atoms/button";
+import { assetDataList } from "@/constants/asset";
+import { useMemo } from "react";
 
 export const AssetTableWithAction = () => {
 
-  const columns: ColumnsType<AssetData> = [
+  const configForm = Form.useFormInstance();
+  const { getFieldValue } = configForm;
+  const selectOptions = useMemo(() => {
+    const assetDistribution = getFieldValue('assetDistribution') ?? [];
+    return assetDistribution?.map((item: any) => {
+      const asset = assetDataList.find((asset) => asset.symbol === item?.value);
+      return {
+        ...asset,
+        ...item,
+      }
+    });
+  }, [getFieldValue])
+
+  const columns: ColumnsType<BaseAsset> = [
     {
       title: 'Token',
       dataIndex: 'token',
@@ -17,9 +31,9 @@ export const AssetTableWithAction = () => {
     },
     {
       title: 'Amount',
-      dataIndex: 'balance',
-      key: 'balance',
-      render: (balance) => <Text className="neutral-1 font-semibold">{balance}</Text>
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (amount) => <Text className="neutral-1 font-semibold">{amount}</Text>
     },
     {
       title: 'Action',
@@ -28,7 +42,7 @@ export const AssetTableWithAction = () => {
       render: (_, record) => (
         <Flex gap={8} justify="flex-end" className="configured-table-action">
           {
-            record?.sign === "ETH" ? (
+            record?.symbol === "ETH" ? (
               <>
                 <AppButton size="small" type="primary-outlined" className="btn-action">
                   <Text size="text-sm" className="font-bold uppercase">Deposit</Text>
@@ -51,7 +65,7 @@ export const AssetTableWithAction = () => {
     <>
       <Table
         columns={columns}
-        dataSource={assetTemp}
+        dataSource={selectOptions}
         pagination={false}
         className="configured-table"
       />

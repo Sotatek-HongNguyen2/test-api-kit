@@ -5,7 +5,8 @@ import { AppTable } from "@/components/molecules/table";
 import { ColumnsType } from "antd/es/table";
 import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { Text } from "@/components/atoms/text";
-import { assetTemp } from "../wil-tabs";
+import { useMemo } from "react";
+import formatNumber from "@/helpers/useFormatToken";
 
 interface AssetCardProps {
   willDetail: WillData;
@@ -13,12 +14,24 @@ interface AssetCardProps {
 
 export const AssetCard = ({ willDetail }: AssetCardProps) => {
 
+  const listAsset = useMemo(() => willDetail?.willAsset?.map((asset) => {
+    const ownerBalance = willDetail?.ownerBalance?.find(
+      (item) => item.address == asset.asset
+    );
+    return {
+      ...asset,
+      ...ownerBalance,
+      amount: Number(asset?.amount) > Number(ownerBalance?.balance)
+        ? formatNumber(Number(ownerBalance?.balance)) : formatNumber(Number(asset?.amount))
+    }
+  }), [willDetail]);
+
   const columns: ColumnsType<AssetData> = [
     {
       title: 'Token',
       dataIndex: 'name',
       key: 'name',
-      render: (_, asset) => <AssetName asset={asset} ownerBalance={willDetail?.ownerBalance} />
+      render: (_, asset) => <AssetName asset={asset} />
     },
     {
       title: 'Total amount',
@@ -30,10 +43,10 @@ export const AssetCard = ({ willDetail }: AssetCardProps) => {
 
   return (
     <CartItemContainer
-      title={`Assets (${willDetail?.willAsset?.length ?? 0})`}
+      title={`Assets (${listAsset?.length ?? 0})`}
       iconTitle={<DiamondIcon />}
     >
-      <AppTable dataSource={willDetail?.willAsset} columns={columns} pagination={false} />
+      <AppTable dataSource={listAsset} columns={columns} pagination={false} />
     </CartItemContainer>
   )
 }

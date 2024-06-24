@@ -67,6 +67,11 @@
   }
 }
 
+.app-button--error {
+  background-color: $color-error;
+  color: white;
+}
+
 .app-button--normal {
   width: fit-content;
   padding: 0;

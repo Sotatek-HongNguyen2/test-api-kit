@@ -28,6 +28,7 @@ export const ConfigBeneficiaries = () => {
     >
       <Form.Item
         name="beneficiaries"
+        rules={[{ required: true, message: 'Please select an option' }]}
       >
         <RadioGroup items={configOptions} />
       </Form.Item>

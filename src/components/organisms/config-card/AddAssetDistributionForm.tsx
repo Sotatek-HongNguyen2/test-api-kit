@@ -44,7 +44,7 @@ export const AddAssetDistributionForm = () => {
     const assetIndex = assets.findIndex(item => item.value === asset?.value);
     const newAsset: AssetDataColumn = {
       token: asset?.label,
-      amount: 1000000.51,
+      amount: asset?.amount as number,
       value: asset?.value as string
     }
     const newAssets = [...assets];
@@ -60,14 +60,12 @@ export const AddAssetDistributionForm = () => {
   return (
     <Flex vertical gap={16}>
       <Text className="neutral-1">You’re a designated assets:</Text>
-      <Form.Item name="assetDistribution">
-        <AppTable
-          columns={columns}
-          dataSource={assets}
-          pagination={false}
-          className="asset-distribution-table"
-        />
-      </Form.Item>
+      <AppTable
+        columns={columns}
+        dataSource={assets}
+        pagination={false}
+        className="asset-distribution-table"
+      />
       <SelectAsset addAsset={(asset) => setAsset(asset)} />
       <AppButton
         className="none-styles uppercase"
@@ -77,6 +75,6 @@ export const AddAssetDistributionForm = () => {
       >
         Save
       </AppButton>
-    </Flex>
+    </Flex >
   )
 }

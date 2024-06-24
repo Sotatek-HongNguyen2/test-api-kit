@@ -1,6 +1,6 @@
 import "./styles.scss";
 import { Text } from "@/components/atoms/text";
-import { Flex } from "antd";
+import { Flex, Form } from "antd";
 import { RadioGroup } from "../radio-group";
 import { AppInput } from "@/components/atoms/input";
 
@@ -31,14 +31,22 @@ export const SelectTime = ({ title, handleChangeValue }: SelectTimeProps) => {
       value: 'custom',
       title: 'Customize',
       itemChildren: <Flex gap={10} align="center">
-        <AppInput
-          className="input-time"
-          type="number"
-          placeholder="Enter a number"
-          onChange={(e) => {
-            handleChangeValue?.(e.target.value as any);
-          }}
-        />
+        <Form.Item
+          name="customTime"
+          rules={[
+            { required: true, message: 'Please enter a number' },
+          ]}
+        >
+          <AppInput
+            className="input-time"
+            onlyNumber
+            placeholder="Enter a number"
+            min={0}
+            onChange={(e) => {
+              handleChangeValue?.(e.target.value as any);
+            }}
+          />
+        </Form.Item>
         <Text className="black">months</Text>
       </Flex>
     }

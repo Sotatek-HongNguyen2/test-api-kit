@@ -32,7 +32,6 @@ export const WillList = (props: WillListProps) => {
   const { type } = props;
 
   const [myWills, setMyWills] = useState<WillData[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
 
@@ -57,8 +56,7 @@ export const WillList = (props: WillListProps) => {
             : null;
       if (data) {
         setMyWills(data?.data);
-        setCurrentPage(data?.metadata?.page);
-        setTotalPage(data?.metadata?.totalPage);
+        setTotalPage(data?.metadata?.total);
       }
     } catch (error: any) {
       WillToast.error(error?.message);
@@ -110,7 +108,11 @@ export const WillList = (props: WillListProps) => {
 
   return (
     <Flex vertical gap={20} className="home-page">
-      <WillTypeModal />
+      {
+        type === "created" && (
+          <WillTypeModal />
+        )
+      }
       <Flex justify="space-between" gap="5vw">
         <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
         <Flex vertical className="app-will--list">
@@ -127,8 +129,8 @@ export const WillList = (props: WillListProps) => {
                 <Flex justify="flex-end">
                   <AppPagination
                     total={totalPage}
-                    current={currentPage}
-                    onChange={(page) => setCurrentPage(page)}
+                    current={searchParams?.page || 1}
+                    onChange={(page) => setSearchParams({ ...searchParams, page })}
                   />
                 </Flex>
               </>

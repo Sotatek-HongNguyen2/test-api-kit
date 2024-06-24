@@ -5,7 +5,7 @@ import { SizeType } from "antd/es/config-provider/SizeContext";
 import clsx from "clsx";
 
 export interface AppButtonProps extends Omit<ButtonProps, "type" | "size"> {
-  type?: ButtonType | "primary-outlined" | "normal";
+  type?: ButtonType | "primary-outlined" | "normal" | "error";
   rightIcon?: React.ReactNode;
   icon?: React.ReactNode;
   size?: SizeType | "xl";
