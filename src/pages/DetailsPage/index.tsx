@@ -74,9 +74,8 @@ export function DetailsPage() {
       willName={willDetail?.name}
       willType={willDetail?.type}
       description={getPageDescription()}
-      active={!["process", "done"]?.includes(willDetail?.status)
-        ? false
-        : { textSignatures: `There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund` }}
+      active={!["process", "done"]?.includes(willDetail?.status) ? false : true}
+      textSignatures={`There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund`}
       method={method}
       contractId={willDetail?.txHash}
       willId={willId}
@@ -89,7 +88,10 @@ export function DetailsPage() {
       }
       {
         willDetail?.type === 'forwarding' && (
-          <AssetDetailCard beneficiaries={willDetail?.willDetail} />
+          <AssetDetailCard
+            beneficiaries={willDetail?.willDetail}
+            ownerBalance={willDetail?.ownerBalance}
+          />
         )
       }
       <ProgressCard
