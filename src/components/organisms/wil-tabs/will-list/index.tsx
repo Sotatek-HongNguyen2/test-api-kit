@@ -1,7 +1,6 @@
 import "./styles.scss";
-import { Flex } from "antd";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { debounce } from "lodash";
+import { Flex, Spin } from "antd";
+import { useEffect, useState } from "react";
 
 import { WillData } from "@/types";
 import AppPagination from "@/components/molecules/Pagination";
@@ -15,7 +14,6 @@ import { SearchParams } from "@/types/global";
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 import { WillTypeModal } from "../will-type-modal";
-import useDisclosure from "@/hooks/useDisclosure";
 
 export interface WillListProps {
   type?: "created" | "inherited";
@@ -34,11 +32,13 @@ export const WillList = (props: WillListProps) => {
   const [myWills, setMyWills] = useState<WillData[]>([]);
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
+  const [isLoading, setIsLoading] = useState(false);
 
   const willService = new WillServices();
 
   const getWills = async () => {
     try {
+      setIsLoading(true);
       const params: SearchParams = {
         limit: 10,
         page: searchParams?.page || 1,
@@ -60,19 +60,13 @@ export const WillList = (props: WillListProps) => {
       }
     } catch (error: any) {
       WillToast.error(error?.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const debouncedGetWills = useCallback(debounce(getWills, 500), [
-    searchParams,
-    type,
-  ]);
-
   useEffect(() => {
-    debouncedGetWills();
-    return () => {
-      debouncedGetWills.cancel();
-    };
+    getWills();
   }, [searchParams, type]);
 
 
@@ -115,48 +109,57 @@ export const WillList = (props: WillListProps) => {
       }
       <Flex justify="space-between" gap="5vw">
         <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
-        <Flex vertical className="app-will--list">
-          <Flex vertical gap="32px">
-            <Text size="text-lg" className="neutral-1">{getTitle()}</Text>
-            {myWills && myWills.length > 0 ? (
-              <>
-                <>
-                  {myWills?.map((will) => (
-                    <WillCard key={`will-item-${will?.id}`} will={will} type={type} />
-                  ))}
-                </>
+        {
+          isLoading ? (
+            <Flex justify="center" align="center" className="app-will--list">
+              <Spin size="large" />
+            </Flex>
+          ) : (
+            <Flex vertical className="app-will--list">
+              <Flex vertical gap="32px">
+                <Text size="text-lg" className="neutral-1">{getTitle()}</Text>
+                {myWills && myWills.length > 0 ? (
+                  <>
+                    <>
+                      {myWills?.map((will) => (
+                        <WillCard key={`will-item-${will?.id}`} will={will} type={type} />
+                      ))}
+                    </>
 
-                <Flex justify="flex-end">
-                  <AppPagination
-                    total={totalPage}
-                    current={searchParams?.page || 1}
-                    onChange={(page) => setSearchParams({ ...searchParams, page })}
-                  />
-                </Flex>
-              </>
-            ) : (
-              <Flex vertical justify="center" align="center" gap={16}>
-                <NoData />
-                <Flex vertical gap={4}>
-                  <Text
-                    size="text-lg"
-                    align="center"
-                    className="font-semibold neutral-1"
-                  >
-                    No data
-                  </Text>
-                  <Text size="text-sm" align="center" className="neutral-2">
-                    {
-                      type === "created"
-                        ? "You currently have no will. Get started by creating a will"
-                        : "Currently there is no will have you as a beneficiary "
-                    }
-                  </Text>
-                </Flex>
+                    <Flex justify="flex-end">
+                      <AppPagination
+                        total={totalPage}
+                        current={searchParams?.page || 1}
+                        onChange={(page) => setSearchParams({ ...searchParams, page })}
+                      />
+                    </Flex>
+                  </>
+                ) : (
+                  <Flex vertical justify="center" align="center" gap={16}>
+                    <NoData />
+                    <Flex vertical gap={4}>
+                      <Text
+                        size="text-lg"
+                        align="center"
+                        className="font-semibold neutral-1"
+                      >
+                        No data
+                      </Text>
+                      <Text size="text-sm" align="center" className="neutral-2">
+                        {
+                          type === "created"
+                            ? "You currently have no will. Get started by creating a will"
+                            : "Currently there is no will have you as a beneficiary "
+                        }
+                      </Text>
+                    </Flex>
+                  </Flex>
+                )}
               </Flex>
-            )}
-          </Flex>
-        </Flex>
+            </Flex>
+          )
+        }
+
       </Flex>
     </Flex>
 
