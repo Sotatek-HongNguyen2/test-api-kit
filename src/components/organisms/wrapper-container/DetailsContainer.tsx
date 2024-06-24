@@ -14,16 +14,25 @@ interface DetailsContainerProps {
   willName: string;
   willType: WillType;
   description: string | React.ReactNode;
-  active: false | {
-    textSignatures: string;
-  };
+  active: boolean;
+  textSignatures?: string;
   method: WillMethod;
   contractId: string;
   willId: string;
 }
 
 export const DetailsContainer = (props: DetailsContainerProps) => {
-  const { children, willName, willType, description, active, method, contractId, willId } = props;
+  const {
+    children,
+    willName,
+    willType,
+    description,
+    active,
+    method,
+    contractId,
+    willId,
+    textSignatures,
+  } = props;
   const navigate = useNavigate();
 
   const viewSmartContract = () => {
@@ -35,6 +44,8 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
   const goToEdit = () => {
     navigate(`${APP_ROUTES_PATHS.EDIT_WILL}/${willId}`);
   }
+
+  const signToReceiveFund = () => { }
 
   return (
     <Flex vertical className="app-details-container" gap="32px">
@@ -64,10 +75,12 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
               <Text size="text-lg" className="uppercase neutral-1 font-bold">View smart contract</Text>
             </AppButton>
           </Flex>
-        ) : active ? ( // inherited and active
+        ) : method === "inherited" ? ( // inherited
           <Flex vertical align="flex-end" gap={10}>
-            <Text className="neutral-2">{active?.textSignatures}</Text>
-            <AppButton type="primary" size="xl"><Text size="text-lg" className="uppercase font-bold">Sign to receive fund</Text></AppButton>
+            <Text className="neutral-2">{textSignatures}</Text>
+            <AppButton type="primary" size="xl" disabled={!active} onClick={signToReceiveFund}>
+              <Text size="text-lg" className="uppercase font-bold">Sign to receive fund</Text>
+            </AppButton>
           </Flex>
         ) : null // inherited and inactive
       }

@@ -1,5 +1,5 @@
 import "./styles.scss";
-import { AssetData, AssetDetailData, BeneficiaryData, FWDetailAsset } from "@/types"
+import { AssetData, AssetDetailData, BaseAsset, BeneficiaryData, FWDetailAsset, ItemOwnerBalance } from "@/types"
 import { CartItemContainer } from "./CardItemContainer"
 import { DiamondIcon } from "@/assets/icons/custom-icon";
 import { AppTable } from "@/components/molecules/table";
@@ -9,6 +9,7 @@ import { Text } from "@/components/atoms/text";
 import { BeneficiaryName } from "@/components/molecules/asset-item/BeneficiaryName";
 import { Flex } from "antd";
 import { useState } from "react";
+import { assetData, assetDataList } from "@/constants/asset";
 
 interface AssetCardProps {
   beneficiaries: AssetDetailData[];
@@ -34,16 +35,36 @@ const Beneficiaries = (props: AssetCardProps) => {
   )
 }
 
-export const AssetDetailCard = ({ beneficiaries }: Pick<AssetCardProps, 'beneficiaries'>) => {
-  const [currentBeneficiary, setCurrentBeneficiary] = useState<AssetDetailData>(beneficiaries[0]);
-  const assets = currentBeneficiary?.fwDetailAsset ?? [] as FWDetailAsset[];
+interface AssetDetailCardProps {
+  beneficiaries: AssetDetailData[];
+  ownerBalance: ItemOwnerBalance[];
+}
 
-  const columns: ColumnsType<FWDetailAsset> = [
+interface AssetPercent extends BaseAsset {
+  percent: string;
+}
+
+export const AssetDetailCard = ({ beneficiaries, ownerBalance }: AssetDetailCardProps) => {
+  console.log("ownerBalance: ", ownerBalance);
+  const [currentBeneficiary, setCurrentBeneficiary] = useState<AssetDetailData>(beneficiaries[0]);
+  const assets = currentBeneficiary?.fwDetailAsset?.map((item) => {
+    const asset = (ownerBalance ?? [])?.find((owner) => owner.address === item?.asset);
+    return {
+      name: asset?.name,
+      symbol: asset?.symbol,
+      percent: item?.percent,
+      icon: assetData[asset?.symbol ?? 'ETH']?.icon
+    }
+  }) as AssetPercent[];
+
+  console.log('assets', assets);
+
+  const columns: ColumnsType<AssetPercent> = [
     {
       title: 'Token',
       dataIndex: 'asset',
       key: 'asset',
-      // render: (_, asset) => <AssetName asset={asset} />
+      render: (_, asset) => <AssetName asset={asset} />
     },
     {
       title: 'Inheritance Percentage (%)',
