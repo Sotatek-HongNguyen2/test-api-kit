@@ -16,6 +16,7 @@ const { ConfigWillPage } = lazyImport(
   () => import("@/pages/ConfigWillPage"),
   "ConfigWillPage"
 );
+
 const { DetailsPage } = lazyImport(
   () => import("@/pages/DetailsPage"),
   "DetailsPage"
@@ -27,6 +28,10 @@ const { NotFound } = lazyImport(
 const { ErrorPage } = lazyImport(
   () => import("@/routes/components/ErrorPage"),
   "ErrorPage"
+);
+const { UserProfile } = lazyImport(
+  () => import("@/pages/UserProfile"),
+  "UserProfile"
 );
 
 export function AppRoutes() {
@@ -76,7 +81,10 @@ export function AppRoutes() {
               path: `${APP_ROUTES_PATHS.CONFIG_WILL}/:willType`,
               element: <ConfigWillPage />,
             },
-
+            {
+              path: `${APP_ROUTES_PATHS.USER_PROFILE}`,
+              element: <UserProfile />,
+            },
             {
               path: "*",
               element: <NotFound />,
