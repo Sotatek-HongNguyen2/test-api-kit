@@ -21,6 +21,8 @@ import { CommonServices } from "@/services/common";
 import "./styles.scss";
 import { AuthServices } from "@/services/auth-service";
 import WillToast from "@/components/atoms/ToastMessage";
+import { useNavigate } from "react-router-dom";
+import { APP_ROUTES_PATHS } from "@/constants";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -64,6 +66,7 @@ export function UserProfile() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleChange = (info: any) => {
     const isImage = info.file.type.startsWith("image/");
@@ -76,9 +79,7 @@ export function UserProfile() {
       return;
     }
     if (isImage) {
-      console.log(info);
       setFileList([info.fileList[0]]);
-      console.log(fileList);
       const file = info.file;
       setPreviewImage(URL.createObjectURL(file));
     } else {
@@ -159,10 +160,11 @@ export function UserProfile() {
                   label="Your Name"
                   name="name"
                   rules={[
-                    { required: true, message: "Please enter your name" },
+                    { required: true, message: "Please enter your name!" },
+                    { max: 16 },
                   ]}
                 >
-                  <AppInput placeholder="Enter your name here" />
+                  <AppInput placeholder="Enter your name here" maxLength={16} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -181,8 +183,14 @@ export function UserProfile() {
                   label="Email Address"
                   name="email"
                   rules={[
-                    { required: true, message: "Please enter your email" },
-                    { type: "email", message: "Please enter a valid email" },
+                    {
+                      required: true,
+                      message: "Please enter your email address!",
+                    },
+                    {
+                      type: "email",
+                      message: "Invalid email. Please re-enter!",
+                    },
                   ]}
                 >
                   <AppInput placeholder="Enter your email here" />
@@ -217,7 +225,14 @@ export function UserProfile() {
               </AppButton>
             </Col>
             <Col>
-              <AppButton className="btn-cancel">CANCEL</AppButton>
+              <AppButton
+                className="btn-cancel"
+                onClick={() => {
+                  navigate(APP_ROUTES_PATHS.HOME);
+                }}
+              >
+                CANCEL
+              </AppButton>
             </Col>
           </Row>
         </Form>

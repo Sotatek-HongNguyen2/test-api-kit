@@ -49,6 +49,21 @@
     }
 }
 
+.ant-form-item-required {
+    &::before {
+        display: none !important;
+    }
+}
+
+.ant-form-item-label {
+    margin-bottom: 4px;
+    color: #0A0B0C;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: left;
+}
+
 .item-name {
     font-size: 16px;
     font-weight: 400;
