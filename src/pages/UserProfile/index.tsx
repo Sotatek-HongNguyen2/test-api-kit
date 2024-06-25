@@ -108,8 +108,9 @@ export function UserProfile() {
   const onFinish = async (values: any) => {
     setLoading(true);
     const formData = new FormData();
-
-    formData.append("avatar", fileList[0].originFileObj as FileType);
+    if (fileList[0]) {
+      formData.append("avatar", fileList[0].originFileObj as FileType);
+    }
     formData.append("country", values.country as string);
     formData.append("email", values.email as string);
     formData.append("name", values.name as string);
