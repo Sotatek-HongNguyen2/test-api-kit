@@ -103,7 +103,6 @@ export function ConfigWillPage() {
       setIsConfigured(true);
     } catch (error: any) {
       WillToast.error(error.message);
-      console.error(error);
     } finally {
       setLoading(false);
     }
