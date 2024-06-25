@@ -1,6 +1,7 @@
 import InheritanceWillAbi from "@/constants/InheritanceWill";
 
 import Contract, { InitializeContractType } from "./contract";
+import { values } from "lodash";
 
 type ABIType = typeof InheritanceWillAbi;
 
@@ -21,19 +22,14 @@ export default class inheritanceWillContract extends Contract<ABIType> {
   }: Omit<InitializeContractType<ABIType>, "contractABI">) {
     super({ address, contractABI: InheritanceWillAbi, provider });
   }
-  createWill(dto: CreateWillType) {
+  async createWill(dto: CreateWillType) {
     return this.contractInstance.methods.createWill(
-      {
-        name: dto.nameWill,
-        note: dto.note,
-        nickNames: dto.nickNames,
-        beneficiaries: dto.beneficiaries,
-      },
-      {
-        minRequiredSignatures: dto.minRequiredSignatures,
-        lackOfOutgoingTxRange: dto.lackOfOutgoingTxRange,
-        lackOfSignedMsgRange: dto.lackOfSignedMsgRange,
-      }
+      [dto.nameWill, dto.note, dto.nickNames, dto.beneficiaries, []],
+      [
+        Number(dto.minRequiredSignatures),
+        Number(dto.lackOfOutgoingTxRange),
+        Number(dto.lackOfSignedMsgRange),
+      ]
     );
   }
 }

@@ -38,22 +38,22 @@ export const ProgressCard = (props: ProgressCardProps) => {
               />
               <Flex align="center" justify="space-between" gap={24}>
                 {
-                  lackTransaction && lackTransaction > 0 && (
+                  lackTransaction && lackTransaction > 0 ? (
                     <TriggerCard
                       image={NotGoingImage}
                       title={`No outgoing transactions in ${getTimeMonths(lackTransaction)}`}
                       description={`If you haven’t initiated an outgoing transaction in ${getTimeMonths(lackTransaction)}, your will will be activated`}
                     />
-                  )
+                  ) : null
                 }
                 {
-                  lackSignMessage && lackSignMessage > 0 && (
+                  lackSignMessage && lackSignMessage > 0 ? (
                     <TriggerCard
                       image={NotSignedImage}
                       title={`No signed messages in ${getTimeMonths(lackSignMessage)}`}
                       description={`If you haven’t signed a message in ${getTimeMonths(lackSignMessage)}, your will will be activated`}
                     />
-                  )
+                  ) : null
                 }
               </Flex>
             </Flex>
