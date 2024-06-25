@@ -12,7 +12,7 @@ export const InHeritanceForm = () => {
       <WillName />
       <ConfigBeneficiaries />
       <ActivationTrigger />
-      {/* <AssetDistribution /> */}
+      <AssetDistribution />
       <NoteToBeneficiaries />
     </Flex>
   )
