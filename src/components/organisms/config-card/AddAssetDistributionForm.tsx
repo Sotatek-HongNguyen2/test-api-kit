@@ -3,6 +3,7 @@ import { AppButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text"
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
 import { AppTable } from "@/components/molecules/table"
+import formatNumber from "@/helpers/useFormatToken";
 import { Flex, Form } from "antd"
 import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
@@ -12,6 +13,7 @@ export interface AssetDataColumn {
   token: React.ReactNode;
   amount: number;
   value: string;
+  assetAddress: string;
 }
 
 export type AssetSelectType = DefaultOptionType & {
@@ -36,7 +38,7 @@ export const AddAssetDistributionForm = () => {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
-      render: (amount) => <Text className="neutral-1 font-semibold">{amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</Text>
+      render: (amount) => <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>
     },
   ];
 
@@ -45,7 +47,8 @@ export const AddAssetDistributionForm = () => {
     const newAsset: AssetDataColumn = {
       token: asset?.label,
       amount: asset?.amount as number,
-      value: asset?.value as string
+      value: asset?.value as string,
+      assetAddress: asset?.assetAddress as string,
     }
     const newAssets = [...assets];
     if (assetIndex > -1) {
@@ -72,6 +75,7 @@ export const AddAssetDistributionForm = () => {
         size="xl"
         type="primary"
         onClick={handleAddAsset}
+        disabled={!asset}
       >
         Save
       </AppButton>

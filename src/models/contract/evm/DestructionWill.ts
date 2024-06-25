@@ -1,33 +1,28 @@
-import InheritanceWillAbi from "@/constants/InheritanceWill";
+import DestructionWillAbi from "@/constants/DestructionWill";
 
 import Contract, { InitializeContractType } from "./contract";
 import { values } from "lodash";
 
-type ABIType = typeof InheritanceWillAbi;
+type ABIType = typeof DestructionWillAbi;
 
 interface CreateWillType {
   nameWill: string;
-  note: string;
-  nickNames: string[];
-  beneficiaries: string[];
-  assets: string[];
-  minRequiredSignatures: number;
+  assetAddresses: string[];
   lackOfOutgoingTxRange: number;
   lackOfSignedMsgRange: number;
 }
 
-export default class inheritanceWillContract extends Contract<ABIType> {
+export default class destructionWillContract extends Contract<ABIType> {
   constructor({
     address,
     provider,
   }: Omit<InitializeContractType<ABIType>, "contractABI">) {
-    super({ address, contractABI: InheritanceWillAbi, provider });
+    super({ address, contractABI: DestructionWillAbi, provider });
   }
   async createWill(dto: CreateWillType) {
     return this.contractInstance.methods.createWill(
-      [dto.nameWill, dto.note, dto.nickNames, dto.beneficiaries, dto.assets],
+      [dto.nameWill, dto.assetAddresses],
       [
-        Number(dto.minRequiredSignatures),
         Number(dto.lackOfOutgoingTxRange),
         Number(dto.lackOfSignedMsgRange),
       ]
