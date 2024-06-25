@@ -1,6 +1,8 @@
 import { AxiosResponse } from "axios";
-import { HttpClient } from "./http-service";
+
 import WillToast from "@/components/atoms/ToastMessage";
+
+import { HttpClient } from "./http-service";
 
 interface Dict<T> {
   [key: string]: T;
@@ -123,5 +125,16 @@ export class ServiceBase extends HttpClient {
 
   fire(data: any) {
     Object.values(this.onChangeListeners).forEach((listener) => listener(data));
+  }
+  getDataByPublicApi = async (config: any) => {
+    try {
+      const response = await this.axiosInstance.request(config);
+      return response;
+    } catch (error: any) {
+      WillToast.error(error.message);
+      return {
+        data: error,
+      };
+    }
   }
 }

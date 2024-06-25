@@ -38,6 +38,11 @@ export function ConfigWillPage() {
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values: ConfigFormDataType) => {
+    const provider: ProviderType = {
+      type: PROVIDER_TYPE.WALLET,
+      injectObject: WALLET_INJECT_OBJ.METAMASK,
+    };
+    const web3 = getWeb3Instance(provider);
     try {
       setLoading(true);
       if (!willType) {

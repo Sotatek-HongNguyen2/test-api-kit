@@ -3,6 +3,8 @@ export const API_CONFIG = {
     refreshToken: "auth/refresh-token",
     login: "/auth/login/metamask",
     logout: "/auth/logout",
+    updateUserProfile: '/auth/edit-profile',
+    getInformation: '/auth/me'
   },
   will: {
     myWill: "/will/my",
@@ -10,4 +12,8 @@ export const API_CONFIG = {
     detail: "/will/detail",
     saveAsset: "/will/save-asset",
   },
+
+  common: {
+    countries: '/all?fields=name,cca2'
+  }
 } as const;

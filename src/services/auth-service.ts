@@ -10,4 +10,10 @@ export class AuthServices extends ServiceBase {
   logout = async () => {
     return this.post(API_CONFIG.auth.logout);
   };
+  updateUserProfile = async (data: any) => {
+    return this.put(API_CONFIG.auth.updateUserProfile, data);
+  };
+  getInformation = async () => {
+    return this.get(API_CONFIG.auth.getInformation);
+  };
 }

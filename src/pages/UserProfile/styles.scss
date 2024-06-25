@@ -1,0 +1,83 @@
+.title-page {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 30px;
+    text-align: left;
+    color: #0A0B0C;
+}
+
+.ant-input {
+    &::placeholder {
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        line-height: 20px !important;
+        text-align: left !important;
+        color: #BCC0CD !important;
+    }
+}
+
+
+.ant-select-selection-placeholder {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+    text-align: left !important;
+    color: #BCC0CD !important;
+}
+
+.card-main {
+    box-shadow: 2px 4px 30px 0px #00000014;
+    background: #FFFFFF;
+    padding: 24px 20px 24px 20px;
+    gap: 24px;
+    border-radius: 16px;
+    opacity: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    .ant-card-body {
+        padding: 0;
+    }
+
+    .label-field {
+        margin-bottom: 4px;
+        color: #0A0B0C;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 20px;
+        text-align: left;
+    }
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+    color: #0A0B0C;
+}
+
+.mt-5 {
+    margin-top: 20px;
+}
+
+.mr-2 {
+    margin-right: 8px;
+}
+
+.btn-cancel {
+    padding: 20px;
+    gap: 8px;
+    border-radius: 8px;
+    opacity: 0px;
+    border: 1px solid #BCC0CD;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #0A0B0C;
+
+}
+
+.ant-upload-list {
+    display: none
+}
