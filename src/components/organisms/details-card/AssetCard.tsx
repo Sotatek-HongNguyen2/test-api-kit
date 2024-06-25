@@ -18,11 +18,13 @@ export const AssetCard = ({ willDetail }: AssetCardProps) => {
     const ownerBalance = willDetail?.ownerBalance?.find(
       (item) => item.address == asset.asset
     );
+    const amount = Number(asset?.amount) > Number(ownerBalance?.balance)
+      ? formatNumber(Number(ownerBalance?.balance))
+      : formatNumber(Number(asset?.amount));
     return {
       ...asset,
       ...ownerBalance,
-      amount: Number(asset?.amount) > Number(ownerBalance?.balance)
-        ? formatNumber(Number(ownerBalance?.balance)) : formatNumber(Number(asset?.amount))
+      amount,
     }
   }), [willDetail]);
 
@@ -35,9 +37,9 @@ export const AssetCard = ({ willDetail }: AssetCardProps) => {
     },
     {
       title: 'Total amount',
-      dataIndex: 'balance',
-      key: 'balance',
-      render: (balance) => <Text size="text-md" className="neutral-1 font-semibold">{balance ?? '0.0'}</Text>
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (amount) => <Text size="text-md" className="neutral-1 font-semibold">{amount ?? '0.0'}</Text>
     },
   ];
 
