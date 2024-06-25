@@ -147,6 +147,8 @@ export const AssetToBeneficiary = () => {
     }
   }
 
+  if (!watchBeneficiary || watchBeneficiary?.length === 0) return null;
+
   return (
     <CartItemContainer
       title="Configure asset to beneficiary"

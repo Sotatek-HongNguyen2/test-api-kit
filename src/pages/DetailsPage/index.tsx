@@ -32,15 +32,50 @@ export function DetailsPage() {
 
 
   if (!willDetail || !method) return null;
+  const getPageDescription = () => {
+    if (method === "inherited") {
+      switch (willDetail?.type) {
+        case "inheritance":
+          return ["process", "done"]?.includes(willDetail?.status) ? (
+            <>
+              This is an <span className="capitalize">{willDetail?.type}</span> will you are a beneficiary of. When this will is activated, a minimum number of co-signatures will be required for you as a beneficiary to claim the fund in the multisig-wallet.
+            </>
+          ) : (
+            <>
+              This is an <span className="capitalize">{willDetail?.type}</span> will you are as a beneficiary.
+            </>
+          );
+        default:
+          return (
+            <>
+              This is an <span className="capitalize">{willDetail?.type}</span> will you are as a beneficiary.
+            </>
+          );
+      }
+    }
+    switch (willDetail?.type) {
+      case "destruction":
+        return (
+          <>
+            This is a <span className="capitalize">{willDetail?.type}</span> will you created with a list of assets.
+          </>
+        );
+      default:
+        return (
+          <>
+            This is a <span className="capitalize">{willDetail?.type}</span> will you created with a list of beneficiaries.
+          </>
+        );
+    }
+  };
 
   return (
     <DetailsContainer
       willName={willDetail?.name}
       willType={willDetail?.type}
-      description={method === "inherited"
-        ? `This is a ${willDetail?.type} will you are as a beneficiary.`
-        : `This is a ${willDetail?.type} will you created with list of beneficiaries.`}
-      active={willDetail?.status !== 'active' ? false : { textSignatures: `There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund` }}
+      description={getPageDescription()}
+      active={!["process", "done"]?.includes(willDetail?.status) ? false : true}
+      textSignatures={`There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund`}
       method={method}
       contractId={willDetail?.txHash}
       willId={willId}
@@ -53,7 +88,10 @@ export function DetailsPage() {
       }
       {
         willDetail?.type === 'forwarding' && (
-          <AssetDetailCard beneficiaries={willDetail?.willDetail} />
+          <AssetDetailCard
+            beneficiaries={willDetail?.willDetail}
+            ownerBalance={willDetail?.ownerBalance}
+          />
         )
       }
       <ProgressCard

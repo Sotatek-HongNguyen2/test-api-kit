@@ -17,6 +17,7 @@ import WillToast from "@/components/atoms/ToastMessage";
 import { BeneficiaryData } from "@/types";
 import { getWeb3Instance } from "@/helpers/evmHandlers";
 import BigNumber from "bignumber.js";
+import { formWei } from "@/helpers/common";
 
 export interface ConfigFormDataType {
   willName: string;
@@ -88,19 +89,13 @@ export function ConfigWillPage() {
 
       const res = await contract?.createWill(params);
 
-      const estGas = (await res?.estimateGas({
-        from: "0xb286BaAeaAe23590d16539652D49F58cA6282b9C",
+      await res?.estimateGas({
+        from: address,
         value: "0",
-      })) as any;
-
-      const gasPrice = (await web3.eth.getGasPrice()) as any;
-      const estGasNumber = new BigNumber(estGas);
-      const gasPriceNumber = new BigNumber(gasPrice);
-      const gas = estGasNumber.multipliedBy(gasPriceNumber).toString();
+      });
 
       const res2 = await res.send({
         from: address,
-        gas: gas,
         value: "0",
       });
       console.log("res2", res2);

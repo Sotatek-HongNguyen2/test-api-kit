@@ -28,7 +28,7 @@ export interface OwnerLastTime {
   walletAddress: string;
 }
 
-export type WillStatus = "open" | "active";
+export type WillStatus = "open" | "process" | "done" | "delete";
 export interface WillData {
   id: string | number;
   name: string;
