@@ -83,7 +83,10 @@ export function DetailsPage() {
       <AssetCard willDetail={willDetail} />
       {
         willDetail?.type !== 'destruction' && (
-          <BeneficiariesCard beneficiaries={willDetail?.willDetail} />
+          <BeneficiariesCard
+            beneficiaries={willDetail?.willDetail}
+            minSignature={willDetail?.minSignature}
+          />
         )
       }
       {

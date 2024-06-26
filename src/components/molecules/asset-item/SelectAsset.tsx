@@ -23,6 +23,7 @@ export const SelectAsset = ({ addAsset }: SelectAssetProps) => {
       title: asset?.name,
       value: asset?.symbol,
       amount: asset?.balance,
+      assetAddress: asset?.assetAddress,
       label: <AssetName asset={labelAsset} />
     }
   })

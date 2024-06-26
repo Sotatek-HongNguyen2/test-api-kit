@@ -12,7 +12,7 @@ import { ConfigAsset } from "@/components/molecules/asset-item/ConfigAsset"
 import { AssetDataColumn, AssetSelectType } from "./AddAssetDistributionForm"
 import WillToast from "@/components/atoms/ToastMessage"
 
-interface BeneficiaryConfig extends BeneficiaryData {
+export interface BeneficiaryConfig extends BeneficiaryData {
   assetConfig: {
     asset: AssetSelectType;
     percent: number;
