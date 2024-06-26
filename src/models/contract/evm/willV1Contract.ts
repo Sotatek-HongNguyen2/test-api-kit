@@ -3,7 +3,6 @@ import willV1 from "@/constants/willV1";
 
 type ABIType = typeof willV1;
 
-
 export default class willV1Contract extends Contract<ABIType> {
   constructor({
     address,
@@ -11,10 +10,7 @@ export default class willV1Contract extends Contract<ABIType> {
   }: Omit<InitializeContractType<ABIType>, "contractABI">) {
     super({ address, contractABI: willV1, provider });
   }
-  async approve(dto: { address: string, amount: string }) {
-    return this.contractInstance.methods.approve(
-      dto.address,
-      dto.amount
-    )
+  async approve(dto: { address: string; amount: string }) {
+    return this.contractInstance.methods.approve(dto.address, dto.amount);
   }
 }
