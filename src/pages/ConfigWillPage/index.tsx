@@ -181,7 +181,11 @@ export function ConfigWillPage() {
     }
   };
   return (
-    <WrapperContainer title="Configure your will">
+    <WrapperContainer
+      title="Configure your will"
+      hasBackButton={!isConfigured}
+      description={isConfigured ? "You must approve/deposit tokens to finish creating will." : undefined}
+    >
       <Form form={form} onFinish={onFinish} autoComplete="off">
         <Flex vertical gap={16}>
           {isConfigured && willAddress ? (

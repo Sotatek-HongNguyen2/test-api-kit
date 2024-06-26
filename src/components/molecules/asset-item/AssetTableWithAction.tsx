@@ -53,7 +53,7 @@ export const AssetTableWithAction = ({ willAddress, isEdit }: { willAddress: str
                     setCurrentToken(record);
                   }}
                 >
-                  <Text size="text-sm" className="font-bold uppercase">Deposit</Text>
+                  <Text size="text-sm" className="font-bold uppercase primary">Deposit</Text>
                 </AppButton>
                 {
                   isEdit ? (
