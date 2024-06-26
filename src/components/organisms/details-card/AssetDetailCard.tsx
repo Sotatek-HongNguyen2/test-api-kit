@@ -45,7 +45,6 @@ interface AssetPercent extends BaseAsset {
 }
 
 export const AssetDetailCard = ({ beneficiaries, ownerBalance }: AssetDetailCardProps) => {
-  console.log("ownerBalance: ", ownerBalance);
   const [currentBeneficiary, setCurrentBeneficiary] = useState<AssetDetailData>(beneficiaries[0]);
   const assets = currentBeneficiary?.fwDetailAsset?.map((item) => {
     const asset = (ownerBalance ?? [])?.find((owner) => owner.address === item?.asset);
@@ -56,8 +55,6 @@ export const AssetDetailCard = ({ beneficiaries, ownerBalance }: AssetDetailCard
       icon: assetData[asset?.symbol ?? 'ETH']?.icon
     }
   }) as AssetPercent[];
-
-  console.log('assets', assets);
 
   const columns: ColumnsType<AssetPercent> = [
     {

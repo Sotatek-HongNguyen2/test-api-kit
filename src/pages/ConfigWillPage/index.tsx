@@ -14,10 +14,14 @@ import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import inheritanceWillContract from "@/models/contract/evm/InheritanceWill";
 import { getWalletSlice, useAppSelector } from "@/store";
 import WillToast from "@/components/atoms/ToastMessage";
-import { BeneficiaryData } from "@/types";
-import { getWeb3Instance } from "@/helpers/evmHandlers";
-import BigNumber from "bignumber.js";
-import { formWei } from "@/helpers/common";
+import { BeneficiaryData, WillType } from "@/types";
+import { AssetDataColumn } from "@/components/organisms/config-card/AddAssetDistributionForm";
+import { ethers } from "ethers";
+import forwardingWillContract from "@/models/contract/evm/ForwardingWill";
+import destructionWillContract from "@/models/contract/evm/DestructionWill";
+import { APP_ROUTES_PATHS } from "@/constants";
+import { BeneficiaryConfig } from "@/components/organisms/config-card/AssetToBeneficiary";
+import { uniqBy } from "lodash";
 
 export interface ConfigFormDataType {
   willName: string;
@@ -26,7 +30,19 @@ export interface ConfigFormDataType {
   lackOfOutgoingTxRange: number;
   lackOfSignedMsgRange: number;
   minRequiredSignatures: number;
+  assetDistribution: AssetDataColumn[];
 }
+
+export const contractAddress = (willType: WillType) => {
+  switch (willType) {
+    case "inheritance":
+      return import.meta.env.VITE_INHERITANCE_ROUTER;
+    case "forwarding":
+      return import.meta.env.VITE_FORWARDING_ROUTER;
+    default:
+      return import.meta.env.VITE_DESTRUCTION_ROUTER;
+  }
+};
 
 export function ConfigWillPage() {
   const { address } = useAppSelector(getWalletSlice);
@@ -34,62 +50,107 @@ export function ConfigWillPage() {
 
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
+  const { setFieldValue } = form;
   const [isConfigured, setIsConfigured] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [willAddress, setWillAddress] = useState<string | null>(null);
+
+  const getWillContract = () => {
+    switch (willType) {
+      case "inheritance":
+        return inheritanceWillContract;
+      case "forwarding":
+        return forwardingWillContract;
+      case "destruction":
+        return destructionWillContract;
+      default:
+        return null;
+    }
+  }
+
+  const getParams = (values: ConfigFormDataType) => {
+    switch (willType) {
+      case "inheritance":
+        return {
+          nameWill: values?.willName,
+          note: values?.note,
+          nickNames: (values?.beneficiariesList ?? []).map((item) => item.name),
+          beneficiaries: (values?.beneficiariesList ?? []).map((item) => item?.address),
+          assets: (values?.assetDistribution ?? []).map((item) => item.assetAddress),
+          minRequiredSignatures: values?.minRequiredSignatures,
+          lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
+          lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
+        }
+      case "forwarding":
+        return {
+          nameWill: values?.willName,
+          note: values?.note,
+          nickNames: (values?.beneficiariesList ?? [])?.map((item) => item.name),
+          distributions: ((values?.beneficiariesList ?? []) as BeneficiaryConfig[])?.map((item) => {
+            return [
+              item?.address,
+              item?.assetConfig.map((item) => item.asset?.assetAddress),
+              item.assetConfig.map((item) => item?.percent)
+            ]
+          }),
+          minRequiredSignatures: values?.minRequiredSignatures,
+          lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
+          lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
+        }
+      case "destruction":
+        return {
+          nameWill: values?.willName,
+          assetAddresses: (values?.assetDistribution ?? []).map((item) => item.assetAddress),
+          lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
+          lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
+        }
+      default:
+        return null;
+    }
+  }
 
   const onFinish = async (values: ConfigFormDataType) => {
-    const provider: ProviderType = {
-      type: PROVIDER_TYPE.WALLET,
-      injectObject: WALLET_INJECT_OBJ.METAMASK,
-    };
-    const web3 = getWeb3Instance(provider);
     try {
       setLoading(true);
-      if (!willType) {
-        WillToast.error("Something went wrong, please try again later");
-        return;
-      }
       if (!address) {
         WillToast.error("Please connect your wallet first");
         return;
       }
-      const contractAddress = () => {
-        switch (willType) {
-          case "inheritance":
-            return import.meta.env.VITE_INHERITANCE_ROUTER;
-          case "forwarding":
-            return import.meta.env.VITE_FORWARDING_ROUTER;
-          default:
-            return import.meta.env.VITE_DESTRUCTION_ROUTER;
-        }
-      };
-      const addressData = contractAddress();
-      if (!addressData) {
+      const addressData = contractAddress(willType as WillType);
+      if (!addressData || !willType) {
         WillToast.error("Something went wrong, please try again later");
         return;
       }
-
-      const contract = new inheritanceWillContract({
+      const Contract = getWillContract();
+      if (!Contract) {
+        WillToast.error("Something went wrong, please try again later");
+        return;
+      }
+      const contract = new Contract({
         address: addressData,
         provider: {
           type: PROVIDER_TYPE.WALLET,
           injectObject: WALLET_INJECT_OBJ.METAMASK,
         },
       });
+      const params = getParams(values);
+      if (willType === "forwarding") {
+        const listAsset = ((values?.beneficiariesList ?? []) as BeneficiaryConfig[])
+          .flatMap((item) => (item?.assetConfig ?? [])?.map(asset => ({
+            ...asset?.asset,
+            symbol: asset?.asset?.value
+          })));
+        const distinctArray = uniqBy(listAsset, 'value');
+        setFieldValue("assetDistribution", distinctArray);
+      }
 
-      const params = {
-        nameWill: values?.willName,
-        note: values?.note,
-        nickNames: values?.beneficiariesList.map((item) => item.name),
-        beneficiaries: values?.beneficiariesList.map((item) => item?.address),
-        minRequiredSignatures: values?.minRequiredSignatures,
-        lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
-        lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
-      };
+      if (!params) {
+        WillToast.error("Something went wrong, please try again later");
+        return;
+      }
+      const res = await contract?.createWill(params as any);
 
-      const res = await contract?.createWill(params);
-
-      await res?.estimateGas({
+      const estGas = await res?.estimateGas({
         from: address,
         value: "0",
       });
@@ -97,10 +158,22 @@ export function ConfigWillPage() {
       const res2 = await res.send({
         from: address,
         value: "0",
+        gas: estGas.toString(),
       });
-      console.log("res2", res2);
 
-      setIsConfigured(true);
+      const providerUrl = import.meta.env.VITE_ETH_RPC_URL;
+      const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+      const txwait = await provider.waitForTransaction(res2?.transactionHash);
+      const decodedLog = ethers.utils.defaultAbiCoder.decode(
+        ["uint256", "address", "address", "tuple", "tuple", "uint256"],
+        txwait.logs[0].data
+      );
+      const willAddress = decodedLog[1];
+      if (willAddress) {
+        setWillAddress(willAddress);
+        setIsConfigured(true);
+      }
+
     } catch (error: any) {
       WillToast.error(error.message);
     } finally {
@@ -108,13 +181,24 @@ export function ConfigWillPage() {
     }
   };
   return (
-    <WrapperContainer title="Configure your will">
+    <WrapperContainer
+      title="Configure your will"
+      hasBackButton={!isConfigured}
+      description={isConfigured ? "You must approve/deposit tokens to finish creating will." : undefined}
+    >
       <Form form={form} onFinish={onFinish} autoComplete="off">
         <Flex vertical gap={16}>
-          {isConfigured ? (
+          {isConfigured && willAddress ? (
             <>
-              <AssetTableWithAction />
-              <AppButton type="primary" className="none-styles">
+              <AssetTableWithAction willAddress={willAddress} />
+              <AppButton
+                type="primary"
+                className="none-styles"
+                onClick={() => {
+                  WillToast.success("Configure assets details successfully");
+                  navigate(APP_ROUTES_PATHS.HOME);
+                }}
+              >
                 <Text size="text-lg" className="font-bold">
                   Save
                 </Text>

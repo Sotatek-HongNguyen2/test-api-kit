@@ -25,9 +25,8 @@ export const WillProgress = (props: WillProgressProps) => {
       <Text className="neutral-1">
         {title
           ? title
-          : `This will requires a minimum of ${minimumSignatures} signature${
-              minimumSignatures > 0 ? "s" : ""
-            } for wallet access.`}
+          : `This will requires a minimum of ${minimumSignatures} signature${minimumSignatures > 1 ? "s" : ""
+          } for wallet access.`}
       </Text>
       <AppProgress percent={usePercentCompletion(createdDate, activeDate)} />
       <Text size="text-sm" className="neutral-2">

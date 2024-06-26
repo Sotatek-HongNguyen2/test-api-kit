@@ -84,6 +84,7 @@ export const fetchBalances = createAsyncThunk(
     const results = await multicall.call(contractContexts);
     const fetchedBalances = Object.keys(results.results).map((key: any) => {
       const callsReturnContext = results.results[key].callsReturnContext;
+      const assetAddress: string = results.results[key].originalContractCallContext.contractAddress;
       return {
         balance: formWei(
           callsReturnContext[0].returnValues[0].hex,
@@ -91,6 +92,7 @@ export const fetchBalances = createAsyncThunk(
         ),
         name: callsReturnContext[2].returnValues[0],
         symbol: callsReturnContext[3].returnValues[0],
+        assetAddress,
       };
     });
 
