@@ -6,6 +6,7 @@ import walletInstanceSlice from "./walletInstanceSlice";
 import AuthInstanceSlide from "./authSlides";
 import commonInstanceSlide from "./common";
 import balancesSlice from "./useBalances";
+import informationInstanceSlide from "./information";
 
 const rootReducer = combineReducers({
   wallet: walletSlice,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   authSlides: AuthInstanceSlide,
   commonSlides: commonInstanceSlide,
   balanceSlide: balancesSlice,
+  informationInstanceSlide: informationInstanceSlide,
 });
 
 export default rootReducer;

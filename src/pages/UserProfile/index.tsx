@@ -23,6 +23,7 @@ import { AuthServices } from "@/services/auth-service";
 import WillToast from "@/components/atoms/ToastMessage";
 import { useNavigate } from "react-router-dom";
 import { APP_ROUTES_PATHS } from "@/constants";
+import { getInformationInstanceSlide, useAppSelector } from "@/store";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -51,6 +52,9 @@ export function UserProfile() {
   const [form] = Form.useForm();
 
   const [listCountries, setListCountries] = useState<any[]>([]);
+  const { avatar, country, email, gender, name } = useAppSelector(
+    getInformationInstanceSlide
+  );
 
   const getListCountries = async () => {
     const res = await commonService.getListCountries();
@@ -88,16 +92,12 @@ export function UserProfile() {
   };
 
   const getInformation = async () => {
-    const res = await authServices.getInformation();
-
-    form.setFieldValue("name", res.data.data.name);
-    form.setFieldValue("email", res.data.data.email);
-    form.setFieldValue(
-      "gender",
-      res.data.data.gender ? Number(res.data.data.gender) : 1
-    );
-    form.setFieldValue("country", res.data.data.country);
-    setPreviewImage(res.data.data.avatar);
+    // const res = await authServices.getInformation();
+    form.setFieldValue("name", name);
+    form.setFieldValue("email", email);
+    form.setFieldValue("gender", gender ? Number(gender) : 1);
+    form.setFieldValue("country", country);
+    setPreviewImage(avatar);
   };
 
   useEffect(() => {
