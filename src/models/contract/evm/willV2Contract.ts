@@ -3,7 +3,6 @@ import willV2 from "@/constants/willV2";
 
 type ABIType = typeof willV2;
 
-
 export default class willV2Contract extends Contract<ABIType> {
   constructor({
     address,
