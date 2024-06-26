@@ -41,7 +41,7 @@ export const AssetTableWithAction = ({ willAddress, isEdit }: { willAddress: str
       render: (_, record) => (
         <Flex gap={8} justify="flex-end" className="configured-table-action">
           {
-            record?.symbol !== "ETH" ? (
+            record?.symbol === "ETH" ? (
               <>
                 <AppButton
                   size="small"
@@ -74,7 +74,16 @@ export const AssetTableWithAction = ({ willAddress, isEdit }: { willAddress: str
                 }
               </>
             ) : (
-              <AppButton size="small" type="primary" className="btn-action">
+              <AppButton
+                size="small"
+                type="primary"
+                className="btn-action"
+                onClick={() => {
+                  onOpen();
+                  setCurrentType("approve");
+                  setCurrentToken(record);
+                }}
+              >
                 <Text size="text-sm" className="font-bold uppercase">Approve</Text>
               </AppButton>
             )

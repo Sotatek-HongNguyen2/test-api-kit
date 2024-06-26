@@ -1,4 +1,4 @@
-import { AssetDetailData } from "@/types"
+import { AssetDetailData, WillData } from "@/types"
 import { CartItemContainer } from "./CardItemContainer"
 import { CopyIcon, DiamondIcon } from "@/assets/icons/custom-icon";
 import { AppTable } from "@/components/molecules/table";
@@ -11,6 +11,7 @@ import { useCopyToClipBoard } from "@/hooks/useCopyToClipboard";
 
 interface BeneficiariesCardProps {
   beneficiaries: AssetDetailData[];
+  minSignature: WillData['minSignature'];
 }
 
 const NameWithAvt = ({ name }: { name: string }) => {
@@ -22,7 +23,7 @@ const NameWithAvt = ({ name }: { name: string }) => {
   )
 }
 
-export const BeneficiariesCard = ({ beneficiaries }: BeneficiariesCardProps) => {
+export const BeneficiariesCard = ({ beneficiaries, minSignature }: BeneficiariesCardProps) => {
   const { handleCopyToClipboard } = useCopyToClipBoard();
 
   const columns: ColumnsType<AssetDetailData> = [
@@ -54,7 +55,12 @@ export const BeneficiariesCard = ({ beneficiaries }: BeneficiariesCardProps) => 
     >
       <Flex vertical gap={24}>
         <AppTable dataSource={beneficiaries} columns={columns} pagination={false} />
-        <Text className="neutral-2">Your will consists of the following addresses as the beneficiaries once your will is activated.</Text>
+        <Text className="neutral-2">
+          Your will consists of the following addresses as the beneficiaries once your will is activated.
+        </Text>
+        <Text className="neutral-1">
+          This will requires a minimum of {minSignature} signature{minSignature > 1 ? 's' : ''} for wallet access.
+        </Text>
       </Flex>
 
     </CartItemContainer>

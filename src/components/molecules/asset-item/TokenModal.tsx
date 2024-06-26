@@ -10,11 +10,14 @@ import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import WillToast from "@/components/atoms/ToastMessage";
 import willV1Contract from "@/models/contract/evm/willV1Contract";
 import { getWalletSlice, useAppSelector } from "@/store";
-import { useParams } from "react-router-dom"
-import { WillType } from "@/types"
-import willV2Contract from "@/models/contract/evm/willV2Contract"
+import { useParams } from "react-router-dom";
+import { WillType } from "@/types";
+import willV2Contract from "@/models/contract/evm/willV2Contract";
+import ContractEthers from "@/models/contract/evm/contract";
+import { Web3 } from "web3";
+import { ethers } from "ethers";
 
-export type TokenModalType = "deposit" | "withdraw";
+export type TokenModalType = "deposit" | "withdraw" | "approve";
 
 interface TokenModalProps {
   open: boolean;
@@ -53,31 +56,48 @@ export const TokenModal = (props: TokenModalProps) => {
         WillToast.error("Please connect your wallet first!");
         return;
       }
-      const Contract = getContract();
-      if (!Contract) {
-        WillToast.error("Something went wrong, please try again later");
-        return;
-      }
+      let res2 = null;
+      if (type === "approve") {
+        const Contract = getContract();
+        if (!Contract) {
+          WillToast.error("Something went wrong, please try again later");
+          return;
+        }
 
-      const contract = new Contract({
-        address: token?.assetAddress, // token address
-        provider: {
-          type: PROVIDER_TYPE.WALLET,
-          injectObject: WALLET_INJECT_OBJ.METAMASK,
-        },
-      });
-      if (type === "deposit") {
+        const contract = new Contract({
+          address: token?.assetAddress, // token address
+          provider: {
+            type: PROVIDER_TYPE.WALLET,
+            injectObject: WALLET_INJECT_OBJ.METAMASK,
+          },
+        });
         const tx = await contract.approve({
           address: willAddress.toString(),
           amount: amount,
         });
-        const res2 = await tx.send({
+        res2 = await tx.send({
           from: address, // my address wallet
         })
-        if (res2) {
-          onClose();
-          setAmount("");
+      } else if (type === "deposit") {
+        if (!window.ethereum) {
+          WillToast.error('Please connect your wallet first');
+          return;
         }
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const tokenContract = new ethers.Contract(
+          token?.assetAddress,
+          [
+            'function transfer(address to, uint amount) public returns (bool)', // abi
+          ],
+          signer
+        );
+        const tx = await tokenContract.transfer(willAddress, ethers.utils.parseUnits(amount, 18));
+        await tx.wait();
+      }
+      if (res2) {
+        onClose();
+        setAmount("");
       }
     } catch (error: any) {
       WillToast.error(error.message);
