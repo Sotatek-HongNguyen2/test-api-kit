@@ -2,6 +2,12 @@ $mobile-width: 480px;
 $tablet-width: 768px;
 $desktop-width: 1400px;
 
+$XXS: 376px;
+$SM: 576px;
+$LG: 992px;
+$XL: 1200px;
+$XXL: 1600px;
+
 @mixin mobile {
   @media (max-width: #{$mobile-width - 1px}) {
     @content;
@@ -33,7 +39,7 @@ $desktop-width: 1400px;
 }
 
 @mixin tabletFrac {
-  @media (max-width:#{$desktop-width} ) {
+  @media (max-width:#{$desktop-width}) {
     @content;
   }
 }

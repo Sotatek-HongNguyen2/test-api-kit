@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export const DEVICE = {
-  IPHONE_X: "1125px",
-  SS_S21: "1080px",
-}
+  mobile: "480px",
+  // SS_S21: "1080px",
+  tablet: "768px",
+};
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
   return {
     width,
-    height
+    height,
   };
 }
 
@@ -23,8 +24,8 @@ export function useWindowDimensions() {
       setWindowDimensions(getWindowDimensions());
     }
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return windowDimensions;
@@ -33,7 +34,7 @@ export function useWindowDimensions() {
 export function useMediaQuery(query: string): boolean {
   const getMatches = (query: string): boolean => {
     // Prevents SSR issues
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       return window.matchMedia(query).matches;
     }
     return false;
@@ -55,22 +56,22 @@ export function useMediaQuery(query: string): boolean {
     if (matchMedia.addListener) {
       matchMedia.addListener(handleChange);
     } else {
-      matchMedia.addEventListener('change', handleChange);
+      matchMedia.addEventListener("change", handleChange);
     }
 
     return () => {
       if (matchMedia.removeListener) {
         matchMedia.removeListener(handleChange);
       } else {
-        matchMedia.removeEventListener('change', handleChange);
+        matchMedia.removeEventListener("change", handleChange);
       }
     };
   }, [query]);
   return matches;
 }
 
-export function useDevices () {
-  const isIphoneX = useMediaQuery(`(max-width: ${DEVICE.IPHONE_X})`);
-  const isSS_S21 = useMediaQuery(`(max-width: ${DEVICE.SS_S21})`);
-  return { isMobile: isIphoneX, isIphoneX, isSS_S21 };
+export function useDevices() {
+  const isMobile = useMediaQuery(`(max-width: ${DEVICE.mobile})`);
+  const isTablet = useMediaQuery(`(max-width: ${DEVICE.tablet})`);
+  return { isMobile, isTablet };
 }

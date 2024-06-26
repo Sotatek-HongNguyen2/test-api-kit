@@ -1,11 +1,12 @@
 import "./styles.scss";
-import { useMemo } from "react";
-import { Dropdown, Flex, MenuProps } from "antd";
+import { useEffect, useMemo, useState } from "react";
+import { Avatar, Dropdown, Flex, MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import {
   getAuthSlide,
   getBalanceSlide,
+  getInformationInstanceSlide,
   getWalletSlice,
   useAppDispatch,
   useAppSelector,
@@ -21,6 +22,7 @@ import { walletSliceActions } from "@/store/slices/walletSlice";
 import { useLogout } from "@/hooks/useAuth";
 import { APP_ROUTES_PATHS } from "@/constants";
 import formatNumber from "@/helpers/useFormatToken";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 interface IPropsConnectButton {
   clickLogin: () => void;
@@ -30,6 +32,11 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
   const { address, walletKey } = useAppSelector(getWalletSlice);
   const { accessToken } = useAppSelector(getAuthSlide);
   const { listBalances } = useAppSelector(getBalanceSlide);
+  const { isTablet } = useDevices();
+
+  const { avatar } = useAppSelector(getInformationInstanceSlide);
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   // const { balance } = useAppSelector(getWalletSlice);
   const { logout } = useLogout();
@@ -94,22 +101,51 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
     return arr;
   }, [listBalances]) as MenuProps["items"];
 
+  useEffect(() => {
+    setPreviewImage(avatar);
+  }, [avatar]);
+
   return (
     <>
       {accessToken ? (
         <div className="connected-btn">
-          <Flex align="center" gap={10}>
-            <IconButton
-              type="primary-outlined"
-              onClick={() => navigate(APP_ROUTES_PATHS.USER_PROFILE)}
-            >
-              <UserIcon />
-            </IconButton>
-            <Dropdown menu={{ items }} placement="bottomRight">
-              <AppButton type="primary-outlined" icon={<WalletIcon />}>
-                {displayedAddress}
-              </AppButton>
-            </Dropdown>
+          <Flex align={!isTablet ? "center" : ""} vertical={isTablet} gap={10}>
+            {!isTablet && (
+              <>
+                {previewImage ? (
+                  <Avatar
+                    style={{ cursor: "pointer" }}
+                    src={previewImage}
+                    size={36}
+                    onClick={() => navigate(APP_ROUTES_PATHS.USER_PROFILE)}
+                  />
+                ) : (
+                  <IconButton
+                    type="primary-outlined"
+                    onClick={() => navigate(APP_ROUTES_PATHS.USER_PROFILE)}
+                  >
+                    <UserIcon />
+                  </IconButton>
+                )}
+              </>
+            )}
+            {!isTablet ? (
+              <Dropdown menu={{ items }} placement="bottomRight">
+                <AppButton type="primary-outlined" icon={<WalletIcon />}>
+                  {displayedAddress}
+                </AppButton>
+              </Dropdown>
+            ) : (
+              <>
+                <AppButton type="primary-outlined" icon={<WalletIcon />}>
+                  {displayedAddress}
+                </AppButton>
+                <div className="item-menu mt-3" onClick={handleLogout}>
+                  <Logout />
+                  <span>Disconnect</span>
+                </div>
+              </>
+            )}
           </Flex>
         </div>
       ) : (

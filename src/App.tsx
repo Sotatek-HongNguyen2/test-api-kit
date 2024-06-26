@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
@@ -11,12 +11,25 @@ import useLoadWalletInstances from "./hooks/useLoadWalletInstances";
 import ToastContext from "./components/atoms/ToastContext";
 import useWalletEvents from "./hooks/useWalletEvents";
 import useGetBalances from "./hooks/useGetBalances";
+import useGetInformation from "./hooks/useGetInformation";
 
 const App: React.FC = () => {
   useWeb3Injected();
   useLoadWalletInstances();
   useWalletEvents();
   useGetBalances();
+
+  const getInformation = useGetInformation();
+
+  useEffect(() => {
+    const delayedGetInfo = () => {
+      getInformation();
+    };
+
+    delayedGetInfo();
+
+    return () => {};
+  }, [getInformation]);
 
   return (
     <Fragment>

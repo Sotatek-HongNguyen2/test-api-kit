@@ -50,5 +50,7 @@ export const getAuthSlide = (state: RootState) => state.authSlides;
 export const getWalletObjSlice = (state: RootState) => state.walletObj;
 export const getCommonSlides = (state: RootState) => state.commonSlides;
 export const getBalanceSlide = (state: RootState) => state.balanceSlide;
+export const getInformationInstanceSlide = (state: RootState) =>
+  state.informationInstanceSlide;
 export const getWalletInstanceSlice = (state: RootState) =>
   state.walletInstance;
