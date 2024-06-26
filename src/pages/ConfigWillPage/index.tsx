@@ -19,6 +19,9 @@ import { AssetDataColumn } from "@/components/organisms/config-card/AddAssetDist
 import { ethers } from "ethers";
 import forwardingWillContract from "@/models/contract/evm/ForwardingWill";
 import destructionWillContract from "@/models/contract/evm/DestructionWill";
+import { APP_ROUTES_PATHS } from "@/constants";
+import { BeneficiaryConfig } from "@/components/organisms/config-card/AssetToBeneficiary";
+import { uniqBy } from "lodash";
 
 export interface ConfigFormDataType {
   willName: string;
@@ -47,6 +50,7 @@ export function ConfigWillPage() {
 
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
+  const { setFieldValue } = form;
   const [isConfigured, setIsConfigured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [willAddress, setWillAddress] = useState<string | null>(null);
@@ -70,9 +74,9 @@ export function ConfigWillPage() {
         return {
           nameWill: values?.willName,
           note: values?.note,
-          nickNames: values?.beneficiariesList.map((item) => item.name),
-          beneficiaries: values?.beneficiariesList.map((item) => item?.address),
-          assets: values?.assetDistribution.map((item) => item.assetAddress),
+          nickNames: (values?.beneficiariesList ?? []).map((item) => item.name),
+          beneficiaries: (values?.beneficiariesList ?? []).map((item) => item?.address),
+          assets: (values?.assetDistribution ?? []).map((item) => item.assetAddress),
           minRequiredSignatures: values?.minRequiredSignatures,
           lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
           lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
@@ -81,8 +85,14 @@ export function ConfigWillPage() {
         return {
           nameWill: values?.willName,
           note: values?.note,
-          nickNames: values?.beneficiariesList.map((item) => item.name),
-          distributions: [],
+          nickNames: (values?.beneficiariesList ?? [])?.map((item) => item.name),
+          distributions: ((values?.beneficiariesList ?? []) as BeneficiaryConfig[])?.map((item) => {
+            return [
+              item?.address,
+              item?.assetConfig.map((item) => item.asset?.assetAddress),
+              item.assetConfig.map((item) => item?.percent)
+            ]
+          }),
           minRequiredSignatures: values?.minRequiredSignatures,
           lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
           lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
@@ -90,7 +100,7 @@ export function ConfigWillPage() {
       case "destruction":
         return {
           nameWill: values?.willName,
-          assetAddresses: values?.assetDistribution.map((item) => item.assetAddress),
+          assetAddresses: (values?.assetDistribution ?? []).map((item) => item.assetAddress),
           lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
           lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
         }
@@ -125,7 +135,15 @@ export function ConfigWillPage() {
         },
       });
       const params = getParams(values);
-      console.log("params: ", params);
+      if (willType === "forwarding") {
+        const listAsset = ((values?.beneficiariesList ?? []) as BeneficiaryConfig[])
+          .flatMap((item) => (item?.assetConfig ?? [])?.map(asset => ({
+            ...asset?.asset,
+            symbol: asset?.asset?.value
+          })));
+        const distinctArray = uniqBy(listAsset, 'value');
+        setFieldValue("assetDistribution", distinctArray);
+      }
 
       if (!params) {
         WillToast.error("Something went wrong, please try again later");
@@ -151,9 +169,7 @@ export function ConfigWillPage() {
         ["uint256", "address", "address", "tuple", "tuple", "uint256"],
         txwait.logs[0].data
       );
-      console.log("decodedLog: ", decodedLog);
       const willAddress = decodedLog[1];
-      console.log("willAddress: ", willAddress);
       if (willAddress) {
         setWillAddress(willAddress);
         setIsConfigured(true);
@@ -172,7 +188,14 @@ export function ConfigWillPage() {
           {isConfigured && willAddress ? (
             <>
               <AssetTableWithAction willAddress={willAddress} />
-              <AppButton type="primary" className="none-styles">
+              <AppButton
+                type="primary"
+                className="none-styles"
+                onClick={() => {
+                  WillToast.success("Configure assets details successfully");
+                  navigate(APP_ROUTES_PATHS.HOME);
+                }}
+              >
                 <Text size="text-lg" className="font-bold">
                   Save
                 </Text>

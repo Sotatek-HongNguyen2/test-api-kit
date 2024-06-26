@@ -13,8 +13,8 @@ export default class willV2Contract extends Contract<ABIType> {
   }
   async approve(dto: { address: string, amount: string }) {
     return this.contractInstance.methods.approve(
-      [dto.address],
-      [dto.amount]
+      dto.address,
+      dto.amount
     )
   }
 }

@@ -10,7 +10,7 @@ import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import WillToast from "@/components/atoms/ToastMessage";
 import willV1Contract from "@/models/contract/evm/willV1Contract";
 import { getWalletSlice, useAppSelector } from "@/store";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { WillType } from "@/types"
 import willV2Contract from "@/models/contract/evm/willV2Contract"
 
@@ -26,8 +26,6 @@ interface TokenModalProps {
 
 export const TokenModal = (props: TokenModalProps) => {
   const { open, onClose, type, token, willAddress } = props;
-  console.log("token: ", token);
-  console.log("willAddress: ", willAddress);
   const [amount, setAmount] = useState<string>("");
   const { address } = useAppSelector(getWalletSlice);
   const { willType } = useParams<{ willType: WillType }>();
@@ -56,38 +54,32 @@ export const TokenModal = (props: TokenModalProps) => {
         return;
       }
       const Contract = getContract();
-      console.log("Contract: ", Contract);
       if (!Contract) {
         WillToast.error("Something went wrong, please try again later");
         return;
       }
       const contract = new Contract({
-        address: token?.address, // token address
+        address: token?.assetAddress, // token address
         provider: {
           type: PROVIDER_TYPE.WALLET,
           injectObject: WALLET_INJECT_OBJ.METAMASK,
         },
       })
       if (type === "deposit") {
-        console.log("type: ", type);
         const tx = await contract.approve({
           address: willAddress, // contract address
           amount,
         });
-        console.log('tx', tx)
         const res2 = await tx.send({
           from: address, // my address wallet
-          // value: amount
         })
-        console.log('res2', res2)
+        if (res2) {
+          onClose();
+          setAmount("");
+        }
       }
-      // if (res2) {
-      //   onClose();
-      //   setAmount("");
-      // }
     } catch (error: any) {
       WillToast.error(error.message);
-      console.log("error: ", error.message);
     } finally {
       setLoading(false);
     }
