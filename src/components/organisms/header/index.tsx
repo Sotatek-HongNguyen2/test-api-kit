@@ -4,7 +4,7 @@ import "./styles.scss";
 
 import { useNavigate } from "react-router-dom";
 
-import { ConfigIcon, FAQIcon } from "@/assets/icons/custom-icon";
+import { ConfigIcon, FAQIcon, MenuIcon } from "@/assets/icons/custom-icon";
 import { AppButton, IconButton } from "@/components/atoms/button";
 import WillImage from "@/components/atoms/Image";
 import logo from "@/assets/images/layout/logo.png";
@@ -13,11 +13,14 @@ import { useHandleLogin } from "@/hooks/useHandleLogin";
 import { APP_ROUTES_PATHS } from "@/constants";
 
 import LoginModal from "../LoginModal";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 export const Header = () => {
   const { handelClickOptionLogin, isOpen, setIsOpen, loadingLogin } =
     useHandleLogin();
   const navigate = useNavigate();
+
+  const isMobile = useDevices();
 
   const handelOpenModalLogin = async () => {
     setIsOpen(true);
@@ -32,26 +35,34 @@ export const Header = () => {
       >
         <WillImage src={logo} />
       </AppButton>
-      <Flex gap={20} align="center">
-        <ConnectButton clickLogin={handelOpenModalLogin} />
-        <Flex align="center">
+      {
+        isMobile ? (
           <IconButton>
-            <ConfigIcon />
+            <MenuIcon />
           </IconButton>
-          <IconButton>
-            <FAQIcon />
-          </IconButton>
-        </Flex>
+        ) : (
+          <Flex gap={20} align="center">
+            <ConnectButton clickLogin={handelOpenModalLogin} />
+            <Flex align="center">
+              <IconButton>
+                <ConfigIcon />
+              </IconButton>
+              <IconButton>
+                <FAQIcon />
+              </IconButton>
+            </Flex>
 
-        <LoginModal
-          loading={loadingLogin}
-          clickOptionLogin={handelClickOptionLogin}
-          open={isOpen}
-          handleCancel={() => {
-            setIsOpen(false);
-          }}
-        />
-      </Flex>
+            <LoginModal
+              loading={loadingLogin}
+              clickOptionLogin={handelClickOptionLogin}
+              open={isOpen}
+              handleCancel={() => {
+                setIsOpen(false);
+              }}
+            />
+          </Flex>
+        )
+      }
     </Flex>
   );
 };

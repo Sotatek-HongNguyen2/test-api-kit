@@ -4,6 +4,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { Header } from "@/components/organisms";
 import { Dashboard } from "@/components/molecules/dashboard";
 import clsx from "clsx";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 const { Content } = Layout;
 
@@ -21,6 +22,7 @@ export enum ThemesMode {
 const LayoutComponent: React.FC<ILayoutProps> = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const { isMobile } = useDevices();
   return (
     <div id="app-layout">
       <Layout className="container">
@@ -30,7 +32,7 @@ const LayoutComponent: React.FC<ILayoutProps> = () => {
               <Header />
               <Flex vertical className="app-page--content">
                 {
-                  isHomePage && (
+                  isHomePage && !isMobile && (
                     <Dashboard title="My will list" />
                   )
                 }

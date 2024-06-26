@@ -14,6 +14,7 @@ import { SearchParams } from "@/types/global";
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 import { WillTypeModal } from "../will-type-modal";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 export interface WillListProps {
   type?: "created" | "inherited";
@@ -33,6 +34,7 @@ export const WillList = (props: WillListProps) => {
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
   const [isLoading, setIsLoading] = useState(false);
+  const { isMobile } = useDevices();
 
   const willService = new WillServices();
 
@@ -108,7 +110,11 @@ export const WillList = (props: WillListProps) => {
         )
       }
       <Flex justify="space-between" gap="5vw">
-        <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
+        {
+          !isMobile
+            ? <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
+            : null
+        }
         {
           isLoading ? (
             <Flex justify="center" align="center" className="app-will--list">
