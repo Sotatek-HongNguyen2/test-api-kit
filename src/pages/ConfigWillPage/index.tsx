@@ -110,7 +110,6 @@ export function ConfigWillPage() {
   }
 
   const onFinish = async (values: ConfigFormDataType) => {
-    console.log("values: ", values);
     try {
       setLoading(true);
       if (!address) {

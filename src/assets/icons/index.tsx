@@ -30,3 +30,4 @@ export const Wallet = () => <ReactSVG src={"/icons/login/Wallet.svg"} />;
 export const Logout = () => <ReactSVG src={"/icons/login/logout.svg"} />;
 export const LogoETH = () => <ReactSVG src={"/icons/network/eth.svg"} />;
 export const LogoETH200 = () => <ReactSVG src={"/icons/network/eth_200.svg"} />;
+export const NoAvatar = () => <ReactSVG src={"/icons/no-auth/no-avatar.svg"} />;

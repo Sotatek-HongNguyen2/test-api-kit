@@ -1,6 +1,7 @@
 export enum HomePaths {
   HOME = "/",
   NO_AUTH = "/no-auth",
+  USER_PROFILE = "/user-profile",
 }
 
 export enum WillPaths {

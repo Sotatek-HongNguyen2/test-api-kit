@@ -99,7 +99,10 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
       {accessToken ? (
         <div className="connected-btn">
           <Flex align="center" gap={10}>
-            <IconButton type="primary-outlined">
+            <IconButton
+              type="primary-outlined"
+              onClick={() => navigate(APP_ROUTES_PATHS.USER_PROFILE)}
+            >
               <UserIcon />
             </IconButton>
             <Dropdown menu={{ items }} placement="bottomRight">
