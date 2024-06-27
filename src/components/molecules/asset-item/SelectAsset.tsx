@@ -33,7 +33,7 @@ export const SelectAsset = ({ addAsset }: SelectAssetProps) => {
       <Text className="font-semibold neutral-1">Asset</Text>
       <Flex align="center" gap={12}>
         <AppSelect
-          className="select-asset"
+          className="asset-select"
           options={assetOptions}
           onChange={(_, option) => {
             setCurrentAsset(option as any);

@@ -7,8 +7,13 @@ import { useMemo } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom"
 import { WillType } from "@/types";
 
-export const WillTypeCard = () => {
-  const { willType } = useParams<{ willType: WillType }>();
+interface WillTypeCardProps {
+  type?: WillType;
+}
+
+export const WillTypeCard = ({ type }: WillTypeCardProps) => {
+  const { willType: willTypeParams } = useParams<{ willType: WillType }>();
+  const willType = willTypeParams || type;
   const location = useLocation();
 
   if (!willType || (willType && !['inheritance', 'forwarding', 'destruction'].includes(willType))) {

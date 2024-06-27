@@ -47,6 +47,7 @@ export interface WillData {
   lackSignMessage: number;
   lackTransaction: number;
   owner: OwnerLastTime;
+  scWillId: string;
 }
 
 export interface ItemOwnerBalance {
@@ -59,9 +60,10 @@ export interface ItemOwnerBalance {
   lackTransaction: number;
 }
 
-export interface SaveAssetBody {
-  willId: number;
-  asset: string;
+export interface UpdateWillBody {
+  willId: string;
+  willName?: string;
+  note?: string;
 }
 
 export interface BeneficiaryData {

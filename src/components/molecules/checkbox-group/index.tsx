@@ -16,11 +16,12 @@ interface CheckboxGroupProps {
   titleClassName?: string;
   items: CustomCheckboxItemProps[];
   onChange?: (value: CustomCheckboxItemProps['value'][]) => void;
+  checked?: CustomCheckboxItemProps['value'][];
 }
 
 export const CheckboxGroup = (props: CheckboxGroupProps) => {
-  const { title, titleClassName, items, onChange } = props;
-  const [value, setValue] = useState<CustomCheckboxItemProps['value'][]>([]);
+  const { title, titleClassName, items, onChange, checked } = props;
+  const [value, setValue] = useState<CustomCheckboxItemProps['value'][]>(checked || []);
 
   return (
     <Flex vertical gap="1rem">
@@ -33,18 +34,23 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
             const { id, ...rest } = checkbox;
             return (
               <>
-                <AppCheckbox key={`checkbox-${id}`} checked={value?.includes(checkbox?.value)} onChange={(e) => {
-                  const checked = e.target.checked;
-                  const newArr = [...value];
-                  if (!checked) {
-                    const index = value?.indexOf(checkbox?.value);
-                    newArr?.splice(index, 1);
-                  } else {
-                    newArr?.push(checkbox?.value);
-                  }
-                  setValue(newArr);
-                  onChange?.(newArr);
-                }}>
+                <AppCheckbox
+                  key={`checkbox-${id}`}
+                  checked={value?.includes(checkbox?.value)}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    const newArr = [...value];
+                    if (!checked) {
+                      const index = value?.indexOf(checkbox?.value);
+                      newArr?.splice(index, 1);
+                    } else {
+                      newArr?.push(checkbox?.value);
+                    }
+                    setValue(newArr);
+                    onChange?.(newArr);
+                  }}
+                  {...rest}
+                >
                   {checkbox?.title}
                 </AppCheckbox>
                 {

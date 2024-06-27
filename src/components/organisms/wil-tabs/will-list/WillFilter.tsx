@@ -39,6 +39,7 @@ export const WillFilter = ({ onSearch, onFilter, type }: WillFilterProps) => {
         title="Type"
         items={type === 'created' ? items : items?.filter(item => item.value !== 'destruction')}
         onChange={onFilter}
+        defaultValue="all"
       />
     </Flex>
   )

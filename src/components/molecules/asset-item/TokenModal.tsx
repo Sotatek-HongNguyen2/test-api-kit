@@ -13,8 +13,6 @@ import { getWalletSlice, useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import { WillType } from "@/types";
 import willV2Contract from "@/models/contract/evm/willV2Contract";
-import ContractEthers from "@/models/contract/evm/contract";
-import { Web3 } from "web3";
 import { ethers } from "ethers";
 
 export type TokenModalType = "deposit" | "withdraw" | "approve";

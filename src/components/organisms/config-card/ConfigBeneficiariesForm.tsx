@@ -15,6 +15,7 @@ import { useCopyToClipBoard } from "@/hooks/useCopyToClipboard"
 import WillToast from "@/components/atoms/ToastMessage"
 import useDisclosure from "@/hooks/useDisclosure"
 import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal"
+import { getWalletSlice, useAppSelector } from "@/store"
 
 export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boolean }) => {
 
@@ -28,6 +29,7 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
   const [indexCopied, setIndexCopied] = useState<number>(-1);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedAddress, setSelectedAddress] = useState<string>('');
+  const { address } = useAppSelector(getWalletSlice);
 
   const minSignatureOptions = useMemo(() => [...(new Array(watchBeneficiaries?.length || 0))].map((_, index) => ({
     label: index + 1,
@@ -84,25 +86,29 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
     }
   ];
 
-  useEffect(() => {
-    resetFields();
-    setFieldValue("beneficiariesList", []);
-  }, [generate])
-
   const onAddBeneficiary = (values: any) => {
-    const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
-    const beneficiaryIndex = currentBeneficiaries.findIndex((beneficiary: BeneficiaryData) => beneficiary?.address === values?.beneficiaryAddress);
-    if (beneficiaryIndex > -1) {
-      WillToast.error("Beneficiary already exists")
-      return;
+    try {
+
+      if (values.beneficiaryAddress === address) {
+        WillToast.error("Owner address cannot be added as a beneficiary")
+        return;
+      }
+      const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
+      const beneficiaryIndex = currentBeneficiaries.findIndex((beneficiary: BeneficiaryData) => beneficiary?.address === values?.beneficiaryAddress);
+      if (beneficiaryIndex > -1) {
+        WillToast.error("Beneficiary already exists")
+        return;
+      }
+      const newBeneficiary: BeneficiaryData = {
+        id: currentBeneficiaries.length + 1,
+        name: values.beneficiaryName,
+        address: values.beneficiaryAddress
+      }
+      setFieldValue("beneficiariesList", [...currentBeneficiaries, newBeneficiary]);
+      resetFields();
+    } catch (error: any) {
+      WillToast.error(error.message)
     }
-    const newBeneficiary: BeneficiaryData = {
-      id: currentBeneficiaries.length + 1,
-      name: values.beneficiaryName,
-      address: values.beneficiaryAddress
-    }
-    setFieldValue("beneficiariesList", [...currentBeneficiaries, newBeneficiary]);
-    resetFields();
   }
 
   return (

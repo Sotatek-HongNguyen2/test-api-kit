@@ -4,15 +4,29 @@ import { ConfigBeneficiaries } from "@/components/organisms/config-card/common-c
 import { NoteToBeneficiaries } from "@/components/organisms/config-card/common-card/NoteToBeneficiaries"
 import { WillName } from "@/components/organisms/config-card/common-card/WillName"
 import { Flex } from "antd"
+import { EditFormProps } from ".."
+import { EditConfigCard } from "@/components/organisms/config-card/EditConfigCard"
 
-export const ForwardingForm = () => {
+export const ForwardingForm = (props: EditFormProps) => {
+  const { isEdit } = props;
   return (
     <Flex vertical gap={16}>
-      <WillName />
-      <ConfigBeneficiaries />
-      <AssetToBeneficiary />
-      <ActivationTrigger />
-      <NoteToBeneficiaries />
+      <WillName {...props} />
+      {
+        isEdit ? (
+          <>
+            <EditConfigCard />
+            <ActivationTrigger />
+          </>
+        ) : (
+          <>
+            <ConfigBeneficiaries />
+            <AssetToBeneficiary />
+            <ActivationTrigger />
+          </>
+        )
+      }
+      <NoteToBeneficiaries {...props} />
     </Flex>
   )
 }

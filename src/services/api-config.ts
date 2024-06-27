@@ -10,7 +10,7 @@ export const API_CONFIG = {
     myWill: "/will/my",
     myInheritedWill: "/will/my-inheritance",
     detail: "/will/detail",
-    saveAsset: "/will/save-asset",
+    update: "/will/edit-will",
   },
 
   common: {

@@ -7,8 +7,11 @@ import { AppInput } from "@/components/atoms/input";
 interface SelectTimeProps {
   title?: string;
   handleChangeValue?: (value: number) => void; // month
+  value: number;
+  name?: string;
 }
-export const SelectTime = ({ title, handleChangeValue }: SelectTimeProps) => {
+export const SelectTime = (props: SelectTimeProps) => {
+  const { title, handleChangeValue, value, name } = props;
 
   const options = [
     {
@@ -32,7 +35,7 @@ export const SelectTime = ({ title, handleChangeValue }: SelectTimeProps) => {
       title: 'Customize',
       itemChildren: <Flex gap={10} align="center">
         <Form.Item
-          name="customTime"
+          name={`${name ?? ''}_customTime`}
           rules={[
             { required: true, message: 'Please enter a number' },
           ]}
@@ -57,6 +60,7 @@ export const SelectTime = ({ title, handleChangeValue }: SelectTimeProps) => {
       <Text className="neutral-1">{title}</Text>
       <RadioGroup
         items={options}
+        value={value}
         onChange={(value) => {
           handleChangeValue?.(value as number)
         }}

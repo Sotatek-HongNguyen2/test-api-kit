@@ -11,6 +11,7 @@ import { IconButton } from "@/components/atoms/button"
 import { ConfigAsset } from "@/components/molecules/asset-item/ConfigAsset"
 import { AssetDataColumn, AssetSelectType } from "./AddAssetDistributionForm"
 import WillToast from "@/components/atoms/ToastMessage"
+import { AssetName } from "@/components/molecules/asset-item/AssetName"
 
 export interface BeneficiaryConfig extends BeneficiaryData {
   assetConfig: {
@@ -33,6 +34,7 @@ export const AssetToBeneficiary = () => {
       title: 'Token',
       dataIndex: 'token',
       key: 'token',
+      render: (_, record) => <AssetName asset={record} />
     },
     {
       title: 'Inheritance Percentage (%)',
@@ -87,7 +89,8 @@ export const AssetToBeneficiary = () => {
         if (item?.value === asset?.value) {
           return {
             ...item,
-            amount: percent
+            amount: percent,
+            symbol: asset?.value as string
           }
         }
         return item;
@@ -106,7 +109,8 @@ export const AssetToBeneficiary = () => {
         token: asset?.label,
         amount: percent, // percentage
         value: asset?.value as string,
-      }]))
+        symbol: asset?.value as string,
+      } as any]))
     }
     const newBeneficiaries = currentBeneficiaries.map((beneficiary: BeneficiaryConfig) => {
       if (beneficiary?.address === currentSelected?.address) {
@@ -140,7 +144,8 @@ export const AssetToBeneficiary = () => {
       setAssets(currentBeneficiary?.assetConfig?.map((item: any) => ({
         token: item?.asset?.label,
         amount: item?.percent,
-        value: item?.asset?.value as string
+        value: item?.asset?.value as string,
+        symbol: item?.asset?.value as string
       })));
     } else {
       setAssets([]);

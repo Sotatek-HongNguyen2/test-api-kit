@@ -1,7 +1,6 @@
 import { Flex, Form } from "antd";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Web3 from "web3";
 
 import { AppButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text";
@@ -9,7 +8,7 @@ import { AssetTableWithAction } from "@/components/molecules/asset-item/AssetTab
 import { WillTypeCard } from "@/components/organisms";
 import { WrapperContainer } from "@/components/organisms/wrapper-container";
 import { WillForm } from "@/components/templates/form";
-import { PROVIDER_TYPE, ProviderType } from "@/models/contract/evm/contract";
+import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import inheritanceWillContract from "@/models/contract/evm/InheritanceWill";
 import { getWalletSlice, useAppSelector } from "@/store";
@@ -27,10 +26,15 @@ export interface ConfigFormDataType {
   willName: string;
   note: string;
   beneficiariesList: BeneficiaryData[];
+  initBeneficiaries: BeneficiaryData[];
   lackOfOutgoingTxRange: number;
   lackOfSignedMsgRange: number;
   minRequiredSignatures: number;
   assetDistribution: AssetDataColumn[];
+  activationTrigger: string[];
+  lackOfOutgoingTxRange_customTime: number;
+  lackOfSignedMsgRange_customTime: number;
+  beneficiaries: "existing" | "generate";
 }
 
 export const contractAddress = (willType: WillType) => {
@@ -39,11 +43,23 @@ export const contractAddress = (willType: WillType) => {
       return import.meta.env.VITE_INHERITANCE_ROUTER;
     case "forwarding":
       return import.meta.env.VITE_FORWARDING_ROUTER;
-    default:
+    default: // destruction
       return import.meta.env.VITE_DESTRUCTION_ROUTER;
   }
 };
 
+export const getWillContract = (willType: WillType) => {
+  switch (willType) {
+    case "inheritance":
+      return inheritanceWillContract;
+    case "forwarding":
+      return forwardingWillContract;
+    case "destruction":
+      return destructionWillContract;
+    default:
+      return null;
+  }
+}
 export function ConfigWillPage() {
   const { address } = useAppSelector(getWalletSlice);
   const { willType } = useParams();
@@ -54,19 +70,6 @@ export function ConfigWillPage() {
   const [isConfigured, setIsConfigured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [willAddress, setWillAddress] = useState<string | null>(null);
-
-  const getWillContract = () => {
-    switch (willType) {
-      case "inheritance":
-        return inheritanceWillContract;
-      case "forwarding":
-        return forwardingWillContract;
-      case "destruction":
-        return destructionWillContract;
-      default:
-        return null;
-    }
-  }
 
   const getParams = (values: ConfigFormDataType) => {
     switch (willType) {
@@ -121,7 +124,7 @@ export function ConfigWillPage() {
         WillToast.error("Something went wrong, please try again later");
         return;
       }
-      const Contract = getWillContract();
+      const Contract = getWillContract(willType as WillType);
       if (!Contract) {
         WillToast.error("Something went wrong, please try again later");
         return;

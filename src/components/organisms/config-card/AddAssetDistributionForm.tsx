@@ -1,6 +1,7 @@
 import "./styles.scss"
 import { AppButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text"
+import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
 import { AppTable } from "@/components/molecules/table"
 import formatNumber from "@/helpers/useFormatToken";
@@ -10,7 +11,7 @@ import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 
 export interface AssetDataColumn {
-  token: React.ReactNode;
+  symbol: any;
   amount: number;
   value: string;
   assetAddress: string;
@@ -24,15 +25,17 @@ export const AddAssetDistributionForm = () => {
 
   const configForm = Form.useFormInstance();
   const { setFieldValue } = configForm;
+  const assetDistribution = Form.useWatch('assetDistribution', { form: configForm });
 
-  const [assets, setAssets] = useState<AssetDataColumn[]>([]);
+  const [assets, setAssets] = useState<AssetDataColumn[]>(assetDistribution || []);
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
 
-  const columns: ColumnsType<DefaultOptionType> = [
+  const columns: ColumnsType<AssetDataColumn> = [
     {
       title: 'Token',
       dataIndex: 'token',
       key: 'token',
+      render: (_, record) => <AssetName asset={record as any} />
     },
     {
       title: 'Amount',
@@ -45,7 +48,7 @@ export const AddAssetDistributionForm = () => {
   const handleAddAsset = () => {
     const assetIndex = assets.findIndex(item => item.value === asset?.value);
     const newAsset: AssetDataColumn = {
-      token: asset?.label,
+      symbol: asset?.value,
       amount: asset?.amount as number,
       value: asset?.value as string,
       assetAddress: asset?.assetAddress as string,
@@ -65,7 +68,7 @@ export const AddAssetDistributionForm = () => {
       <Text className="neutral-1">You’re a designated assets:</Text>
       <AppTable
         columns={columns}
-        dataSource={assets}
+        dataSource={assetDistribution || assets}
         pagination={false}
         className="asset-distribution-table"
       />
