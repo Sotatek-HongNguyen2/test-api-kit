@@ -1,4 +1,6 @@
 @import "@/assets/scss/variable.scss";
+@import "@/assets/scss/responsive.scss";
+
 
 #app-layout {
   width: 100vw;
@@ -15,7 +17,12 @@
 
   .app-page {
     width: 100%;
-    padding: 7vh 5vw 10vh;
+    padding: 2vh 5vw 10vh;
+
+    @media screen and (max-width: $tablet-width) {
+      padding: 2vh 5vw 2vh;
+    }
+
     min-height: calc(100vh - $header-height);
     background: #F6F7FB;
   }

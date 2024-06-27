@@ -26,6 +26,7 @@ import { APP_ROUTES_PATHS } from "@/constants";
 import { getInformationInstanceSlide, useAppSelector } from "@/store";
 import useGetInformation from "@/hooks/useGetInformation";
 import { EMAIL_RULES } from "@/helpers/rule";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -48,14 +49,14 @@ export function UserProfile() {
     },
   ];
 
-  const reloadDataInformation = useGetInformation();
+  const { isTablet, isMobile } = useDevices();
 
+  const reloadDataInformation = useGetInformation();
   const commonService = new CommonServices();
   const authServices = new AuthServices();
-
   const [form] = Form.useForm();
-
   const [listCountries, setListCountries] = useState<any[]>([]);
+
   const { avatar, country, email, gender, name } = useAppSelector(
     getInformationInstanceSlide
   );
@@ -68,9 +69,7 @@ export function UserProfile() {
       value: item.cca2.toString(),
       key: item.cca2.toString(),
     }));
-
     arr.sort((a: any, b: any) => a.label.localeCompare(b.label));
-
     setListCountries(arr);
   };
 
@@ -82,7 +81,6 @@ export function UserProfile() {
   const handleChange = (info: any) => {
     const isImage = info.file.type.startsWith("image/");
     const maxSize = 10 * 1024 * 1024;
-
     if (info.file.size > maxSize) {
       WillToast.error(
         "File size exceeds 10MB limit. Please choose a smaller file"
@@ -99,7 +97,6 @@ export function UserProfile() {
   };
 
   const getInformation = async () => {
-    // const res = await authServices.getInformation();
     form.setFieldValue("name", name);
     form.setFieldValue("email", email);
     form.setFieldValue("gender", Number(gender));
@@ -107,17 +104,14 @@ export function UserProfile() {
     setPreviewImage(avatar);
   };
 
-  useEffect(() => {
-    getListCountries();
-    getInformation();
-  }, []);
-
   const onFinish = async (values: any) => {
     setLoading(true);
     const formData = new FormData();
+
     if (fileList[0]) {
       formData.append("avatar", fileList[0].originFileObj as FileType);
     }
+
     formData.append("country", values.country as string);
     formData.append("email", values.email as string);
     formData.append("name", values.name as string);
@@ -143,11 +137,23 @@ export function UserProfile() {
     }
   };
 
+  useEffect(() => {
+    getListCountries();
+    getInformation();
+  }, []);
+
   return (
-    <Row justify="center" style={{ marginTop: 50 }}>
-      <Col span={16}>
-        <Form form={form} layout="vertical" onFinish={onFinish}>
-          <Card title="Setup Profile">
+    <Row justify="center" className="main-user-profile">
+      <Col md={18} xl={14} xxl={14} sm={24} xs={24}>
+        <Form
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+        >
+          {isTablet && <div className="title-page-mobile">Setup Profile</div>}
+          <Card className="card-form" title={!isTablet && "Setup Profile"}>
             <Row gutter={24} align="middle">
               <Col>
                 {previewImage ? (
@@ -171,7 +177,7 @@ export function UserProfile() {
               </Col>
             </Row>
             <Row gutter={24} style={{ marginTop: 20 }}>
-              <Col span={12}>
+              <Col md={12} sm={24} xs={24} className={isTablet ? "mb-3" : ""}>
                 <Form.Item
                   label="Your Name"
                   name="name"
@@ -186,6 +192,7 @@ export function UserProfile() {
                   ]}
                 >
                   <AppInput
+                    width={"100%"}
                     placeholder="Enter your name here"
                     onChange={(e) => {
                       const { value } = e.target;
@@ -207,7 +214,7 @@ export function UserProfile() {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col md={12} sm={24} xs={24} className={isTablet && "mb-3"}>
                 <Form.Item label="Gender" name="gender">
                   <Radio.Group>
                     {listGender.map((item) => (
@@ -218,7 +225,7 @@ export function UserProfile() {
                   </Radio.Group>
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col md={12} sm={24} xs={24} className={isTablet && "mb-3"}>
                 <Form.Item
                   label="Email Address"
                   name="email"
@@ -239,14 +246,8 @@ export function UserProfile() {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Country"
-                  name="country"
-                  // rules={[
-                  //   { required: true, message: "Please select your country" },
-                  // ]}
-                >
+              <Col md={12} sm={24} xs={24} className={isTablet && "mb-3"}>
+                <Form.Item label="Country" name="country">
                   <AppSelect
                     style={{ width: "100%" }}
                     showSearch
@@ -265,13 +266,19 @@ export function UserProfile() {
             </Row>
           </Card>
           <Row gutter={24} style={{ marginTop: 20 }}>
-            <Col>
-              <AppButton type="primary" htmlType="submit" loading={loading}>
+            <Col span={isMobile ? "12" : ""}>
+              <AppButton
+                type="primary"
+                block={isMobile}
+                htmlType="submit"
+                loading={loading}
+              >
                 SAVE CHANGES
               </AppButton>
             </Col>
-            <Col>
+            <Col span={isMobile ? "12" : ""}>
               <AppButton
+                block={isMobile}
                 className="btn-cancel"
                 onClick={() => {
                   navigate(APP_ROUTES_PATHS.HOME);
