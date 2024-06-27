@@ -137,6 +137,12 @@ export function UserProfile() {
     }
   };
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === " ") {
+      e.preventDefault();
+    }
+  };
+
   return (
     <Row justify="center" style={{ marginTop: 50 }}>
       <Col span={16}>
@@ -219,6 +225,7 @@ export function UserProfile() {
                   rules={EMAIL_RULES}
                 >
                   <AppInput
+                    onKeyDown={handleKeyDown}
                     placeholder="Enter your email here"
                     maxLength={254}
                     onChange={(e) => {
