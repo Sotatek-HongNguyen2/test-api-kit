@@ -12,6 +12,7 @@ import ToastContext from "./components/atoms/ToastContext";
 import useWalletEvents from "./hooks/useWalletEvents";
 import useGetBalances from "./hooks/useGetBalances";
 import useGetInformation from "./hooks/useGetInformation";
+import { getAuthSlide, useAppSelector } from "./store";
 
 const App: React.FC = () => {
   useWeb3Injected();
@@ -20,15 +21,18 @@ const App: React.FC = () => {
   useGetBalances();
 
   const getInformation = useGetInformation();
+  const { accessToken } = useAppSelector(getAuthSlide);
 
   useEffect(() => {
-    const delayedGetInfo = () => {
-      getInformation();
-    };
+    if (accessToken) {
+      const delayedGetInfo = () => {
+        getInformation();
+      };
 
-    delayedGetInfo();
+      delayedGetInfo();
 
-    return () => {};
+      return () => {};
+    }
   }, [getInformation]);
 
   return (
