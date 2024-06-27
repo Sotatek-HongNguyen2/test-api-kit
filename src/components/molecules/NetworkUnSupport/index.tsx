@@ -20,7 +20,7 @@ const NetworkUnSupport = ({ cancel }: MetaMaskUnavailableProps) => {
       </div>
 
       <AppButton block className="btn-disconnected" onClick={cancel}>
-        Disconnected
+        DISCONNECTED
       </AppButton>
     </div>
   );
