@@ -44,3 +44,60 @@ export const EMAIL_RULES: Rule[] = [
     },
   },
 ];
+
+export const WILL_NAME_RULES: Rule[] = [
+  {
+    validator(_, value: string) {
+      const regex1 = /^[a-zA-Z0-9]*$/;
+      const convertedValue = value?.trim();
+
+      if (!convertedValue) {
+        return Promise.reject(`Please input your will name!`);
+      }
+
+      if (!regex1.test(convertedValue)) {
+        return Promise.reject(`Will name cannot contain special characters`);
+      }
+
+      return Promise.resolve();
+    },
+  },
+];
+
+export const BENEFICIARY_RULES: Rule[] = [
+  {
+    validator(_, value: string) {
+      const regex1 = /^[a-zA-Z0-9]*$/;
+      const convertedValue = value?.trim();
+
+      if (!convertedValue) {
+        return Promise.reject(`Please input beneficiary name!`);
+      }
+
+      if (!regex1.test(convertedValue)) {
+        return Promise.reject(
+          `Beneficiary name cannot contain special characters`
+        );
+      }
+
+      return Promise.resolve();
+    },
+  },
+];
+
+export const ETHEREUM_ADDRESS_RULES: Rule[] = [
+  {
+    validator(_, value: string) {
+      const trimmedValue = value?.trim();
+
+      if (!trimmedValue) {
+        return Promise.reject("Please enter the wallet address!");
+      }
+
+      if (!/^0x[a-fA-F0-9]{40}$/.test(trimmedValue)) {
+        return Promise.reject("Wrong wallet address");
+      }
+      return Promise.resolve();
+    },
+  },
+];

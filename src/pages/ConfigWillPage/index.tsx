@@ -1,7 +1,8 @@
 import { Flex, Form } from "antd";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Web3 from "web3";
+import { ethers } from "ethers";
+import { uniqBy } from "lodash";
 
 import { AppButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text";
@@ -9,19 +10,17 @@ import { AssetTableWithAction } from "@/components/molecules/asset-item/AssetTab
 import { WillTypeCard } from "@/components/organisms";
 import { WrapperContainer } from "@/components/organisms/wrapper-container";
 import { WillForm } from "@/components/templates/form";
-import { PROVIDER_TYPE, ProviderType } from "@/models/contract/evm/contract";
+import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import inheritanceWillContract from "@/models/contract/evm/InheritanceWill";
 import { getWalletSlice, useAppSelector } from "@/store";
 import WillToast from "@/components/atoms/ToastMessage";
 import { BeneficiaryData, WillType } from "@/types";
 import { AssetDataColumn } from "@/components/organisms/config-card/AddAssetDistributionForm";
-import { ethers } from "ethers";
 import forwardingWillContract from "@/models/contract/evm/ForwardingWill";
 import destructionWillContract from "@/models/contract/evm/DestructionWill";
 import { APP_ROUTES_PATHS } from "@/constants";
 import { BeneficiaryConfig } from "@/components/organisms/config-card/AssetToBeneficiary";
-import { uniqBy } from "lodash";
 
 export interface ConfigFormDataType {
   willName: string;
@@ -66,7 +65,7 @@ export function ConfigWillPage() {
       default:
         return null;
     }
-  }
+  };
 
   const getParams = (values: ConfigFormDataType) => {
     switch (willType) {
@@ -75,39 +74,49 @@ export function ConfigWillPage() {
           nameWill: values?.willName,
           note: values?.note,
           nickNames: (values?.beneficiariesList ?? []).map((item) => item.name),
-          beneficiaries: (values?.beneficiariesList ?? []).map((item) => item?.address),
-          assets: (values?.assetDistribution ?? []).map((item) => item.assetAddress),
+          beneficiaries: (values?.beneficiariesList ?? []).map(
+            (item) => item?.address
+          ),
+          assets: (values?.assetDistribution ?? []).map(
+            (item) => item.assetAddress
+          ),
           minRequiredSignatures: values?.minRequiredSignatures,
           lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
           lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
-        }
+        };
       case "forwarding":
         return {
           nameWill: values?.willName,
           note: values?.note,
-          nickNames: (values?.beneficiariesList ?? [])?.map((item) => item.name),
-          distributions: ((values?.beneficiariesList ?? []) as BeneficiaryConfig[])?.map((item) => {
+          nickNames: (values?.beneficiariesList ?? [])?.map(
+            (item) => item.name
+          ),
+          distributions: (
+            (values?.beneficiariesList ?? []) as BeneficiaryConfig[]
+          )?.map((item) => {
             return [
               item?.address,
               item?.assetConfig.map((item) => item.asset?.assetAddress),
-              item.assetConfig.map((item) => item?.percent)
-            ]
+              item.assetConfig.map((item) => item?.percent),
+            ];
           }),
           minRequiredSignatures: values?.minRequiredSignatures,
           lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
           lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
-        }
+        };
       case "destruction":
         return {
           nameWill: values?.willName,
-          assetAddresses: (values?.assetDistribution ?? []).map((item) => item.assetAddress),
+          assetAddresses: (values?.assetDistribution ?? []).map(
+            (item) => item.assetAddress
+          ),
           lackOfOutgoingTxRange: values?.lackOfOutgoingTxRange || 0,
           lackOfSignedMsgRange: values?.lackOfSignedMsgRange || 0,
-        }
+        };
       default:
         return null;
     }
-  }
+  };
 
   const onFinish = async (values: ConfigFormDataType) => {
     try {
@@ -135,12 +144,15 @@ export function ConfigWillPage() {
       });
       const params = getParams(values);
       if (willType === "forwarding") {
-        const listAsset = ((values?.beneficiariesList ?? []) as BeneficiaryConfig[])
-          .flatMap((item) => (item?.assetConfig ?? [])?.map(asset => ({
+        const listAsset = (
+          (values?.beneficiariesList ?? []) as BeneficiaryConfig[]
+        ).flatMap((item) =>
+          (item?.assetConfig ?? [])?.map((asset) => ({
             ...asset?.asset,
-            symbol: asset?.asset?.value
-          })));
-        const distinctArray = uniqBy(listAsset, 'value');
+            symbol: asset?.asset?.value,
+          }))
+        );
+        const distinctArray = uniqBy(listAsset, "value");
         setFieldValue("assetDistribution", distinctArray);
       }
 
@@ -173,7 +185,6 @@ export function ConfigWillPage() {
         setWillAddress(willAddress);
         setIsConfigured(true);
       }
-
     } catch (error: any) {
       WillToast.error(error.message);
     } finally {
@@ -184,7 +195,11 @@ export function ConfigWillPage() {
     <WrapperContainer
       title="Configure your will"
       hasBackButton={!isConfigured}
-      description={isConfigured ? "You must approve/deposit tokens to finish creating will." : undefined}
+      description={
+        isConfigured
+          ? "You must approve/deposit tokens to finish creating will."
+          : undefined
+      }
     >
       <Form form={form} onFinish={onFinish} autoComplete="off">
         <Flex vertical gap={16}>

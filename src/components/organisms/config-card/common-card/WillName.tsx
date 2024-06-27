@@ -1,31 +1,19 @@
-import { NameIcon } from "@/assets/icons/custom-icon"
-import { AppInput } from "@/components/atoms/input"
-import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer"
-import { Form } from "antd"
+import { Form } from "antd";
+
+import { NameIcon } from "@/assets/icons/custom-icon";
+import { AppInput } from "@/components/atoms/input";
+import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer";
+import { WILL_NAME_RULES } from "@/helpers/rule";
 
 export const WillName = () => {
   const configForm = Form.useFormInstance();
   const { setFieldValue } = configForm;
 
   return (
-    <CartItemContainer
-      title="Will Name"
-      iconTitle={<NameIcon />}
-    >
-      <Form.Item
-        name="willName"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your will name!'
-          },
-          {
-            max: 31,
-            message: 'Will name should not exceed 31 characters'
-          },
-        ]}
-      >
+    <CartItemContainer title="Will Name" iconTitle={<NameIcon />}>
+      <Form.Item name="willName" rules={WILL_NAME_RULES}>
         <AppInput
+          maxLength={30}
           placeholder="Enter will name"
           onChange={(e) => {
             setFieldValue("willName", e.target.value);
@@ -37,5 +25,5 @@ export const WillName = () => {
         />
       </Form.Item>
     </CartItemContainer>
-  )
-}
+  );
+};
