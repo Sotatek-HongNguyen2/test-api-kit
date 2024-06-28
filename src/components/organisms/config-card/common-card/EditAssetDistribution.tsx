@@ -11,21 +11,26 @@ import WillToast from "@/components/atoms/ToastMessage"
 import { contractAddress, getWillContract } from "@/pages/ConfigWillPage"
 import { PROVIDER_TYPE } from "@/models/contract/evm/contract"
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract"
-import { WillType } from "@/types"
+import { TokenWillType, WillType } from "@/types"
 import { getWalletSlice, useAppSelector } from "@/store"
 import { ColumnsType } from "antd/es/table"
 import formatNumber from "@/helpers/useFormatToken"
 import { AssetName } from "@/components/molecules/asset-item/AssetName"
 import { AppTable } from "@/components/molecules/table"
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset"
+import { TokenModal, TokenModalType, getTokenContract } from "@/components/molecules/asset-item/TokenModal";
+import useDisclosure from "@/hooks/useDisclosure";
 
 export const EditAssetDistribution = (props: EditFormProps) => {
 
   const configForm = Form.useFormInstance();
   const { getFieldValue, getFieldError, setFieldValue } = configForm;
   const assetDistribution = Form.useWatch('assetDistribution', { form: configForm });
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [currentType, setCurrentType] = useState<TokenModalType | null>(null);
+  const [currentToken, setCurrentToken] = useState<any>(null);
 
-  const { scWillId, type } = props;
+  const { scWillId, type, willAddress } = props;
   const [loading, setLoading] = useState(false);
   const { address } = useAppSelector(getWalletSlice);
 
@@ -66,7 +71,19 @@ export const EditAssetDistribution = (props: EditFormProps) => {
                 </AppButton>
               </>
             ) : (
-              <AppButton type="primary" size="xl">
+              <AppButton
+                type="primary"
+                size="xl"
+                onClick={() => {
+                  onOpen();
+                  setCurrentType("approve");
+                  setCurrentToken({
+                    ...record,
+                    value: record?.symbol,
+                    assetAddress: (record as any)?.address
+                  });
+                }}
+              >
                 <Text className="uppercase font-bold">
                   Approve
                 </Text>
@@ -189,6 +206,18 @@ export const EditAssetDistribution = (props: EditFormProps) => {
           <Text className="uppercase" size="text-lg">Save</Text>
         </AppButton>
       </Flex>
+      {
+        isOpen && currentType && currentToken && willAddress && (
+          <TokenModal
+            open={isOpen}
+            onClose={onClose}
+            type={currentType}
+            token={currentToken}
+            willAddress={willAddress}
+            willType={type}
+          />
+        )
+      }
     </CartItemContainer>
   )
 }

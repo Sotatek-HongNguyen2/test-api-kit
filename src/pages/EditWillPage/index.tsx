@@ -84,7 +84,12 @@ export function EditWillPage() {
       <Form form={form} autoComplete="off">
         <Flex vertical gap={16}>
           <WillTypeCard type={willDetail?.type} />
-          <WillForm type={willDetail?.type} isEdit={true} scWillId={willDetail?.scWillId} />
+          <WillForm
+            type={willDetail?.type}
+            isEdit={true}
+            scWillId={willDetail?.scWillId}
+            willAddress={willDetail?.address}
+          />
         </Flex>
       </Form>
     </WrapperContainer>

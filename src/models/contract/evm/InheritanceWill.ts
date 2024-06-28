@@ -46,7 +46,7 @@ export default class inheritanceWillContract extends Contract<ABIType> {
       [
         Number(dto.minRequiredSignatures),
         Number(dto.lackOfOutgoingTxRange),
-        Number(dto.lackOfSignedMsgRange),
+        // Number(dto.lackOfSignedMsgRange),
       ]
     );
   }

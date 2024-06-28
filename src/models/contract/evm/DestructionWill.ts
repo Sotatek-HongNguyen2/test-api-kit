@@ -25,7 +25,7 @@ export default class destructionWillContract extends Contract<ABIType> {
       dto.nameWill,
       dto.assetAddresses,
       Number(dto.lackOfOutgoingTxRange),
-      Number(dto.lackOfSignedMsgRange)
+      // Number(dto.lackOfSignedMsgRange)
     );
   }
   async setActivationTrigger(dto: ActivationTriggerType) {

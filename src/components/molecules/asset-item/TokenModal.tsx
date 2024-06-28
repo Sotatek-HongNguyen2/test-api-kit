@@ -11,7 +11,7 @@ import WillToast from "@/components/atoms/ToastMessage";
 import willV1Contract from "@/models/contract/evm/willV1Contract";
 import { getWalletSlice, useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
-import { WillType } from "@/types";
+import { TokenWillType, WillType } from "@/types";
 import willV2Contract from "@/models/contract/evm/willV2Contract";
 import { ethers } from "ethers";
 
@@ -23,25 +23,28 @@ interface TokenModalProps {
   type: TokenModalType;
   token: any;
   willAddress: string;
+  willType?: WillType;
 }
 
+export const getTokenContract = (token: TokenWillType) => {
+  switch (token) {
+    case "WV1":
+      return willV1Contract;
+    case "WV2":
+      return willV2Contract;
+    default:
+      return null;
+  }
+};
+
 export const TokenModal = (props: TokenModalProps) => {
-  const { open, onClose, type, token, willAddress } = props;
+  const { open, onClose, type, token, willAddress, willType: willTypeProp } = props;
   const [amount, setAmount] = useState<string>("");
   const { address } = useAppSelector(getWalletSlice);
-  const { willType } = useParams<{ willType: WillType }>();
+  const { willType: willTypeParam } = useParams<{ willType: WillType }>();
+  const willType = willTypeParam || willTypeProp;
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getContract = () => {
-    switch (token.value) {
-      case "WV1":
-        return willV1Contract;
-      case "WV2":
-        return willV2Contract;
-      default:
-        return null;
-    }
-  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -56,7 +59,7 @@ export const TokenModal = (props: TokenModalProps) => {
       }
       let res2 = null;
       if (type === "approve") {
-        const Contract = getContract();
+        const Contract = getTokenContract(token.value);
         if (!Contract) {
           WillToast.error("Something went wrong, please try again later");
           return;

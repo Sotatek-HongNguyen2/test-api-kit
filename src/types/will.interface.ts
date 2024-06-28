@@ -1,4 +1,5 @@
 export type WillType = "inheritance" | "forwarding" | "destruction";
+export type TokenWillType = "WV1" | "WV2";
 
 export type WillMethod = "inherited" | "created";
 
@@ -48,6 +49,7 @@ export interface WillData {
   lackTransaction: number;
   owner: OwnerLastTime;
   scWillId: string;
+  address: string; // will address
 }
 
 export interface ItemOwnerBalance {

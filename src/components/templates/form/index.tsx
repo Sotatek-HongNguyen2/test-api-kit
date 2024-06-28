@@ -10,6 +10,7 @@ export interface EditFormProps {
   isEdit?: boolean;
   type?: WillType;
   scWillId?: string;
+  willAddress?: string;
 }
 
 export const WillForm = (props: EditFormProps) => {
