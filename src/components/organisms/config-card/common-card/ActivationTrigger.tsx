@@ -19,7 +19,12 @@ export const ActivationTrigger = ({ type }: { type?: 'destruction' }) => {
       value: 'lack_outgoing_transactions',
       itemChildren: <Form.Item
         name="lackOfOutgoingTxRange"
-        rules={[{ required: true, message: 'Please select an option' }]}
+        rules={[
+          {
+            required: true,
+            message: 'Please select an option'
+          }
+        ]}
       >
         <SelectTime
           title="Time of inactivity until will activation"
@@ -31,6 +36,7 @@ export const ActivationTrigger = ({ type }: { type?: 'destruction' }) => {
       id: 2,
       title: "Lack of signed message",
       value: 'lack_signed_message',
+      disabled: true,
       itemChildren: <Form.Item
         name="lackOfSignedMsgRange"
         rules={[{ required: true, message: 'Please select an option' }]}

@@ -5,11 +5,17 @@
 
   .ant-radio-inner {
     background-color: white !important;
-    border-color: $primary !important;
+    border-color: $neutral4 !important;
 
     &::after {
       background-color: $primary !important;
       transform: scale(0.6) !important;
+    }
+  }
+
+  .ant-radio-checked {
+    .ant-radio-inner {
+      border-color: $primary !important;
     }
   }
 }

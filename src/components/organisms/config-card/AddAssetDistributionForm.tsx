@@ -35,7 +35,7 @@ export const AddAssetDistributionForm = () => {
       key: 'token',
     },
     {
-      title: 'Amount',
+      title: 'Total balance',
       dataIndex: 'amount',
       key: 'amount',
       render: (amount) => <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>

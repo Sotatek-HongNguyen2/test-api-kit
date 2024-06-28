@@ -33,18 +33,22 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
             const { id, ...rest } = checkbox;
             return (
               <>
-                <AppCheckbox key={`checkbox-${id}`} checked={value?.includes(checkbox?.value)} onChange={(e) => {
-                  const checked = e.target.checked;
-                  const newArr = [...value];
-                  if (!checked) {
-                    const index = value?.indexOf(checkbox?.value);
-                    newArr?.splice(index, 1);
-                  } else {
-                    newArr?.push(checkbox?.value);
-                  }
-                  setValue(newArr);
-                  onChange?.(newArr);
-                }}>
+                <AppCheckbox
+                  key={`checkbox-${id}`}
+                  {...rest}
+                  checked={value?.includes(checkbox?.value)}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    const newArr = [...value];
+                    if (!checked) {
+                      const index = value?.indexOf(checkbox?.value);
+                      newArr?.splice(index, 1);
+                    } else {
+                      newArr?.push(checkbox?.value);
+                    }
+                    setValue(newArr);
+                    onChange?.(newArr);
+                  }}>
                   {checkbox?.title}
                 </AppCheckbox>
                 {

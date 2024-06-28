@@ -35,6 +35,7 @@ export const SelectTime = ({ title, handleChangeValue }: SelectTimeProps) => {
           name="customTime"
           rules={[
             { required: true, message: 'Please enter a number' },
+            { max: 5, message: 'Maximum 5 digits' }
           ]}
         >
           <AppInput
