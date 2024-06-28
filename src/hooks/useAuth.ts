@@ -134,7 +134,7 @@ const useLogout = () => {
         logoutResults.data.status === 200
       ) {
         dispatch(authInstanceSlideActions.deleteAuth());
-        // WillToast.success("Logout success");
+        WillToast.success("Logout success");
       }
       return logoutResults;
     } catch (err: any) {

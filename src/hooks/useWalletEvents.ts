@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 import { WALLET_EVENT_NAME } from "@/models/wallet/wallet.abstract";
 import {
-  getAuthSlide,
   getWalletInstanceSlice,
   useAppDispatch,
   useAppSelector,
@@ -13,6 +12,7 @@ import { walletSliceActions } from "@/store/slices/walletSlice";
 import { EVM_CHAINS_METADATA } from "@/models/network/network";
 import { authInstanceSlideActions } from "@/store/slices/authSlides";
 import { commonInstanceSlideActions } from "@/store/slices/common";
+import WillToast from "@/components/atoms/ToastMessage";
 // import { walletInstanceSliceActions } from "@/store/slices/walletInstanceSlice";
 
 export default function useWalletEvents() {
@@ -20,7 +20,6 @@ export default function useWalletEvents() {
   // const { getBalance } = walletSliceActions;
 
   const dispatch = useAppDispatch();
-  const { accessToken } = useAppSelector(getAuthSlide);
 
   // native event
   useEffect(() => {
@@ -32,22 +31,8 @@ export default function useWalletEvents() {
       async handler() {
         dispatch(walletSliceActions.logout());
         dispatch(authInstanceSlideActions.deleteAuth());
+        WillToast.success("Logout success");
         return;
-        // if (accounts && accounts.length > 0) {
-        //   const resGetBalance = await dispatch(
-        //     getBalance({
-        //       wallet: WALLETS.metamask,
-        //       address: accounts[0],
-        //       decimals: DECIMALS.ETH,
-        //     })
-        //   );
-
-        //   await dispatch(
-        //     walletSliceActions.updateBalance(resGetBalance.payload as string)
-        //   );
-        //   return dispatch(walletSliceActions.updateAccount(accounts[0]));
-        // }
-        // return dispatch(walletSliceActions.disconnect());
       },
     });
     // display banner when listener was not initialize
