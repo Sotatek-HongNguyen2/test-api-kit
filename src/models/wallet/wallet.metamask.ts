@@ -131,6 +131,17 @@ export default class WalletMetamask extends Wallet {
     });
   }
 
+  async createNewAccount() {
+    const provider: ProviderType = {
+      type: PROVIDER_TYPE.WALLET,
+      injectObject: WALLET_INJECT_OBJ.METAMASK,
+    };
+    const web3 = getWeb3Instance(provider);
+    const [res, error] = await handleRequest(web3.eth.accounts.create() as any);
+    if (error) throw new Error("Error");
+    return res;
+  }
+
   async getBalance(userAddr: string, decimals: number): Promise<string> {
     const provider: ProviderType = {
       type: PROVIDER_TYPE.WALLET,

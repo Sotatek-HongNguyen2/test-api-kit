@@ -40,6 +40,9 @@ export type signMessagePayload = {
   address: string;
 };
 
+export type actionWeb3 = {
+  wallet: Wallet;
+};
 export type getBalancePayload = {
   wallet: Wallet;
   address: string;
@@ -156,6 +159,15 @@ const signMessage = createAppThunk<{
   return res;
 });
 
+const createNewAccount = createAppThunk()(
+  "wallet/signMessage",
+  async ({ wallet }: actionWeb3) => {
+    const res = await wallet.createNewAccount();
+
+    return res;
+  }
+);
+
 const getBalance = createAppThunk<{
   message: string;
 }>()(
@@ -247,6 +259,7 @@ export const walletSliceActions = {
   reconnectWallet,
   signMessage,
   getBalance,
+  createNewAccount,
 };
 
 // export
