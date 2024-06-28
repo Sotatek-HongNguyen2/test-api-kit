@@ -269,7 +269,10 @@ export const AssetToBeneficiary = () => {
                 pagination={false}
               />
             )}
-            <ConfigAsset handleAddConfigAsset={handleAddConfigAsset} />
+            <ConfigAsset
+              handleAddConfigAsset={handleAddConfigAsset}
+              selectedAssets={assetPercents}
+            />
           </>
         )}
       </Flex>

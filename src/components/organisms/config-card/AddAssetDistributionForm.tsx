@@ -1,5 +1,6 @@
+import { TrashIcon } from "@/assets/icons/custom-icon";
 import "./styles.scss"
-import { AppButton } from "@/components/atoms/button";
+import { AppButton, IconButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text"
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
 import { AppTable } from "@/components/molecules/table"
@@ -28,6 +29,12 @@ export const AddAssetDistributionForm = () => {
   const [assets, setAssets] = useState<AssetDataColumn[]>([]);
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
 
+  const handleDeleteAsset = (record: DefaultOptionType) => {
+    const newAssets = assets.filter(item => item.value !== record.value);
+    setAssets(newAssets);
+    setFieldValue("assetDistribution", newAssets);
+  }
+
   const columns: ColumnsType<DefaultOptionType> = [
     {
       title: 'Token',
@@ -40,6 +47,14 @@ export const AddAssetDistributionForm = () => {
       key: 'amount',
       render: (amount) => <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>
     },
+    {
+      title: "",
+      render: (_, record) => (
+        <IconButton onClick={() => handleDeleteAsset(record)}>
+          <TrashIcon />
+        </IconButton>
+      )
+    }
   ];
 
   const handleAddAsset = () => {
@@ -67,9 +82,15 @@ export const AddAssetDistributionForm = () => {
         columns={columns}
         dataSource={assets}
         pagination={false}
-        className="asset-distribution-table"
+        className={`asset-distribution-table ${assets && assets.length > 0 && "have-data"}`}
+        hasIconAction
       />
-      <SelectAsset addAsset={(asset) => setAsset(asset)} />
+      <SelectAsset
+        disableSelected={{
+          selectedAssets: assets
+        }}
+        addAsset={(asset) => setAsset(asset)}
+      />
       <AppButton
         className="none-styles uppercase"
         size="xl"

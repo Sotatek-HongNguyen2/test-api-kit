@@ -4,6 +4,8 @@ import { CartItemContainer } from "@/components/organisms/details-card/CardItemC
 import { Form } from "antd";
 
 export const NoteToBeneficiaries = () => {
+  const configForm = Form.useFormInstance();
+  const { setFieldValue } = configForm;
   return (
     <CartItemContainer title="Note to beneficiaries" iconTitle={<NoteIcon />}>
       <Form.Item
@@ -15,7 +17,20 @@ export const NoteToBeneficiaries = () => {
           },
         ]}
       >
-        <AppInputArea />
+        <AppInputArea
+          onChange={(e) => {
+            const newValue = e.target.value.trimStart();
+            setFieldValue("note", newValue);
+          }}
+
+          onBlur={(e) => {
+            const newValue = e.target.value.trim();
+            if (newValue) {
+              setFieldValue("note", newValue)
+            }
+          }}
+          maxLength={2000}
+        />
       </Form.Item>
     </CartItemContainer>
   );

@@ -27,6 +27,7 @@ import useDisclosure from "@/hooks/useDisclosure";
 import { BENEFICIARY_RULES, ETHEREUM_ADDRESS_RULES } from "@/helpers/rule";
 
 import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal";
+import { getWalletSlice, useAppSelector } from "@/store";
 
 export const ConfigBeneficiariesForm = ({
   generate = false,
@@ -46,6 +47,7 @@ export const ConfigBeneficiariesForm = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [isValidBeneficiary, setIsValidBeneficiary] = useState<boolean>(false);
+  const { address } = useAppSelector(getWalletSlice);
 
   const minSignatureOptions = useMemo(
     () =>
@@ -62,7 +64,7 @@ export const ConfigBeneficiariesForm = ({
       (beneficiary: BeneficiaryData) => beneficiary?.address !== selectedAddress
     );
     setFieldValue("beneficiariesList", newBeneficiaries);
-    WillToast.success("Delete succesfully");
+    WillToast.success("Delete successfully");
   };
 
   const columns: ColumnsType<BeneficiaryData> = [
@@ -121,6 +123,10 @@ export const ConfigBeneficiariesForm = ({
   }, [generate]);
 
   const onAddBeneficiary = (values: any) => {
+    if (values?.beneficiaryAddress === address) {
+      WillToast.error("You can't add your own address as a beneficiary");
+      return;
+    }
     const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
     const beneficiaryIndex = currentBeneficiaries.findIndex(
       (beneficiary: BeneficiaryData) =>
@@ -189,7 +195,7 @@ export const ConfigBeneficiariesForm = ({
                 className={clsx("beneficiary-address", generate && "generate")}
               >
                 <Text className="font-semibold neutral-1">
-                  Etherem public address
+                  Ethereum public address
                 </Text>
                 <Form.Item
                   name="beneficiaryAddress"

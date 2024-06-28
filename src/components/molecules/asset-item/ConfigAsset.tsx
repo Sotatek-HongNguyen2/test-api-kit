@@ -11,9 +11,10 @@ import { SelectAsset } from "./SelectAsset";
 
 interface ConfigAssetProps {
   handleAddConfigAsset: (asset: AssetSelectType, percent: number) => void;
+  selectedAssets?: any[];
 }
 
-export const ConfigAsset = ({ handleAddConfigAsset }: ConfigAssetProps) => {
+export const ConfigAsset = ({ handleAddConfigAsset, selectedAssets }: ConfigAssetProps) => {
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
   const [percent, setPercent] = useState<number>(1);
 
@@ -41,7 +42,12 @@ export const ConfigAsset = ({ handleAddConfigAsset }: ConfigAssetProps) => {
         justify="space-between"
         className="config-asset"
       >
-        <SelectAsset addAsset={setAsset} />
+        <SelectAsset
+          addAsset={setAsset}
+          disableSelected={{
+            selectedAssets: selectedAssets ?? [],
+          }}
+        />
         <Flex vertical gap={10} className="input-percentage">
           <Text className="font-semibold neutral-1">
             Inheritance Percentage
