@@ -5,6 +5,7 @@ import { AppInput } from "@/components/atoms/input"
 import { Text } from "@/components/atoms/text"
 import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer"
 import { EditFormProps } from "@/components/templates/form"
+import { WILL_NAME_RULES } from "@/helpers/rule"
 import { WillServices } from "@/services/will-service"
 import { Flex, Form } from "antd"
 import { useState } from "react"
@@ -51,20 +52,9 @@ export const WillName = ({ isEdit }: EditFormProps) => {
       iconTitle={<NameIcon />}
     >
       <Flex vertical gap={24}>
-        <Form.Item
-          name="willName"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your will name!'
-            },
-            {
-              max: 31,
-              message: 'Will name should not exceed 31 characters'
-            },
-          ]}
-        >
+        <Form.Item name="willName" rules={WILL_NAME_RULES}>
           <AppInput
+            maxLength={30}
             placeholder="Enter will name"
             onChange={(e) => {
               setFieldValue("willName", e.target.value);
@@ -90,5 +80,5 @@ export const WillName = ({ isEdit }: EditFormProps) => {
         }
       </Flex>
     </CartItemContainer>
-  )
-}
+  );
+};

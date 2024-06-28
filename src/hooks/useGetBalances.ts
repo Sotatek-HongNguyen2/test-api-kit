@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 
-import { getWalletSlice, useAppDispatch, useAppSelector } from "@/store";
+import {
+  getAuthSlide,
+  getWalletSlice,
+  useAppDispatch,
+  useAppSelector,
+} from "@/store";
 import {
   balancesSliceActionThunk,
   balancesSliceActions,
@@ -9,6 +14,7 @@ import {
 export default function useGetBalances() {
   const { fetchBalances } = balancesSliceActionThunk;
   const { address } = useAppSelector(getWalletSlice);
+  const { accessToken } = useAppSelector(getAuthSlide);
 
   const dispatch = useAppDispatch();
 
@@ -24,8 +30,9 @@ export default function useGetBalances() {
         console.error("Failed to fetch balances:", error);
       }
     };
-
-    fetchBalancesAsync();
+    if (accessToken) {
+      fetchBalancesAsync();
+    }
   }, [address]);
 
   return;

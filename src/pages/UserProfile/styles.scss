@@ -1,3 +1,22 @@
+@import "@/assets/scss/responsive.scss";
+
+.main-user-profile {
+    margin-top: 50px;
+
+    @media screen and (max-width: $tablet-width) {
+        margin-top: 0px;
+    }
+
+    .title-page-mobile {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 26px;
+        text-align: left;
+        color: #0A0B0C;
+        margin-bottom: 2vh;
+    }
+}
+
 .title-page {
     font-size: 24px;
     font-weight: 700;
@@ -56,12 +75,10 @@
 }
 
 .ant-form-item-label {
-    margin-bottom: 4px;
-    color: #0A0B0C;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 20px;
-    text-align: left;
+    margin-bottom: 4px !important;
+    font-weight: 600 !important;
+    line-height: 20px !important;
+    text-align: left !important;
 }
 
 .item-name {
@@ -95,4 +112,17 @@
 
 .ant-upload-list {
     display: none
+}
+
+.card-form {
+    @media screen and (max-width: $tablet-width) {
+        box-shadow: 2px 4px 30px 0px #00000014;
+
+    }
+
+    label {
+        color: #0A0B0C !important;
+        font-size: 16px !important;
+    }
+
 }

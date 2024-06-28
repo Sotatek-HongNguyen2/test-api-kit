@@ -1,29 +1,46 @@
 import { AppInput } from "@/components/atoms/input"
 import "./styles.scss"
 import { Text } from "@/components/atoms/text"
-import { Divider, Flex, Form } from "antd"
-import { AppButton, IconButton } from "@/components/atoms/button"
-import { AppTable } from "@/components/molecules/table"
-import { ColumnsType } from "antd/es/table"
-import { BeneficiaryData } from "@/types"
-import { AppSelect } from "@/components/atoms/select"
-import { useEffect, useMemo, useState } from "react"
-import clsx from "clsx"
-import { UserOutlined } from "@ant-design/icons"
-import { CheckOutlinedIcon, CopyIcon, TrashIcon } from "@/assets/icons/custom-icon"
-import { useCopyToClipBoard } from "@/hooks/useCopyToClipboard"
-import WillToast from "@/components/atoms/ToastMessage"
-import useDisclosure from "@/hooks/useDisclosure"
-import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal"
 import { getWalletSlice, useAppSelector } from "@/store"
 
-export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boolean }) => {
+import { Divider, Flex, Form } from "antd";
 
+import { AppButton, IconButton } from "@/components/atoms/button";
+import { AppTable } from "@/components/molecules/table";
+
+import { ColumnsType } from "antd/es/table";
+
+import { BeneficiaryData } from "@/types";
+import { AppSelect } from "@/components/atoms/select";
+
+import { useEffect, useMemo, useState } from "react";
+import clsx from "clsx";
+import { UserOutlined } from "@ant-design/icons";
+
+import {
+  CheckOutlinedIcon,
+  CopyIcon,
+  TrashIcon,
+} from "@/assets/icons/custom-icon";
+import { useCopyToClipBoard } from "@/hooks/useCopyToClipboard";
+import WillToast from "@/components/atoms/ToastMessage";
+import useDisclosure from "@/hooks/useDisclosure";
+import { BENEFICIARY_RULES, ETHEREUM_ADDRESS_RULES } from "@/helpers/rule";
+
+import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal";
+
+export const ConfigBeneficiariesForm = ({
+  generate = false,
+}: {
+  generate?: boolean;
+}) => {
   const [form] = Form.useForm();
   const { submit, resetFields } = form;
   const configForm = Form.useFormInstance();
   const { getFieldValue, setFieldValue } = configForm;
-  const watchBeneficiaries = Form.useWatch('beneficiariesList', { form: configForm });
+  const watchBeneficiaries = Form.useWatch("beneficiariesList", {
+    form: configForm,
+  });
 
   const { handleCopyToClipboard, isCopied } = useCopyToClipBoard();
   const [indexCopied, setIndexCopied] = useState<number>(-1);
@@ -31,59 +48,72 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
   const [selectedAddress, setSelectedAddress] = useState<string>('');
   const { address } = useAppSelector(getWalletSlice);
 
-  const minSignatureOptions = useMemo(() => [...(new Array(watchBeneficiaries?.length || 0))].map((_, index) => ({
-    label: index + 1,
-    value: index + 1
-  })), [watchBeneficiaries?.length]);
+  const minSignatureOptions = useMemo(
+    () =>
+      [...new Array(watchBeneficiaries?.length || 0)].map((_, index) => ({
+        label: index + 1,
+        value: index + 1,
+      })),
+    [watchBeneficiaries?.length]
+  );
 
   const handleDeleteBeneficiary = () => {
     const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
-    const newBeneficiaries = currentBeneficiaries.filter((beneficiary: BeneficiaryData) => beneficiary?.address !== selectedAddress);
+    const newBeneficiaries = currentBeneficiaries.filter(
+      (beneficiary: BeneficiaryData) => beneficiary?.address !== selectedAddress
+    );
     setFieldValue("beneficiariesList", newBeneficiaries);
-  }
+    WillToast.success("Delete succesfully");
+  };
 
   const columns: ColumnsType<BeneficiaryData> = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
       render: (name) => (
         <Flex gap={10} align="center">
           <UserOutlined className="user-icon" />
           <Text className="neutral-1 font-semibold">{name}</Text>
         </Flex>
-      )
+      ),
     },
     {
-      title: 'Owner Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: "Owner Address",
+      dataIndex: "address",
+      key: "address",
       render: (address, _, index) => (
         <Flex align="center" justify="flex-start" gap={4}>
           <Text className="neutral-1 text-left">{address}</Text>
-          <IconButton onClick={() => {
-            handleCopyToClipboard(address);
-            setIndexCopied(index);
-          }}>
-            {
-              (isCopied && indexCopied === index) ? <CheckOutlinedIcon /> : <CopyIcon />
-            }
+          <IconButton
+            onClick={() => {
+              handleCopyToClipboard(address);
+              setIndexCopied(index);
+            }}
+          >
+            {isCopied && indexCopied === index ? (
+              <CheckOutlinedIcon />
+            ) : (
+              <CopyIcon />
+            )}
           </IconButton>
         </Flex>
-      )
+      ),
     },
     {
-      title: '',
-      key: 'action',
+      title: "",
+      key: "action",
       render: (_, record) => (
-        <IconButton onClick={() => {
-          setSelectedAddress(record?.address);
-          onOpen();
-        }}>
+        <IconButton
+          onClick={() => {
+            setSelectedAddress(record?.address);
+            onOpen();
+          }}
+        >
           <TrashIcon />
         </IconButton>
-      )
-    }
+      ),
+    },
   ];
 
   const onAddBeneficiary = (values: any) => {
@@ -94,7 +124,10 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
         return;
       }
       const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
-      const beneficiaryIndex = currentBeneficiaries.findIndex((beneficiary: BeneficiaryData) => beneficiary?.address === values?.beneficiaryAddress);
+      const beneficiaryIndex = currentBeneficiaries.findIndex(
+        (beneficiary: BeneficiaryData) =>
+          beneficiary?.address === values?.beneficiaryAddress
+      );
       if (beneficiaryIndex > -1) {
         WillToast.error("Beneficiary already exists")
         return;
@@ -116,48 +149,66 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
       <Form form={form} onFinish={onAddBeneficiary} id="form-add-beneficiary">
         <Flex vertical gap={12}>
           <Flex gap={24}>
-            <Flex vertical={generate} gap={16} className={clsx("beneficiaries-wrapper", generate && "beneficiaries-wrapper--generate")}>
-              <Flex vertical gap={10} className={clsx("beneficiary-name", generate && "generate")}>
-                <Text className="font-semibold neutral-1 text--no-wrap">Beneficiary nickname</Text>
-                <Form.Item
-                  name="beneficiaryName"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter a nickname'
-                    },
-                    {
-                      max: 15,
-                      message: 'Nickname should not exceed 15 characters'
-                    }
-                  ]}
-                >
-                  <AppInput className="input-beneficiary-name" placeholder="Enter nickname" />
+            <Flex
+              vertical={generate}
+              gap={16}
+              className={clsx(
+                "beneficiaries-wrapper",
+                generate && "beneficiaries-wrapper--generate"
+              )}
+            >
+              <Flex
+                vertical
+                gap={10}
+                className={clsx("beneficiary-name", generate && "generate")}
+              >
+                <Text className="font-semibold neutral-1 text--no-wrap">
+                  Beneficiary nickname
+                </Text>
+                <Form.Item name="beneficiaryName" rules={BENEFICIARY_RULES}>
+                  <AppInput
+                    maxLength={15}
+                    className="input-beneficiary-name"
+                    placeholder="Enter beneficiary name"
+                  />
                 </Form.Item>
               </Flex>
-              <Flex vertical gap={10} className={clsx("beneficiary-address", generate && "generate")}>
-                <Text className="font-semibold neutral-1">Etherem public address</Text>
-                <Form.Item name="beneficiaryAddress" rules={[{ required: true, message: "Address is required" }]}>
-                  <AppInput placeholder="Enter address" />
+              <Flex
+                vertical
+                gap={10}
+                className={clsx("beneficiary-address", generate && "generate")}
+              >
+                <Text className="font-semibold neutral-1">
+                  Etherem public address
+                </Text>
+                <Form.Item
+                  name="beneficiaryAddress"
+                  rules={ETHEREUM_ADDRESS_RULES}
+                >
+                  <AppInput maxLength={42} placeholder="Enter address" />
                 </Form.Item>
               </Flex>
             </Flex>
-            {
-              generate && (
-                <Flex vertical gap={10} className="generate-QR">
-                  <Text className="font-semibold">QR Code to access private key</Text>
-                </Flex>
-              )
-            }
+            {generate && (
+              <Flex vertical gap={10} className="generate-QR">
+                <Text className="font-semibold">
+                  QR Code to access private key
+                </Text>
+              </Flex>
+            )}
           </Flex>
+
           <Form.Item>
             <AppButton
+              disabled={watchBeneficiaries && watchBeneficiaries.length === 10}
               type="primary"
               size="xl"
               className="none-styles beneficiary-name"
               onClick={submit}
             >
-              <Text size="text-sm" className="uppercase font-bold">Save this beneficiary</Text>
+              <Text size="text-sm" className="uppercase font-bold">
+                Save this beneficiary
+              </Text>
             </AppButton>
           </Form.Item>
         </Flex>
@@ -165,17 +216,23 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
       <Divider style={{ margin: "0px 0px" }} />
       <Form.Item name="beneficiariesList">
         <Flex vertical gap={16}>
-          <Text className="font-semibold neutral-1">Existing beneficiaries:</Text>
-          {
-            watchBeneficiaries && watchBeneficiaries.length > 0 && (
-              <AppTable
-                columns={columns}
-                dataSource={watchBeneficiaries}
-                pagination={false}
-                hasIconAction={true}
-              />
-            )
-          }
+          <Text className="font-semibold neutral-1">
+            Existing beneficiaries:
+          </Text>
+          {/* {watchBeneficiaries && watchBeneficiaries.length > 0 && ( */}
+          <AppTable
+            className={`${watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
+              }`}
+            columns={columns}
+            dataSource={
+              watchBeneficiaries && watchBeneficiaries.length > 0
+                ? watchBeneficiaries
+                : []
+            }
+            pagination={false}
+            hasIconAction={true}
+          />
+          {/* )} */}
         </Flex>
       </Form.Item>
       <Flex vertical gap={10}>
@@ -184,9 +241,14 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
         </Text>
         <Form.Item
           name="minRequiredSignatures"
-          rules={[{ required: true, message: 'Please select a number of signatures' }]}
+          rules={[
+            { required: true, message: "Please select a number of signatures" },
+          ]}
         >
-          <AppSelect className="select-signature" options={minSignatureOptions} />
+          <AppSelect
+            className="select-signature"
+            options={minSignatureOptions}
+          />
         </Form.Item>
       </Flex>
       <DeleteBeneficiaryModal
@@ -196,5 +258,5 @@ export const ConfigBeneficiariesForm = ({ generate = false }: { generate?: boole
         selectedAddress={selectedAddress}
       />
     </Flex>
-  )
-}
+  );
+};

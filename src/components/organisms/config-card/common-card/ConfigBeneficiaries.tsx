@@ -24,17 +24,17 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
   const configOptions: CustomRadioItemProps[] = [
     {
       id: 1,
-      value: 'existing',
-      title: 'Use existing address',
-      itemChildren: <ConfigBeneficiariesForm />
+      value: "existing",
+      title: "Use existing address",
+      itemChildren: <ConfigBeneficiariesForm />,
     },
     {
       id: 2,
-      value: 'generate',
-      title: 'Generate a new address',
-      itemChildren: <ConfigBeneficiariesForm generate={true} />
-    }
-  ]
+      value: "generate",
+      title: "Generate a new address",
+      itemChildren: <ConfigBeneficiariesForm generate={true} />,
+    },
+  ];
 
   const handleUpdateBeneficiaries = async () => {
     try {
@@ -130,5 +130,5 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
         }
       </Flex>
     </CartItemContainer>
-  )
-}
+  );
+};

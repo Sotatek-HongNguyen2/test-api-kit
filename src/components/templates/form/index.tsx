@@ -1,8 +1,10 @@
 import { useParams } from "react-router-dom";
+
+import { WillType } from "@/types";
+
 import { InHeritanceForm } from "./inheritance-form";
 import { ForwardingForm } from "./forwarding-form";
 import { DestructionForm } from "./destruction-form";
-import { WillType } from "@/types";
 
 export interface EditFormProps {
   isEdit?: boolean;
@@ -26,9 +28,7 @@ export const WillForm = (props: EditFormProps) => {
         return <DestructionForm />
       default: return <></>
     }
-  }
+  };
 
-  return (
-    <>{renderForm()}</>
-  )
-}
+  return <>{renderForm()}</>;
+};

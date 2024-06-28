@@ -27,11 +27,17 @@
     font-size: 18px;
     font-weight: 700;
     line-height: 24px;
+    color: #0A0B0C !important;
+
+    // :hover {
+    //     color: red !important;
+    // }
 
     button:focus {
         outline: auto;
     }
 }
+
 
 .main-link {
     text-align: center;

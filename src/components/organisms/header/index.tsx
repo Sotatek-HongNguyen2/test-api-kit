@@ -31,14 +31,11 @@ export const Header = () => {
     useHandleLogin();
   const navigate = useNavigate();
   const { accessToken } = useAppSelector(getAuthSlide);
-
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-
   const [open, setOpen] = useState<boolean>(false);
-
   const { isTablet } = useDevices();
-
   const { avatar, name } = useAppSelector(getInformationInstanceSlide);
+  const [activeKey, setActiveKey] = useState<string>("1");
 
   const handelOpenModalLogin = async () => {
     await setOpen(false);
@@ -91,6 +88,12 @@ export const Header = () => {
     );
   };
 
+  const handleChange = (e: any) => {
+    setOpen(false);
+    setActiveKey(e.key);
+    navigate(`?typeWill=${e.key}`);
+  };
+
   const itemMobile = () => {
     return (
       <>
@@ -121,7 +124,15 @@ export const Header = () => {
           }
           open={open}
         >
-          {accessToken && <Menu mode="vertical" theme="light" items={items} />}
+          {accessToken && (
+            <Menu
+              mode="vertical"
+              onClick={handleChange}
+              theme="light"
+              activeKey={activeKey}
+              items={items}
+            />
+          )}
           <Row style={{ position: "absolute", bottom: 24 }}>
             <Col span={24}>
               <ConnectButton clickLogin={handelOpenModalLogin} />
