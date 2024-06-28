@@ -44,6 +44,17 @@
   line-height: 24px;
   text-align: left;
 
+  p {
+    color: white
+  }
+
+  &:disabled {
+    background-color: $neutral5;
+
+    p {
+      color: $neutral3;
+    }
+  }
 }
 
 .app-button--primary-outlined {

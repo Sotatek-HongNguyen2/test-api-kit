@@ -1,5 +1,5 @@
 import { Flex, Form } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ColumnsType } from "antd/es/table";
 
 import { Text } from "@/components/atoms/text";
@@ -13,6 +13,8 @@ import WillToast from "@/components/atoms/ToastMessage";
 
 import { AssetDataColumn, AssetSelectType } from "./AddAssetDistributionForm";
 import { CartItemContainer } from "../details-card/CardItemContainer";
+import { AssetName } from "@/components/molecules/asset-item/AssetName";
+import { uniqBy } from "lodash";
 
 export interface BeneficiaryConfig extends BeneficiaryData {
   assetConfig: {
@@ -29,6 +31,23 @@ export const AssetToBeneficiary = () => {
   const [currentSelected, setCurrentSelected] =
     useState<BeneficiaryData | null>(null);
   const [assets, setAssets] = useState<AssetDataColumn[]>([]);
+  const assetPercents = useMemo(() => {
+    const listAssets = watchBeneficiary?.flatMap((data: any) => (data?.assetConfig ?? [])?.map((asset: any) => ({
+      ...asset?.asset,
+      percent: asset?.percent
+    }))) || [];
+    const distinctAsset = uniqBy(listAssets, "value");
+    return distinctAsset?.map((asset: any) => ({
+      ...asset,
+      symbol: asset?.value,
+      percent: listAssets?.reduce((acc: number, item: any) => {
+        if (item?.value === asset?.value) {
+          return acc + (item?.percent ?? 0);
+        }
+        return acc;
+      }, 0)
+    }))
+  }, [watchBeneficiary])
 
   const columns: ColumnsType<any> = [
     {
@@ -72,6 +91,23 @@ export const AssetToBeneficiary = () => {
         >
           <TrashIcon />
         </IconButton>
+      ),
+    },
+  ];
+
+  const totalColumn: ColumnsType<any> = [
+    {
+      title: "Token",
+      dataIndex: "token",
+      key: "token",
+      render: (_, record) => <AssetName asset={record} />
+    },
+    {
+      title: "Total used Percentage (%)",
+      dataIndex: "percent",
+      key: "percent",
+      render: (percent) => (
+        <Text className="neutral-1 font-semibold">{percent}%</Text>
       ),
     },
   ];
@@ -159,21 +195,21 @@ export const AssetToBeneficiary = () => {
             assetConfig:
               checkExist > -1
                 ? (beneficiary?.assetConfig || [])?.map((item) => {
-                    if (item?.asset?.value === asset?.value) {
-                      return {
-                        asset,
-                        percent,
-                      };
-                    }
-                    return item;
-                  })
-                : [
-                    ...(beneficiary?.assetConfig || []),
-                    {
+                  if (item?.asset?.value === asset?.value) {
+                    return {
                       asset,
                       percent,
-                    },
-                  ],
+                    };
+                  }
+                  return item;
+                })
+                : [
+                  ...(beneficiary?.assetConfig || []),
+                  {
+                    asset,
+                    percent,
+                  },
+                ],
           };
         }
         return beneficiary;
@@ -201,8 +237,6 @@ export const AssetToBeneficiary = () => {
     }
   };
 
-  if (!watchBeneficiary || watchBeneficiary?.length === 0) return null;
-
   return (
     <CartItemContainer
       title="Configure asset to beneficiary"
@@ -210,6 +244,11 @@ export const AssetToBeneficiary = () => {
     >
       <Flex vertical gap={16}>
         <Text>You’re a designated beneficiary of the following assets:</Text>
+        <AppTable
+          columns={totalColumn}
+          dataSource={assetPercents}
+          pagination={false}
+        />
         <Flex gap={16}>
           {watchBeneficiary?.map((beneficiary: any) => (
             <BeneficiaryName

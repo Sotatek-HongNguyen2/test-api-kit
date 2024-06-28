@@ -45,6 +45,7 @@ export const ConfigBeneficiariesForm = ({
   const [indexCopied, setIndexCopied] = useState<number>(-1);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedAddress, setSelectedAddress] = useState<string>("");
+  const [isValidBeneficiary, setIsValidBeneficiary] = useState<boolean>(false);
 
   const minSignatureOptions = useMemo(
     () =>
@@ -139,11 +140,23 @@ export const ConfigBeneficiariesForm = ({
       newBeneficiary,
     ]);
     resetFields();
+    setIsValidBeneficiary(false);
+  };
+
+  const validateForm = () => {
+    const hasErrors = form.getFieldsError().some(({ errors }) => errors.length > 0);
+    const isTouched = form.isFieldsTouched(true);
+    setIsValidBeneficiary(isTouched && !hasErrors);
   };
 
   return (
     <Flex vertical gap={12}>
-      <Form form={form} onFinish={onAddBeneficiary} id="form-add-beneficiary">
+      <Form
+        form={form}
+        onFinish={onAddBeneficiary}
+        id="form-add-beneficiary"
+        onFieldsChange={validateForm}
+      >
         <Flex vertical gap={12}>
           <Flex gap={24}>
             <Flex
@@ -182,13 +195,13 @@ export const ConfigBeneficiariesForm = ({
                   name="beneficiaryAddress"
                   rules={ETHEREUM_ADDRESS_RULES}
                 >
-                  <AppInput maxLength={42} placeholder="Enter address" />
+                  <AppInput maxLength={42} placeholder="Enter beneficiary's wallet address" />
                 </Form.Item>
               </Flex>
             </Flex>
             {generate && (
               <Flex vertical gap={10} className="generate-QR">
-                <Text className="font-semibold">
+                <Text className="font-semibold neutral-1 text--no-wrap">
                   QR Code to access private key
                 </Text>
               </Flex>
@@ -197,13 +210,13 @@ export const ConfigBeneficiariesForm = ({
 
           <Form.Item>
             <AppButton
-              disabled={watchBeneficiaries && watchBeneficiaries.length === 10}
+              disabled={(watchBeneficiaries && watchBeneficiaries.length === 10) || !isValidBeneficiary}
               type="primary"
               size="xl"
               className="none-styles beneficiary-name"
               onClick={submit}
             >
-              <Text size="text-sm" className="uppercase font-bold">
+              <Text className="uppercase font-bold">
                 Save this beneficiary
               </Text>
             </AppButton>
@@ -216,11 +229,9 @@ export const ConfigBeneficiariesForm = ({
           <Text className="font-semibold neutral-1">
             Existing beneficiaries:
           </Text>
-          {/* {watchBeneficiaries && watchBeneficiaries.length > 0 && ( */}
           <AppTable
-            className={`${
-              watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
-            }`}
+            className={`${watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
+              }`}
             columns={columns}
             dataSource={
               watchBeneficiaries && watchBeneficiaries.length > 0
@@ -230,7 +241,6 @@ export const ConfigBeneficiariesForm = ({
             pagination={false}
             hasIconAction={true}
           />
-          {/* )} */}
         </Flex>
       </Form.Item>
       <Flex vertical gap={10}>

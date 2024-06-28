@@ -21,7 +21,12 @@ export const WrapperContainer = (props: WrapperContainerProps) => {
           <AppButton type="normal" onClick={() => navigate(-1)}>
             <Flex gap="16px">
               <ArrowOutlinedIcon />
-              <Text size="text-xl" className="font-bold">{title}</Text>
+              <Text
+                size="text-xl"
+                className="font-bold neutral-1"
+              >
+                {title}
+              </Text>
             </Flex>
           </AppButton>
         ) : (

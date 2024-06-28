@@ -57,7 +57,7 @@ const willTypeItems: WillTypeItem[] = [
 
 export const WillTypeModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [willType, setWillType] = useState<WillType>("inheritance");
+  const [willType, setWillType] = useState<WillType | null>(null);
   const navigate = useNavigate();
   const { isOpen: isShowFooter, onOpen: showFooter, onClose: hideFooter } = useDisclosure();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -114,10 +114,13 @@ export const WillTypeModal = () => {
       <WillModal
         width={672}
         open={isOpen}
-        handleCancel={onClose}
+        handleCancel={() => {
+          onClose();
+          setWillType(null);
+        }}
         title={
           <Text size="text-3xl" className="font-bold neutral-1">
-            Choose Will Type
+            Choose will type
           </Text>
         }
         hideFooter
@@ -136,14 +139,27 @@ export const WillTypeModal = () => {
 
           <Row gutter={24}>
             <Col span={12}>
-              <AppButton block size="xl" onClick={onClose}>
+              <AppButton
+                size="xl"
+                block
+                onClick={() => {
+                  onClose();
+                  setWillType(null);
+                }}
+              >
                 <Text size="text-lg" className="neutral-1 font-bold uppercase">
                   Cancel
                 </Text>
               </AppButton>
             </Col>
             <Col span={12}>
-              <AppButton block size="xl" type="primary" onClick={createAWill}>
+              <AppButton
+                block
+                size="xl"
+                type="primary"
+                onClick={createAWill}
+                disabled={!willType}
+              >
                 <Text size="text-lg" className="neutral-3 font-bold uppercase">
                   create a will
                 </Text>
@@ -152,6 +168,6 @@ export const WillTypeModal = () => {
           </Row>
         </Flex>
       </WillModal>
-    </div>
+    </div >
   );
 };

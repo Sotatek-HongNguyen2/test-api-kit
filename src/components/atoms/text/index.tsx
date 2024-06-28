@@ -13,7 +13,7 @@ interface TextProps {
 export const Text = (props: TextProps) => {
   const { size = 'text-md', color = APP_COLORS.textColor, className, align } = props;
   return (
-    <p color={color} className={`app-text ${size} ${className} text-${align}`}>
+    <p color={color} className={`text-default app-text ${size} ${className} text-${align}`}>
       {props?.children || ""}
     </p>
   )

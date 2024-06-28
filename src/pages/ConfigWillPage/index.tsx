@@ -201,7 +201,12 @@ export function ConfigWillPage() {
           : undefined
       }
     >
-      <Form form={form} onFinish={onFinish} autoComplete="off">
+      <Form
+        form={form}
+        onFinish={onFinish}
+        autoComplete="off"
+        validateTrigger="onChange"
+      >
         <Flex vertical gap={16}>
           {isConfigured && willAddress ? (
             <>
@@ -227,18 +232,22 @@ export function ConfigWillPage() {
                 <AppButton
                   size="xl"
                   type="primary"
-                  className="uppercase font-bold"
                   htmlType="submit"
                   loading={loading}
                 >
-                  Configure will
+                  <Text
+                    size="text-lg"
+                    className="uppercase font-bold"
+                  >
+                    Configure will
+                  </Text>
                 </AppButton>
                 <AppButton
                   size="xl"
-                  className="uppercase font-bold neutral-1 transparent"
+                  className="transparent"
                   onClick={() => navigate(-1)}
                 >
-                  Cancel
+                  <Text size="text-lg" className="uppercase font-bold">Cancel</Text>
                 </AppButton>
               </Flex>
             </>

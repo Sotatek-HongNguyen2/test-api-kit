@@ -23,7 +23,7 @@ export const WillTypeCard = (props: WillTypeCardProps) => {
       <Flex vertical gap={16}>
         {icon}
         <Flex vertical gap={8}>
-          <Text size="text-lg" className="font-semibold">
+          <Text size="text-lg" className="font-semibold neutral-1">
             {title}
           </Text>
           <Text size="text-sm" className="neutral-2">
