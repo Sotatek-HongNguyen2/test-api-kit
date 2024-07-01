@@ -186,8 +186,9 @@ export const ConfigBeneficiariesForm = ({
     const link = document.createElement("a");
     link.href = image as string;
     const beneficiaryName = form.getFieldValue("beneficiaryName") as any;
-    link.download = `${beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
-      }.png`;
+    link.download = `${
+      beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
+    }.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -310,8 +311,9 @@ export const ConfigBeneficiariesForm = ({
             Existing beneficiaries:
           </Text>
           <AppTable
-            className={`${watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
-              }`}
+            className={`${
+              watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
+            }`}
             columns={columns}
             dataSource={
               watchBeneficiaries && watchBeneficiaries.length > 0

@@ -18,27 +18,30 @@ export const ActivationTrigger = ({ type }: { type?: "destruction" }) => {
     {
       id: 1,
       title: "Lack of outgoing transactions",
-      value: 'lack_outgoing_transactions',
-      itemChildren:
+      value: "lack_outgoing_transactions",
+      itemChildren: (
         <SelectTime
           name="lackOfOutgoingTxRange"
           title="Time of inactivity until will activation"
-          handleChangeValue={(value) => setFieldValue('lackOfOutgoingTxRange', value)}
+          handleChangeValue={(value) =>
+            setFieldValue("lackOfOutgoingTxRange", value)
+          }
         />
+      ),
     },
-    {
-      id: 2,
-      title: "Lack of signed message",
-      value: 'lack_signed_message',
-      disabled: true,
-      itemChildren:
-        <SelectTime
-          name="lackOfSignedMsgRange"
-          title="Time of inactivity until will activation"
-          handleChangeValue={(value) => setFieldValue('lackOfSignedMsgRange', value)}
-        />
-    }
-  ]
+    // {
+    //   id: 2,
+    //   title: "Lack of signed message",
+    //   value: 'lack_signed_message',
+    //   disabled: true,
+    //   itemChildren:
+    //     <SelectTime
+    //       name="lackOfSignedMsgRange"
+    //       title="Time of inactivity until will activation"
+    //       handleChangeValue={(value) => setFieldValue('lackOfSignedMsgRange', value)}
+    //     />
+    // }
+  ];
 
   return (
     <CartItemContainer

@@ -46,20 +46,24 @@ const willTypeItems: WillTypeItem[] = [
       "When activated, assets designated by the owner will be sent directly to the public addresses of listed beneficiaries.",
     type: "forwarding",
   },
-  {
-    icon: <DestructionIcon />,
-    title: "Destruction",
-    description:
-      "When activated, all assets will be sent to the Ethereum genesis address, thus destroyed permanently.",
-    type: "destruction",
-  },
+  // {
+  //   icon: <DestructionIcon />,
+  //   title: "Destruction",
+  //   description:
+  //     "When activated, all assets will be sent to the Ethereum genesis address, thus destroyed permanently.",
+  //   type: "destruction",
+  // },
 ];
 
 export const WillTypeModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [willType, setWillType] = useState<WillType | null>(null);
   const navigate = useNavigate();
-  const { isOpen: isShowFooter, onOpen: showFooter, onClose: hideFooter } = useDisclosure();
+  const {
+    isOpen: isShowFooter,
+    onOpen: showFooter,
+    onClose: hideFooter,
+  } = useDisclosure();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -168,6 +172,6 @@ export const WillTypeModal = () => {
           </Row>
         </Flex>
       </WillModal>
-    </div >
+    </div>
   );
 };

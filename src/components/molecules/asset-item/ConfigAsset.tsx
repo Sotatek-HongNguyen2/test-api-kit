@@ -56,7 +56,9 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
           asset={asset}
           addAsset={(asset: AssetSelectType) => {
             setAsset(asset);
-            const isSelectedAsset = selectedAssets?.find(item => item?.value === asset?.value);
+            const isSelectedAsset = selectedAssets?.find(
+              (item) => item?.value === asset?.value
+            );
             if (isSelectedAsset) {
               setPercent(isSelectedAsset?.amount);
             } else {

@@ -1,5 +1,5 @@
 import "./styles.scss";
-import { Flex, Spin } from "antd";
+import { Col, Flex, Row, Spin } from "antd";
 import { useEffect, useState } from "react";
 
 import { WillData } from "@/types";
@@ -15,6 +15,8 @@ import { useDevices } from "@/hooks/useMediaQuery";
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 import { WillTypeModal } from "../will-type-modal";
+import { SearchInput } from "@/components/molecules/search-input";
+import { AppSelect } from "@/components/atoms/select";
 
 export interface WillListProps {
   type?: "created" | "inherited";
@@ -34,7 +36,7 @@ export const WillList = (props: WillListProps) => {
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
   const [isLoading, setIsLoading] = useState(false);
-  const { isMobile } = useDevices();
+  const { isMobile, isTablet } = useDevices();
 
   const willService = new WillServices();
 
@@ -104,9 +106,22 @@ export const WillList = (props: WillListProps) => {
 
   return (
     <Flex vertical gap={20} className="home-page">
+      {isTablet && (
+        <Row>
+          <Col span={15}>
+            <SearchInput
+              placeholder="Search by will name"
+              onHandleSearch={onSearch}
+            />
+          </Col>
+          <Col span={9}>
+            <AppSelect style={{ width: "100%" }}></AppSelect>
+          </Col>
+        </Row>
+      )}
       {type === "created" && <WillTypeModal />}
       <Flex justify="space-between" gap="5vw">
-        {!isMobile ? (
+        {!isTablet ? (
           <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
         ) : null}
         {isLoading ? (
