@@ -34,7 +34,11 @@ export const DeleteBeneficiaryModal = (props: DeleteBeneficiaryModalProps) => {
             align="center"
             className="neutral-2"
           >
-            Are you sure you want to delete {selectedAddress} from your will?
+            Are you sure you want to delete
+            {` ${selectedAddress?.substring(0, 10)}...${selectedAddress?.substring(
+              selectedAddress?.length - 3,
+              selectedAddress?.length
+            )}`} from your will?
           </Text>
         </Flex>
         <Flex vertical gap={10} style={{ width: "100%" }}>

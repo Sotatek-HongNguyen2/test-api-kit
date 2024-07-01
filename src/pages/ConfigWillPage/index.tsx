@@ -1,5 +1,5 @@
 import { Flex, Form } from "antd";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import { uniqBy } from "lodash";
@@ -30,6 +30,8 @@ export interface ConfigFormDataType {
   lackOfSignedMsgRange: number;
   minRequiredSignatures: number;
   assetDistribution: AssetDataColumn[];
+  beneficiaries: string;
+  activationTrigger: string[];
 }
 
 export const contractAddress = (willType: WillType) => {
@@ -49,10 +51,11 @@ export function ConfigWillPage() {
 
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
-  const { setFieldValue } = form;
+  const { setFieldValue, getFieldsError, getFieldsValue } = form;
   const [isConfigured, setIsConfigured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [willAddress, setWillAddress] = useState<string | null>(null);
+  const [isValidForm, setIsValidForm] = useState(false);
 
   const getWillContract = () => {
     switch (willType) {
@@ -96,8 +99,8 @@ export function ConfigWillPage() {
           )?.map((item) => {
             return [
               item?.address,
-              item?.assetConfig.map((item) => item.asset?.assetAddress),
-              item.assetConfig.map((item) => item?.percent),
+              (item?.assetConfig ?? []).map((item) => item.asset?.assetAddress),
+              (item.assetConfig ?? []).map((item) => item?.percent),
             ];
           }),
           minRequiredSignatures: values?.minRequiredSignatures,
@@ -130,6 +133,26 @@ export function ConfigWillPage() {
         WillToast.error("Something went wrong, please try again later");
         return;
       }
+
+      if (willType === "forwarding") {
+        const isValidConfigBeneficiaries = (values?.beneficiariesList ?? []).some(
+          (item: any) => item?.assetConfig?.length > 0
+        )
+        if (!isValidConfigBeneficiaries) {
+          WillToast.error("You have to configure at least one beneficiary's asset");
+          return;
+        }
+        const listAsset = (
+          (values?.beneficiariesList ?? []) as BeneficiaryConfig[]
+        ).flatMap((item) =>
+          (item?.assetConfig ?? [])?.map((asset) => ({
+            ...asset?.asset,
+            symbol: asset?.asset?.value,
+          }))
+        );
+        const distinctArray = uniqBy(listAsset, "value");
+        setFieldValue("assetDistribution", distinctArray);
+      }
       const Contract = getWillContract();
       if (!Contract) {
         WillToast.error("Something went wrong, please try again later");
@@ -143,18 +166,6 @@ export function ConfigWillPage() {
         },
       });
       const params = getParams(values);
-      if (willType === "forwarding") {
-        const listAsset = (
-          (values?.beneficiariesList ?? []) as BeneficiaryConfig[]
-        ).flatMap((item) =>
-          (item?.assetConfig ?? [])?.map((asset) => ({
-            ...asset?.asset,
-            symbol: asset?.asset?.value,
-          }))
-        );
-        const distinctArray = uniqBy(listAsset, "value");
-        setFieldValue("assetDistribution", distinctArray);
-      }
 
       if (!params) {
         WillToast.error("Something went wrong, please try again later");
@@ -191,6 +202,60 @@ export function ConfigWillPage() {
       setLoading(false);
     }
   };
+
+  const checkAllFormTouch = useCallback((hasErrors: boolean) => {
+    const formValues = getFieldsValue();
+    let fields: (keyof ConfigFormDataType)[] = [];
+    switch (willType) {
+      case "inheritance":
+        fields = [
+          "willName",
+          "beneficiaries",
+          "beneficiariesList",
+          "assetDistribution",
+          "minRequiredSignatures",
+          "activationTrigger",
+          "lackOfOutgoingTxRange",
+          "note"
+        ]
+        break;
+      case "forwarding":
+        fields = [
+          "willName",
+          "beneficiaries",
+          "beneficiariesList",
+          "minRequiredSignatures",
+          "activationTrigger",
+          "lackOfOutgoingTxRange",
+          "note"
+        ]
+        break;
+      case "destruction":
+        fields = [
+          "willName",
+          "assetDistribution",
+          "activationTrigger",
+          "lackOfOutgoingTxRange",
+        ]
+        break;
+      default:
+        break;
+    }
+    const check = fields.every(field =>
+      formValues[field] !== undefined && formValues[field] !== null && formValues[field] !== ''
+    );
+    setIsValidForm(check && !hasErrors);
+  }, [getFieldsValue, willType]);
+
+  const validateForm = () => {
+    const hasErrors = getFieldsError().some(({ errors }) => errors.length > 0);
+    if (hasErrors) {
+      setIsValidForm(false);
+      return;
+    }
+    checkAllFormTouch(hasErrors);
+  };
+
   return (
     <WrapperContainer
       title="Configure your will"
@@ -206,6 +271,7 @@ export function ConfigWillPage() {
         onFinish={onFinish}
         autoComplete="off"
         validateTrigger="onChange"
+        onFieldsChange={validateForm}
       >
         <Flex vertical gap={16}>
           {isConfigured && willAddress ? (
@@ -234,6 +300,7 @@ export function ConfigWillPage() {
                   type="primary"
                   htmlType="submit"
                   loading={loading}
+                  disabled={!isValidForm}
                 >
                   <Text
                     size="text-lg"

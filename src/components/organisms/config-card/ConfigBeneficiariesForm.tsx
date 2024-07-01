@@ -28,6 +28,7 @@ import WALLETS from "@/models/wallet";
 import { Plus } from "@/assets/icons";
 
 import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal";
+import { getWalletSlice, useAppSelector } from "@/store";
 
 export const ConfigBeneficiariesForm = ({
   generate = false,
@@ -47,6 +48,7 @@ export const ConfigBeneficiariesForm = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [isValidBeneficiary, setIsValidBeneficiary] = useState<boolean>(false);
+  const { address } = useAppSelector(getWalletSlice);
   const dispatch = useAppDispatch();
   const { createNewAccount } = walletSliceActions;
   const [image, setImage] = useState<string>();
@@ -68,7 +70,7 @@ export const ConfigBeneficiariesForm = ({
       (beneficiary: BeneficiaryData) => beneficiary?.address !== selectedAddress
     );
     setFieldValue("beneficiariesList", newBeneficiaries);
-    WillToast.success("Delete succesfully");
+    WillToast.success("Delete successfully");
   };
 
   const columns: ColumnsType<BeneficiaryData> = [
@@ -128,6 +130,10 @@ export const ConfigBeneficiariesForm = ({
   }, [generate]);
 
   const onAddBeneficiary = (values: any) => {
+    if (values?.beneficiaryAddress === address) {
+      WillToast.error("You can't add your own address as a beneficiary");
+      return;
+    }
     const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
     const beneficiaryIndex = currentBeneficiaries.findIndex(
       (beneficiary: BeneficiaryData) =>
@@ -177,9 +183,8 @@ export const ConfigBeneficiariesForm = ({
     const link = document.createElement("a");
     link.href = image as string;
     const beneficiaryName = form.getFieldValue("beneficiaryName") as any;
-    link.download = `${
-      beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
-    }.png`;
+    link.download = `${beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
+      }.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -236,7 +241,7 @@ export const ConfigBeneficiariesForm = ({
                 className={clsx("beneficiary-address", generate && "generate")}
               >
                 <Text className="font-semibold neutral-1">
-                  Etherem public address
+                  Ethereum public address
                 </Text>
                 <Form.Item
                   name="beneficiaryAddress"
@@ -302,9 +307,8 @@ export const ConfigBeneficiariesForm = ({
             Existing beneficiaries:
           </Text>
           <AppTable
-            className={`${
-              watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
-            }`}
+            className={`${watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
+              }`}
             columns={columns}
             dataSource={
               watchBeneficiaries && watchBeneficiaries.length > 0

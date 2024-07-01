@@ -80,7 +80,10 @@
 
 .app-button--error {
   background-color: $color-error;
-  color: white;
+
+  p {
+    color: white;
+  }
 }
 
 .app-button--normal {

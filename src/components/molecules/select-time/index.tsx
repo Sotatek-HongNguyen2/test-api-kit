@@ -5,10 +5,11 @@ import { RadioGroup } from "../radio-group";
 import { AppInput } from "@/components/atoms/input";
 
 interface SelectTimeProps {
+  name: string;
   title?: string;
   handleChangeValue?: (value: number) => void; // month
 }
-export const SelectTime = ({ title, handleChangeValue }: SelectTimeProps) => {
+export const SelectTime = ({ name, title, handleChangeValue }: SelectTimeProps) => {
 
   const options = [
     {
@@ -56,12 +57,22 @@ export const SelectTime = ({ title, handleChangeValue }: SelectTimeProps) => {
   return (
     <Flex vertical gap={12}>
       <Text className="neutral-1">{title}</Text>
-      <RadioGroup
-        items={options}
-        onChange={(value) => {
-          handleChangeValue?.(value as number)
-        }}
-      />
+      <Form.Item
+        name={name}
+        rules={[
+          {
+            required: true,
+            message: 'Please select an option'
+          }
+        ]}
+      >
+        <RadioGroup
+          items={options}
+          onChange={(value) => {
+            handleChangeValue?.(value as number)
+          }}
+        />
+      </Form.Item>
     </Flex>
   )
 }
