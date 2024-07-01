@@ -20,11 +20,6 @@ const ForwardingWillAbi = [
         "internalType": "address",
         "name": "erc20Whitelist_",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "verifier_",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -80,33 +75,6 @@ const ForwardingWillAbi = [
       }
     ],
     "name": "Create2InsufficientBalance",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ECDSAInvalidSignature",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
-      }
-    ],
-    "name": "ECDSAInvalidSignatureLength",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "s",
-        "type": "bytes32"
-      }
-    ],
-    "name": "ECDSAInvalidSignatureS",
     "type": "error"
   },
   {
@@ -254,11 +222,6 @@ const ForwardingWillAbi = [
             "internalType": "uint128",
             "name": "lackOfOutgoingTxRange",
             "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "lackOfSignedMsgRange",
-            "type": "uint128"
           }
         ],
         "indexed": false,
@@ -368,12 +331,6 @@ const ForwardingWillAbi = [
         "indexed": false,
         "internalType": "uint128",
         "name": "lackOfOutgoingTxRange",
-        "type": "uint128"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint128",
-        "name": "lackOfSignedMsgRange",
         "type": "uint128"
       },
       {
@@ -495,23 +452,8 @@ const ForwardingWillAbi = [
         "type": "uint256"
       },
       {
-        "internalType": "bytes[]",
-        "name": "signatures_",
-        "type": "bytes[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "signers_",
-        "type": "address[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "erc20Addresses_",
-        "type": "address[]"
-      },
-      {
         "internalType": "bytes",
-        "name": "erc20Signature_",
+        "name": "signature_",
         "type": "bytes"
       }
     ],
@@ -602,11 +544,6 @@ const ForwardingWillAbi = [
           {
             "internalType": "uint128",
             "name": "lackOfOutgoingTxRange",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "lackOfSignedMsgRange",
             "type": "uint128"
           }
         ],
@@ -818,11 +755,6 @@ const ForwardingWillAbi = [
         "internalType": "uint128",
         "name": "lackOfOutgoingTxRange_",
         "type": "uint128"
-      },
-      {
-        "internalType": "uint128",
-        "name": "lackOfSignedMsgRange_",
-        "type": "uint128"
       }
     ],
     "name": "setActivationTrigger",
@@ -878,19 +810,6 @@ const ForwardingWillAbi = [
       }
     ],
     "name": "setFeeReceiver",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "verifier_",
-        "type": "address"
-      }
-    ],
-    "name": "setVerifier",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -970,19 +889,6 @@ const ForwardingWillAbi = [
     "name": "updateWillAssetsDistribution",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "verifier",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
