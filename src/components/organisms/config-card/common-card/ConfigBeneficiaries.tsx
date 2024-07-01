@@ -40,7 +40,11 @@ export const ConfigBeneficiaries = () => {
         name="beneficiaries"
       // rules={[{ required: true, message: "Please select an option" }]}
       >
-        <RadioGroup onChange={handleChangeOption} items={configOptions} />
+        <RadioGroup
+          onChange={handleChangeOption}
+          items={configOptions}
+          verticalOption={false}
+        />
       </Form.Item>
       {selectedOption && (
         <ConfigBeneficiariesForm generate={selectedOption === "generate"} />

@@ -15,10 +15,11 @@ interface RadioGroupProps {
   titleClassName?: string;
   items: CustomRadioItemProps[];
   onChange?: (value: CustomRadioItemProps["value"]) => void;
+  verticalOption?: boolean;
 }
 
 export const RadioGroup = (props: RadioGroupProps) => {
-  const { title, titleClassName, items, onChange } = props;
+  const { title, titleClassName, items, onChange, verticalOption = true } = props;
   const [value, setValue] = useState<CustomRadioItemProps["value"]>("all");
 
   return (
@@ -31,7 +32,7 @@ export const RadioGroup = (props: RadioGroupProps) => {
           {title}
         </Text>
       )}
-      <Flex vertical gap="1rem">
+      <Flex vertical={verticalOption} gap="1rem">
         {(items ?? [])?.map((radio) => {
           const { id, ...rest } = radio;
           return (

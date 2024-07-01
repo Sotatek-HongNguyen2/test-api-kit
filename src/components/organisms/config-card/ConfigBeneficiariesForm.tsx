@@ -127,6 +127,9 @@ export const ConfigBeneficiariesForm = ({
     resetFields();
     // setFieldValue("beneficiariesList", []);
     setImage("");
+    if (generate) {
+      generateNewAccount();
+    }
   }, [generate]);
 
   const onAddBeneficiary = (values: any) => {
