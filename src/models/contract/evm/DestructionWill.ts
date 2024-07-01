@@ -21,10 +21,10 @@ export default class destructionWillContract extends Contract<ABIType> {
   }
   async createWill(dto: CreateWillType) {
     return this.contractInstance.methods.createWill(
-        dto.nameWill, 
-        dto.assetAddresses, 
-        Number(dto.lackOfOutgoingTxRange), 
-        Number(dto.lackOfSignedMsgRange)
+      dto.nameWill,
+      dto.assetAddresses,
+      Number(dto.lackOfOutgoingTxRange),
+      // Number(dto.lackOfSignedMsgRange)
     );
   }
 }

@@ -8,7 +8,7 @@ interface CreateWillType {
   nameWill: string;
   note: string;
   nickNames: string[];
-  distributions: [string, string[], string[]][]; 
+  distributions: [string, string[], string[]][];
   minRequiredSignatures: number;
   lackOfOutgoingTxRange: number;
   lackOfSignedMsgRange: number;
@@ -27,7 +27,7 @@ export default class forwardingWillContract extends Contract<ABIType> {
       [
         Number(dto.minRequiredSignatures),
         Number(dto.lackOfOutgoingTxRange),
-        Number(dto.lackOfSignedMsgRange),
+        // Number(dto.lackOfSignedMsgRange),
       ]
     );
   }

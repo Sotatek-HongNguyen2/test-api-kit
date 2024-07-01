@@ -1,5 +1,5 @@
 import { Flex, Form } from "antd";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import { uniqBy } from "lodash";
@@ -56,6 +56,11 @@ export function ConfigWillPage() {
   const [loading, setLoading] = useState(false);
   const [willAddress, setWillAddress] = useState<string | null>(null);
   const [isValidForm, setIsValidForm] = useState(false);
+  const watchAssetDistribution = Form.useWatch("assetDistribution", form);
+  const isValidFormConfig = useMemo(() => {
+    if (willType === "forwarding") return isValidForm;
+    return isValidForm && !!watchAssetDistribution && watchAssetDistribution?.length > 0;
+  }, [watchAssetDistribution, isValidForm, willType])
 
   const watchBeneficiary = Form.useWatch("beneficiariesList", form);
   const assetPercents = useMemo(() => {
@@ -94,7 +99,7 @@ export function ConfigWillPage() {
       case "inheritance":
         return {
           nameWill: values?.willName,
-          note: values?.note,
+          note: values?.note ?? "",
           nickNames: (values?.beneficiariesList ?? []).map((item) => item.name),
           beneficiaries: (values?.beneficiariesList ?? []).map(
             (item) => item?.address
@@ -109,7 +114,7 @@ export function ConfigWillPage() {
       case "forwarding":
         return {
           nameWill: values?.willName,
-          note: values?.note,
+          note: values?.note ?? "",
           nickNames: (values?.beneficiariesList ?? [])?.map(
             (item) => item.name
           ),
@@ -140,6 +145,14 @@ export function ConfigWillPage() {
     }
   };
 
+  const checkDividedForwarding = (beneficiaries: any) => {
+    return !beneficiaries.some((beneficiary: any) => {
+      const assetAddress = (beneficiary?.assetConfig ?? []).map((beneficiary: any) => beneficiary.asset?.assetAddress);
+      const percent = (beneficiary?.assetConfig ?? []).map((beneficiary: any) => beneficiary.percent);
+      return assetAddress.length === 0 || percent.length === 0
+    });;
+  }
+
   const onFinish = async (values: ConfigFormDataType) => {
     try {
       setLoading(true);
@@ -158,6 +171,10 @@ export function ConfigWillPage() {
         )
         if (!isValidConfigBeneficiaries) {
           WillToast.error("You have to configure at least one beneficiary's asset");
+          return;
+        }
+        if (!checkDividedForwarding(values?.beneficiariesList)) {
+          WillToast.error("There is one beneficiaries has not be configured. Please check it and save again.");
           return;
         }
         const checkIsNotDonePercent = assetPercents?.some(asset => asset?.percent !== 100);
@@ -235,7 +252,6 @@ export function ConfigWillPage() {
           "willName",
           "beneficiaries",
           "beneficiariesList",
-          "assetDistribution",
           "minRequiredSignatures",
           "activationTrigger",
           "lackOfOutgoingTxRange"
@@ -254,7 +270,6 @@ export function ConfigWillPage() {
       case "destruction":
         fields = [
           "willName",
-          "assetDistribution",
           "activationTrigger",
           "lackOfOutgoingTxRange",
         ]
@@ -321,7 +336,7 @@ export function ConfigWillPage() {
                   type="primary"
                   htmlType="submit"
                   loading={loading}
-                  disabled={!isValidForm}
+                  disabled={!isValidFormConfig}
                 >
                   <Text
                     size="text-lg"
