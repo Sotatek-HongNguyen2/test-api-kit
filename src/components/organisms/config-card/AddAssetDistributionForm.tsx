@@ -73,6 +73,7 @@ export const AddAssetDistributionForm = () => {
     }
     setAssets(newAssets);
     setFieldValue("assetDistribution", newAssets);
+    setAsset(null);
   }
 
   return (
@@ -86,6 +87,7 @@ export const AddAssetDistributionForm = () => {
         hasIconAction
       />
       <SelectAsset
+        asset={asset}
         disableSelected={{
           selectedAssets: assets
         }}

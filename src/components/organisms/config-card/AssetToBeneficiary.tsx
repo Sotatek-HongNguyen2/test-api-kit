@@ -1,3 +1,4 @@
+import "./styles.scss";
 import { Flex, Form } from "antd";
 import { useMemo, useState } from "react";
 import { ColumnsType } from "antd/es/table";
@@ -116,34 +117,13 @@ export const AssetToBeneficiary = () => {
     const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
     if (percent > 100) {
       WillToast.error("Percentage must be less than 100");
-      return;
+      return 0;
     }
-    const checkExist = assets?.findIndex(
+
+    const checkAssetExist = assets?.findIndex(
       (item) => item?.value === asset?.value
     );
-    if (checkExist > -1) {
-      const totalCurrentPercent = currentBeneficiaries?.reduce(
-        (acc: number, beneficiary: BeneficiaryConfig) => {
-          if (beneficiary?.address === currentSelected?.address) {
-            return acc + percent;
-          }
-          return (
-            acc +
-            beneficiary?.assetConfig?.reduce(
-              (acc: number, item) =>
-                acc + (item?.asset?.value === asset?.value ? item?.percent : 0),
-              0
-            )
-          );
-        },
-        0
-      );
-      if (totalCurrentPercent > 100) {
-        WillToast.error(
-          `Adding ${asset?.title} percentage exceeds the total allowed percentage of 100%`
-        );
-        return;
-      }
+    if (checkAssetExist > -1) { // check total percent for current beneficiary
       const newAssets = assets.map((item) => {
         if (item?.value === asset?.value) {
           return {
@@ -155,22 +135,16 @@ export const AssetToBeneficiary = () => {
       });
       setAssets(newAssets);
     } else {
-      const totalCurrentPercent = currentBeneficiaries?.reduce(
-        (acc: number, item: BeneficiaryConfig) => {
-          const totalPercent = item?.assetConfig?.reduce(
-            (acc: number, item) =>
-              acc + (item?.asset?.value === asset?.value ? item?.percent : 0),
-            0
-          );
-          return acc + totalPercent;
-        },
-        0
+      const percentExist = assetPercents?.find(
+        (item) => item?.value === asset?.value
       );
-      if (totalCurrentPercent + percent > 100) {
-        WillToast.error(
-          `Adding ${asset?.title} percentage exceeds the total allowed percentage of 100%`
-        );
-        return;
+      if (percentExist) {
+        if (percentExist?.percent + percent > 100) {
+          WillToast.error(
+            "Total percentage have to be 100"
+          );
+          return 0;
+        }
       }
       setAssets(
         (pre) =>
@@ -216,6 +190,7 @@ export const AssetToBeneficiary = () => {
       }
     );
     setFieldValue("beneficiariesList", newBeneficiaries);
+    return 1;
   };
 
   const changeCurrentSelected = (beneficiary: BeneficiaryData) => {
@@ -259,22 +234,18 @@ export const AssetToBeneficiary = () => {
             />
           ))}
         </Flex>
-        {currentSelected && (
-          <>
-            {assets?.length > 0 && (
-              <AppTable
-                columns={columns}
-                dataSource={assets}
-                hasIconAction
-                pagination={false}
-              />
-            )}
-            <ConfigAsset
-              handleAddConfigAsset={handleAddConfigAsset}
-              selectedAssets={assetPercents}
-            />
-          </>
-        )}
+        <AppTable
+          className={`${assets && assets.length > 0 && "have-data"}`}
+          columns={columns}
+          dataSource={assets ?? []}
+          hasIconAction
+          pagination={false}
+        />
+        <ConfigAsset
+          handleAddConfigAsset={handleAddConfigAsset}
+          selectedAssets={assets}
+          currentBeneficiary={currentSelected}
+        />
       </Flex>
     </CartItemContainer>
   );

@@ -152,8 +152,8 @@ export const ConfigBeneficiariesForm = ({
       address: values.beneficiaryAddress,
     };
     setFieldValue("beneficiariesList", [
-      ...currentBeneficiaries,
       newBeneficiary,
+      ...currentBeneficiaries,
     ]);
     resetFields();
     setIsValidBeneficiary(false);
