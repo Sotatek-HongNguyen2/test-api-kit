@@ -10,13 +10,14 @@ import { assetDataList } from "@/constants/asset"
 import { getBalanceSlide, useAppSelector } from "@/store"
 
 interface SelectAssetProps {
+  asset: AssetSelectType | null;
   addAsset?: (asset: AssetSelectType) => void;
   disableSelected?: false | {
     selectedAssets: AssetSelectType[];
   }
 }
 
-export const SelectAsset = ({ addAsset, disableSelected }: SelectAssetProps) => {
+export const SelectAsset = ({ asset, addAsset, disableSelected }: SelectAssetProps) => {
   const [currentAsset, setCurrentAsset] = useState<DefaultOptionType | null>(null);
   const { listBalances } = useAppSelector(getBalanceSlide);
 
@@ -40,6 +41,7 @@ export const SelectAsset = ({ addAsset, disableSelected }: SelectAssetProps) => 
       <Flex align="center" gap={12}>
         <AppSelect
           className="select-asset"
+          value={asset}
           options={assetOptions}
           onChange={(_, option) => {
             setCurrentAsset(option as any);

@@ -1,6 +1,6 @@
 import "./styles.scss";
 import { Flex } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Text } from "@/components/atoms/text";
 import { AppInput } from "@/components/atoms/input";
@@ -10,13 +10,20 @@ import { AssetSelectType } from "@/components/organisms/config-card/AddAssetDist
 import { SelectAsset } from "./SelectAsset";
 
 interface ConfigAssetProps {
-  handleAddConfigAsset: (asset: AssetSelectType, percent: number) => void;
+  handleAddConfigAsset: (asset: AssetSelectType, percent: number) => number;
   selectedAssets?: any[];
+  currentBeneficiary?: any;
 }
 
-export const ConfigAsset = ({ handleAddConfigAsset, selectedAssets }: ConfigAssetProps) => {
+export const ConfigAsset = (props: ConfigAssetProps) => {
+  const { handleAddConfigAsset, selectedAssets, currentBeneficiary } = props;
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
   const [percent, setPercent] = useState<number>(1);
+
+  useEffect(() => {
+    setAsset(null);
+    setPercent(1);
+  }, [currentBeneficiary]);
 
   const handleChangePercent = (value: string) => {
     if (Number(value) > 100) {
@@ -29,9 +36,12 @@ export const ConfigAsset = ({ handleAddConfigAsset, selectedAssets }: ConfigAsse
     setPercent(100);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setPercent(1);
-    if (asset) handleAddConfigAsset(asset, Number(percent));
+    if (asset) {
+      const result = await handleAddConfigAsset(asset, Number(percent));
+      result && setAsset(null);
+    }
   };
 
   return (
@@ -43,9 +53,15 @@ export const ConfigAsset = ({ handleAddConfigAsset, selectedAssets }: ConfigAsse
         className="config-asset"
       >
         <SelectAsset
-          addAsset={setAsset}
-          disableSelected={{
-            selectedAssets: selectedAssets ?? [],
+          asset={asset}
+          addAsset={(asset: AssetSelectType) => {
+            setAsset(asset);
+            const isSelectedAsset = selectedAssets?.find(item => item?.value === asset?.value);
+            if (isSelectedAsset) {
+              setPercent(isSelectedAsset?.amount);
+            } else {
+              setPercent(1);
+            }
           }}
         />
         <Flex vertical gap={10} className="input-percentage">

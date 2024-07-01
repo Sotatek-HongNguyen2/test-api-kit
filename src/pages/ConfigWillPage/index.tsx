@@ -1,5 +1,5 @@
 import { Flex, Form } from "antd";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import { uniqBy } from "lodash";
@@ -56,6 +56,25 @@ export function ConfigWillPage() {
   const [loading, setLoading] = useState(false);
   const [willAddress, setWillAddress] = useState<string | null>(null);
   const [isValidForm, setIsValidForm] = useState(false);
+
+  const watchBeneficiary = Form.useWatch("beneficiariesList", form);
+  const assetPercents = useMemo(() => {
+    const listAssets = watchBeneficiary?.flatMap((data: any) => (data?.assetConfig ?? [])?.map((asset: any) => ({
+      ...asset?.asset,
+      percent: asset?.percent
+    }))) || [];
+    const distinctAsset = uniqBy(listAssets, "value");
+    return distinctAsset?.map((asset: any) => ({
+      ...asset,
+      symbol: asset?.value,
+      percent: listAssets?.reduce((acc: number, item: any) => {
+        if (item?.value === asset?.value) {
+          return acc + (item?.percent ?? 0);
+        }
+        return acc;
+      }, 0)
+    }))
+  }, [watchBeneficiary])
 
   const getWillContract = () => {
     switch (willType) {
@@ -133,13 +152,17 @@ export function ConfigWillPage() {
         WillToast.error("Something went wrong, please try again later");
         return;
       }
-
       if (willType === "forwarding") {
         const isValidConfigBeneficiaries = (values?.beneficiariesList ?? []).some(
           (item: any) => item?.assetConfig?.length > 0
         )
         if (!isValidConfigBeneficiaries) {
           WillToast.error("You have to configure at least one beneficiary's asset");
+          return;
+        }
+        const checkIsNotDonePercent = assetPercents?.some(asset => asset?.percent !== 100);
+        if (checkIsNotDonePercent) {
+          WillToast.error("Total percentage have to be 100");
           return;
         }
         const listAsset = (
@@ -215,8 +238,7 @@ export function ConfigWillPage() {
           "assetDistribution",
           "minRequiredSignatures",
           "activationTrigger",
-          "lackOfOutgoingTxRange",
-          "note"
+          "lackOfOutgoingTxRange"
         ]
         break;
       case "forwarding":
@@ -226,8 +248,7 @@ export function ConfigWillPage() {
           "beneficiariesList",
           "minRequiredSignatures",
           "activationTrigger",
-          "lackOfOutgoingTxRange",
-          "note"
+          "lackOfOutgoingTxRange"
         ]
         break;
       case "destruction":
