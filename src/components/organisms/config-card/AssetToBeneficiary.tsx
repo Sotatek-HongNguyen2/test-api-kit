@@ -224,7 +224,7 @@ export const AssetToBeneficiary = () => {
           dataSource={assetPercents}
           pagination={false}
         />
-        <Flex gap={16}>
+        <Flex gap={16} className="list-beneficiary--card">
           {watchBeneficiary?.map((beneficiary: any) => (
             <BeneficiaryName
               key={beneficiary?.address}

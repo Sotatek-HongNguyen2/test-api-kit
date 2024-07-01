@@ -61,3 +61,9 @@
   margin-top: 4px;
   cursor: pointer;
 }
+
+.list-beneficiary--card {
+  max-width: calc(100vw - 10vw - 40vw); // 10vw is padding, 10vw is app-page padding, 40vw is app-config-container padding
+  padding-bottom: 2px;
+  overflow-x: scroll;
+}
