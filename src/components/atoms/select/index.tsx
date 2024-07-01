@@ -1,13 +1,8 @@
-import "./styles.scss"
-import { Select, SelectProps } from "antd"
+import "./styles.scss";
+import { Select, SelectProps } from "antd";
 
 export const AppSelect = (props: SelectProps) => {
-  const {
-    placeholder = "Select",
-    ...restProps
-  } = props;
+  const { placeholder = "Select", ...restProps } = props;
 
-  return (
-    <Select placeholder={placeholder} {...restProps} />
-  )
-}
+  return <Select placeholder={placeholder} {...restProps} />;
+};

@@ -12,3 +12,15 @@
 .app-will--list {
   width: 100%;
 }
+
+.drawer-select {
+  .ant-drawer-header {
+    border-bottom: unset;
+    box-shadow: none;
+    padding: 8px 16px;
+  }
+
+  .ant-drawer-body {
+    padding: 0px 16px;
+  }
+}

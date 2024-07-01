@@ -1,5 +1,5 @@
 import "./styles.scss";
-import { Col, Flex, Row, Spin } from "antd";
+import { Flex, Spin } from "antd";
 import { useEffect, useState } from "react";
 
 import { WillData } from "@/types";
@@ -12,11 +12,11 @@ import { CustomRadioItemProps } from "@/components/molecules/radio-group";
 import { SearchParams } from "@/types/global";
 import { useDevices } from "@/hooks/useMediaQuery";
 
+import { DrawerSelect } from "@/components/molecules/DrawerSelect";
+
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 import { WillTypeModal } from "../will-type-modal";
-import { SearchInput } from "@/components/molecules/search-input";
-import { AppSelect } from "@/components/atoms/select";
 
 export interface WillListProps {
   type?: "created" | "inherited";
@@ -36,7 +36,7 @@ export const WillList = (props: WillListProps) => {
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
   const [isLoading, setIsLoading] = useState(false);
-  const { isMobile, isTablet } = useDevices();
+  const { isTablet } = useDevices();
 
   const willService = new WillServices();
 
@@ -106,19 +106,7 @@ export const WillList = (props: WillListProps) => {
 
   return (
     <Flex vertical gap={20} className="home-page">
-      {isTablet && (
-        <Row>
-          <Col span={15}>
-            <SearchInput
-              placeholder="Search by will name"
-              onHandleSearch={onSearch}
-            />
-          </Col>
-          <Col span={9}>
-            <AppSelect style={{ width: "100%" }}></AppSelect>
-          </Col>
-        </Row>
-      )}
+      {isTablet && <DrawerSelect onFilter={onFilter} onSearch={onSearch} />}
       {type === "created" && <WillTypeModal />}
       <Flex justify="space-between" gap="5vw">
         {!isTablet ? (
