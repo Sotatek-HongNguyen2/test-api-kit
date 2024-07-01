@@ -13,41 +13,11 @@
   &:hover {
     border-color: $primary;
     transition: all 0.3s;
-
-    .user-icon {
-      border-color: $primary;
-
-      svg {
-        fill: $primary;
-      }
-    }
-  }
-
-  .user-icon {
-    width: 32px;
-    height: 32px;
-    border: 1px solid #0A0B0C;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-
-    svg {
-      fill: #0A0B0C;
-    }
   }
 }
 
 .beneficiary-card.active-card {
   border: 2px solid #136AF3;
-
-  .user-icon {
-    border-color: $primary;
-
-    svg {
-      fill: $primary;
-    }
-  }
 }
 
 .select-asset {

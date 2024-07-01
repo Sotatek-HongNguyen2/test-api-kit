@@ -36,7 +36,7 @@ export const AssetCard = ({ willDetail }: AssetCardProps) => {
       render: (_, asset) => <AssetName asset={asset} />
     },
     {
-      title: 'Total amount',
+      title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
       render: (amount) => <Text size="text-md" className="neutral-1 font-semibold">{amount ?? '0.0'}</Text>

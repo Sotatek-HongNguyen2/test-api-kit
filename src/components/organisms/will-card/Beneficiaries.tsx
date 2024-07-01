@@ -1,7 +1,7 @@
 import { Text } from "@/components/atoms/text";
 import { AssetDetailData } from "@/types";
-import { Col, Flex, Row } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Flex } from "antd";
+import { UserOutlinedIcon } from "@/assets/icons/custom-icon";
 
 export const Beneficiaries = ({
   beneficiaries,
@@ -16,17 +16,17 @@ export const Beneficiaries = ({
       <Flex gap="30px" className="list-beneficiaries">
         {(beneficiaries ?? []).map((beneficiary, index) => (
           <Flex key={`beneficiary-${index}`} gap="10px">
-            <UserOutlined className="user-icon" />
+            <UserOutlinedIcon />
             <Text className="neutral-1">
               {beneficiary?.name && beneficiary?.name !== ""
                 ? beneficiary?.name
                 : `${beneficiary?.walletAddress?.substring(
-                    0,
-                    10
-                  )}...${beneficiary?.walletAddress?.substring(
-                    beneficiary?.walletAddress?.length - 3,
-                    beneficiary?.walletAddress?.length
-                  )}`}
+                  0,
+                  10
+                )}...${beneficiary?.walletAddress?.substring(
+                  beneficiary?.walletAddress?.length - 3,
+                  beneficiary?.walletAddress?.length
+                )}`}
             </Text>
           </Flex>
         ))}
