@@ -1,27 +1,35 @@
+import { Form } from "antd";
+import { useState } from "react";
+
 import { BeneficiariesIcon } from "@/assets/icons/custom-icon";
 import {
   CustomRadioItemProps,
   RadioGroup,
 } from "@/components/molecules/radio-group";
 import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer";
-import { Form } from "antd";
+
 import { ConfigBeneficiariesForm } from "../ConfigBeneficiariesForm";
 
 export const ConfigBeneficiaries = () => {
+  const [selectedOption, setSelectedOption] = useState<string>("");
   const configOptions: CustomRadioItemProps[] = [
     {
       id: 1,
       value: "existing",
       title: "Use existing address",
-      itemChildren: <ConfigBeneficiariesForm />,
+      // itemChildren: <ConfigBeneficiariesForm />,
     },
     {
       id: 2,
       value: "generate",
       title: "Generate a new address",
-      itemChildren: <ConfigBeneficiariesForm generate={true} />,
+      // itemChildren: <ConfigBeneficiariesForm generate={true} />,
     },
   ];
+
+  const handleChangeOption = (e: any) => {
+    setSelectedOption(e);
+  };
 
   return (
     <CartItemContainer
@@ -30,9 +38,12 @@ export const ConfigBeneficiaries = () => {
     >
       <Form.Item
         name="beneficiaries"
-        rules={[{ required: true, message: "Please select an option" }]}
+        // rules={[{ required: true, message: "Please select an option" }]}
       >
-        <RadioGroup items={configOptions} />
+        <RadioGroup onChange={handleChangeOption} items={configOptions} />
+        {selectedOption && (
+          <ConfigBeneficiariesForm generate={selectedOption === "generate"} />
+        )}
       </Form.Item>
     </CartItemContainer>
   );

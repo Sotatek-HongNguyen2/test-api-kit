@@ -34,3 +34,5 @@ export const NoAvatar = () => <ReactSVG src={"/icons/no-auth/no-avatar.svg"} />;
 export const NoAvatar36 = () => (
   <ReactSVG src={"/icons/no-auth/no-avatar36.svg"} />
 );
+
+export const Plus = () => <ReactSVG src={"/icons/plus.svg"} />;
