@@ -1,11 +1,10 @@
 import { AssetDetailData, WillData } from "@/types"
 import { CartItemContainer } from "./CardItemContainer"
-import { CopyIcon, DiamondIcon } from "@/assets/icons/custom-icon";
+import { BeneficiariesIcon, CopyIcon, DiamondIcon, UserOutlinedIcon } from "@/assets/icons/custom-icon";
 import { AppTable } from "@/components/molecules/table";
 import { ColumnsType } from "antd/es/table";
 import { Text } from "@/components/atoms/text";
 import { Flex } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import { IconButton } from "@/components/atoms/button";
 import { useCopyToClipBoard } from "@/hooks/useCopyToClipboard";
 
@@ -17,7 +16,7 @@ interface BeneficiariesCardProps {
 const NameWithAvt = ({ name }: { name: string }) => {
   return (
     <Flex gap="10px">
-      <UserOutlined className="user-icon" />
+      <UserOutlinedIcon />
       <Text className="font-semibold neutral-1">{name}</Text>
     </Flex>
   )
@@ -51,7 +50,7 @@ export const BeneficiariesCard = ({ beneficiaries, minSignature }: Beneficiaries
   return (
     <CartItemContainer
       title={`List of beneficiaries (${beneficiaries?.length ?? 0})`}
-      iconTitle={<DiamondIcon />}
+      iconTitle={<BeneficiariesIcon />}
     >
       <Flex vertical gap={24}>
         <AppTable dataSource={beneficiaries} columns={columns} pagination={false} />

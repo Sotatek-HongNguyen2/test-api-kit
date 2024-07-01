@@ -26,7 +26,7 @@ export const AssetName = (props: AssetNameProps) => {
         {assetDataItem?.icon ?? <LogoETH200 />}
         <Flex vertical>
           <Text className="font-semibold neutral-1">{asset?.name ?? assetDataItem?.name}</Text>
-          {showSign && <Text className="neutral-2">{asset?.symbol ?? "ETH"}</Text>}
+          {showSign && <Text size="text-sm" className="neutral-2">{asset?.symbol ?? "ETH"}</Text>}
         </Flex>
       </Flex>
     </Flex>

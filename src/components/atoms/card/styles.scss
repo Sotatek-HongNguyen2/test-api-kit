@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .app-card {
   background-color: white;
   padding: 24px;
@@ -11,7 +13,7 @@
 
 .box-shadow-none {
   box-shadow: none; // none
-  border: 1px solid #DCE0EA;
+  border: 1px solid $neutral5;
 }
 
 // ========== radius ==========
