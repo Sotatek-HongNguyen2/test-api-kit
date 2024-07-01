@@ -22,11 +22,11 @@ const items: CustomRadioItemProps[] = [
     title: "Forwarding",
     value: "forwarding",
   },
-  {
-    id: 4,
-    title: "Destruction",
-    value: "destruction",
-  },
+  // {
+  //   id: 4,
+  //   title: "Destruction",
+  //   value: "destruction",
+  // },
 ];
 
 interface WillFilterProps extends Pick<WillListProps, "type"> {

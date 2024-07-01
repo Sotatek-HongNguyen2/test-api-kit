@@ -44,11 +44,11 @@ export const DrawerSelect = ({ onSearch, onFilter }: DrawerSelectProps) => {
       title: "Forwarding",
       value: "forwarding",
     },
-    {
-      id: 4,
-      title: "Destruction",
-      value: "destruction",
-    },
+    // {
+    //   id: 4,
+    //   title: "Destruction",
+    //   value: "destruction",
+    // },
   ];
 
   const optionsSelect = [
@@ -64,10 +64,10 @@ export const DrawerSelect = ({ onSearch, onFilter }: DrawerSelectProps) => {
       label: "Forwarding",
       value: "forwarding",
     },
-    {
-      label: "Destruction",
-      value: "destruction",
-    },
+    // {
+    //   label: "Destruction",
+    //   value: "destruction",
+    // },
   ];
 
   const handleChangeOption = (e: any) => {
