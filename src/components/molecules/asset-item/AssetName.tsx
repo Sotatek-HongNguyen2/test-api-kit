@@ -3,7 +3,7 @@ import { Flex } from "antd";
 
 import { Text } from "@/components/atoms/text";
 import { BaseAsset } from "@/types";
-import { AssetItemData, assetData } from "@/constants/asset";
+import { AssetItemData, AssetType, assetData } from "@/constants/asset";
 import { useMemo } from "react";
 import { LogoETH200 } from "@/assets/icons";
 
@@ -18,7 +18,7 @@ export const AssetName = (props: AssetNameProps) => {
   if (!asset) return null;
 
 
-  const assetDataItem: AssetItemData = useMemo(() => assetData[asset?.symbol ?? 'ETH'], [asset?.symbol]);
+  const assetDataItem: AssetItemData = useMemo(() => assetData[(asset?.symbol ?? 'ETH') as AssetType], [asset?.symbol]);
 
   return (
     <Flex align="center" gap="10px">
@@ -26,7 +26,7 @@ export const AssetName = (props: AssetNameProps) => {
         {assetDataItem?.icon ?? <LogoETH200 />}
         <Flex vertical>
           <Text className="font-semibold neutral-1">{asset?.name ?? assetDataItem?.name}</Text>
-          {showSign && <Text className="neutral-2">{asset?.symbol ?? "ETH"}</Text>}
+          {showSign && <Text size="text-sm" className="neutral-2">{asset?.symbol ?? "ETH"}</Text>}
         </Flex>
       </Flex>
     </Flex>

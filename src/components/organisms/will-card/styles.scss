@@ -1,4 +1,6 @@
 @import 'src/assets/scss/_colors.scss';
+@import "@/assets/scss/responsive.scss";
+
 
 .will-card {
   border: 2px solid transparent;
@@ -17,20 +19,16 @@
   }
 
   .card-item--right-content {
-    width: 60%;
-
-    .user-icon {
-      width: 26px;
-      height: 26px;
-      border: 1px solid #136AF3;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-
-      svg {
-        fill: $primary;
-      }
-    }
+    // width: 60%;
   }
+}
+
+.list-beneficiaries {
+  max-width: 100%;
+  overflow: auto;
+
+  @media screen and (max-width: $tablet-width) {
+    padding-bottom: 8px;
+  }
+
 }

@@ -38,6 +38,7 @@ export const SelectTime = (props: SelectTimeProps) => {
           name={`${name ?? ''}_customTime`}
           rules={[
             { required: true, message: 'Please enter a number' },
+            { max: 5, message: 'Maximum 5 digits' }
           ]}
         >
           <AppInput
@@ -58,13 +59,22 @@ export const SelectTime = (props: SelectTimeProps) => {
   return (
     <Flex vertical gap={12}>
       <Text className="neutral-1">{title}</Text>
-      <RadioGroup
-        items={options}
-        value={value}
-        onChange={(value) => {
-          handleChangeValue?.(value as number)
-        }}
-      />
+      <Form.Item
+        name={name}
+        rules={[
+          {
+            required: true,
+            message: 'Please select an option'
+          }
+        ]}
+      >
+        <RadioGroup
+          items={options}
+          onChange={(value) => {
+            handleChangeValue?.(value as number)
+          }}
+        />
+      </Form.Item>
     </Flex>
   )
 }

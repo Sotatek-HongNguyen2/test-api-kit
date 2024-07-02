@@ -21,7 +21,12 @@ export const CartItemContainer = (props: CardItemContainerProps) => {
             {iconTitle}
           </Flex>
           <Flex gap={4} align="center">
-            <Text size="text-lg" className="font-semibold">{title}</Text>
+            <Text
+              size="text-lg"
+              className="font-semibold neutral-1"
+            >
+              {title}
+            </Text>
             {
               hasTooltip && (
                 <AppTooltip {...hasTooltip} />

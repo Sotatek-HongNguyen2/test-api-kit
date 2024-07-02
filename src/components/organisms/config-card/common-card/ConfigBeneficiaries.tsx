@@ -18,6 +18,7 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
 
   const configForm = Form.useFormInstance();
   const { getFieldValue, setFieldValue, getFieldError } = configForm;
+  const watchBeneficiariesType = Form.useWatch("beneficiaries", configForm);
   const [loading, setLoading] = useState(false);
   const { address } = useAppSelector(getWalletSlice);
 
@@ -26,13 +27,13 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
       id: 1,
       value: "existing",
       title: "Use existing address",
-      itemChildren: <ConfigBeneficiariesForm />,
+      // itemChildren: <ConfigBeneficiariesForm />,
     },
     {
       id: 2,
       value: "generate",
       title: "Generate a new address",
-      itemChildren: <ConfigBeneficiariesForm generate={true} />,
+      // itemChildren: <ConfigBeneficiariesForm generate={true} />,
     },
   ];
 
@@ -105,6 +106,7 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
           <RadioGroup
             value={getFieldValue("beneficiaries")}
             items={configOptions}
+            verticalOption={false}
             onChange={(value) => {
               if (isEdit && value === "existing") {
                 const beneficiaries = getFieldValue("initBeneficiaries") || [];
@@ -115,6 +117,9 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
             }}
           />
         </Form.Item>
+        {watchBeneficiariesType && (
+          <ConfigBeneficiariesForm generate={watchBeneficiariesType === "generate"} />
+        )}
         {
           isEdit ? (
             <AppButton

@@ -16,7 +16,6 @@ import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract"
 import { getWalletSlice, useAppSelector } from "@/store"
 
 export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => {
-
   const configForm = Form.useFormInstance();
   const { setFieldValue, getFieldValue, getFieldError } = configForm;
   const [selected, setSelected] = useState<string[]>([]);
@@ -28,18 +27,15 @@ export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => 
     {
       id: 1,
       title: "Lack of outgoing transactions",
-      value: 'lack_outgoing_transactions',
-      itemChildren: <Form.Item
-        name="lackOfOutgoingTxRange"
-        rules={[{ required: true, message: 'Please select an option' }]}
-      >
+      value: "lack_outgoing_transactions",
+      itemChildren: (
         <SelectTime
-          title="Time of inactivity until will activation"
           name="lackOfOutgoingTxRange"
+          title="Time of inactivity until will activation"
           value={getFieldValue('lackOfOutgoingTxRange')}
           handleChangeValue={(value) => setFieldValue('lackOfOutgoingTxRange', value)}
         />
-      </Form.Item>
+      ),
     },
     {
       id: 2,
@@ -119,7 +115,7 @@ export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => 
           <Text className="neutral-1">Select one or both</Text>
           <Form.Item
             name="activationTrigger"
-            rules={[{ required: true, message: 'Please select an option' }]}
+            rules={[{ required: true, message: "Please select an option" }]}
           >
             <CheckboxGroup
               checked={value}
@@ -128,14 +124,17 @@ export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => 
             />
           </Form.Item>
         </Flex>
-        {
-          type && type === "destruction" && selected?.length === 2 && (
-            <Flex align="flex-start" gap={10}>
-              <AttentionIcon />
-              <Text className="neutral-2">You’ve selected both lack of outgoing transactions and signed transactions as your trigger. Both conditions will need to be met for your will to be activated. Once one of the two activities is authorized, your activation duration will be reset.</Text>
-            </Flex>
-          )
-        }
+        {type && type === "destruction" && selected?.length === 2 && (
+          <Flex align="flex-start" gap={10}>
+            <AttentionIcon />
+            <Text className="neutral-2">
+              You’ve selected both lack of outgoing transactions and signed
+              transactions as your trigger. Both conditions will need to be met
+              for your will to be activated. Once one of the two activities is
+              authorized, your activation duration will be reset.
+            </Text>
+          </Flex>
+        )}
         {
           isEdit ? (
             <AppButton
@@ -150,6 +149,6 @@ export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => 
           ) : null
         }
       </Flex>
-    </CartItemContainer >
-  )
-}
+    </CartItemContainer>
+  );
+};

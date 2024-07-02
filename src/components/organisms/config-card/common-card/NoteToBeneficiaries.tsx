@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom"
 export const NoteToBeneficiaries = ({ isEdit }: EditFormProps) => {
 
   const configForm = Form.useFormInstance();
-  const { getFieldValue, getFieldError } = configForm;
+  const { getFieldValue, getFieldError, setFieldValue } = configForm;
   const { willId } = useParams();
   const [loading, setLoading] = useState(false);
 
@@ -55,16 +55,25 @@ export const NoteToBeneficiaries = ({ isEdit }: EditFormProps) => {
           name="note"
           rules={[
             {
-              required: true,
-              message: 'Please input your note!'
-            },
-            {
               max: 2000,
-              message: 'Note should not exceed 2000 characters'
-            }
+              message: "Note should not exceed 2000 characters",
+            },
           ]}
         >
-          <AppInputArea />
+          <AppInputArea
+            onChange={(e) => {
+              const newValue = e.target.value.trimStart();
+              setFieldValue("note", newValue);
+            }}
+
+            onBlur={(e) => {
+              const newValue = e.target.value.trim();
+              if (newValue) {
+                setFieldValue("note", newValue)
+              }
+            }}
+            maxLength={2000}
+          />
         </Form.Item>
         {
           isEdit ? (
@@ -81,5 +90,5 @@ export const NoteToBeneficiaries = ({ isEdit }: EditFormProps) => {
         }
       </Flex>
     </CartItemContainer>
-  )
-}
+  );
+};

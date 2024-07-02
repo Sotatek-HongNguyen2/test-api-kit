@@ -1,5 +1,5 @@
 import "./styles.scss";
-import { Card, Divider, Flex } from "antd";
+import { Card, Col, Divider, Flex, Row } from "antd";
 import { RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ import { Text } from "@/components/atoms/text";
 import { WillData } from "@/types";
 import { APP_ROUTES_PATHS } from "@/constants";
 import { AppBadge } from "@/components/atoms/badge";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 import { Assets } from "./Assets";
 import { Beneficiaries } from "./Beneficiaries";
@@ -21,6 +22,8 @@ interface WillCardProps {
 
 export const WillCard = ({ will, type }: WillCardProps) => {
   const navigate = useNavigate();
+  const { isTablet } = useDevices();
+
   return (
     <Card
       className="will-card"
@@ -33,7 +36,8 @@ export const WillCard = ({ will, type }: WillCardProps) => {
               <Text size="text-xl" className="font-bold">
                 {will?.name}
               </Text>
-              {["process", "done"]?.includes(will?.status) && type === "inherited" ? (
+              {["process", "done"]?.includes(will?.status) &&
+              type === "inherited" ? (
                 <AppBadge
                   color="secondary"
                   count={
@@ -61,8 +65,8 @@ export const WillCard = ({ will, type }: WillCardProps) => {
             <RightOutlined />
           </IconButton>
         </Flex>
-        <Divider />
-        <Flex justify="space-between" gap="10px">
+        <Divider style={{ margin: "12px 0px" }} />
+        {/* <Flex justify="space-between" gap="10px">
           <Assets assets={will?.willAsset} will={will} />
           <Flex vertical className="card-item--right-content" gap="12px">
             <Beneficiaries beneficiaries={will?.willDetail} />
@@ -73,7 +77,31 @@ export const WillCard = ({ will, type }: WillCardProps) => {
               minimumSignatures={will?.minSignature}
             />
           </Flex>
-        </Flex>
+        </Flex> */}
+        <Row gutter={24}>
+          <Col md={10} lg={8} xl={8} xs={24} xxl={24} sm={24}>
+            <Assets assets={will?.willAsset} will={will} />
+          </Col>
+          <Col
+            md={14}
+            lg={16}
+            xl={16}
+            xs={24}
+            xxl={24}
+            sm={24}
+            className={`${isTablet && "mt-5"}`}
+          >
+            <Flex vertical className="card-item--right-content" gap="12px">
+              <Beneficiaries beneficiaries={will?.willDetail} />
+              <Divider style={{ margin: "8px 0px" }} />
+              <WillProgress
+                activeDate={will?.expTime}
+                createdDate={will?.createdAt}
+                minimumSignatures={will?.minSignature}
+              />
+            </Flex>
+          </Col>
+        </Row>
       </Flex>
     </Card>
   );

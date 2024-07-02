@@ -59,14 +59,14 @@ export const WillTypeCard = ({ type }: WillTypeCardProps) => {
 
   return (
     <Card>
-      <Flex gap={20}>
+      <Flex gap={20} align="flex-start">
         <DiamondIcon />
         <Flex vertical gap={10}>
           <Text size="text-lg" className="font-semibold neutral-1">
             {willTypeData?.title}
           </Text>
           {willTypeData?.description &&
-          typeof willTypeData?.description === "string" ? (
+            typeof willTypeData?.description === "string" ? (
             <Text size="text-sm" className="neutral-2">
               {willTypeData?.description}
             </Text>

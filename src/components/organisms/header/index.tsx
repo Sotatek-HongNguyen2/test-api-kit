@@ -3,7 +3,7 @@ import { CloseOutlined } from "@ant-design/icons";
 
 import "./styles.scss";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MenuProps } from "rc-menu";
 
@@ -36,6 +36,7 @@ export const Header = () => {
   const { isTablet } = useDevices();
   const { avatar, name } = useAppSelector(getInformationInstanceSlide);
   const [activeKey, setActiveKey] = useState<string>("1");
+  const location = useLocation();
 
   const handelOpenModalLogin = async () => {
     await setOpen(false);
@@ -91,7 +92,13 @@ export const Header = () => {
   const handleChange = (e: any) => {
     setOpen(false);
     setActiveKey(e.key);
-    navigate(`?typeWill=${e.key}`);
+    if (e.key === "0") {
+      navigate("/user-profile");
+    } else {
+      if (location.pathname !== "/") {
+        navigate(`/?typeWill=${e.key}`);
+      } else navigate(`?typeWill=${e.key}`);
+    }
   };
 
   const itemMobile = () => {

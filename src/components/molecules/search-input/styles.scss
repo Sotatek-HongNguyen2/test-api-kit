@@ -1,7 +1,14 @@
+@import "@/assets/scss/responsive.scss";
+@import 'src/assets/scss/_colors.scss';
+
 .ant-input-group-wrapper {
-  border: 1px solid #DCE0EA;
+  border: 1px solid $neutral5;
   border-radius: 8px;
   height: 46px;
+
+  @media screen and (max-width: $tablet-width) {
+    height: 40px;
+  }
 
   .ant-input-wrapper {
     height: 100%;

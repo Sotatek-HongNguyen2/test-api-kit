@@ -1,5 +1,6 @@
+import { TrashIcon } from "@/assets/icons/custom-icon";
 import "./styles.scss"
-import { AppButton } from "@/components/atoms/button";
+import { AppButton, IconButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text"
 import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
@@ -30,7 +31,13 @@ export const AddAssetDistributionForm = () => {
   const [assets, setAssets] = useState<AssetDataColumn[]>(assetDistribution || []);
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
 
-  const columns: ColumnsType<AssetDataColumn> = [
+  const handleDeleteAsset = (record: DefaultOptionType) => {
+    const newAssets = assets.filter(item => item.value !== record.value);
+    setAssets(newAssets);
+    setFieldValue("assetDistribution", newAssets);
+  }
+
+  const columns: ColumnsType<DefaultOptionType> = [
     {
       title: 'Token',
       dataIndex: 'token',
@@ -38,11 +45,19 @@ export const AddAssetDistributionForm = () => {
       render: (_, record) => <AssetName asset={record as any} />
     },
     {
-      title: 'Amount',
+      title: 'Total balance',
       dataIndex: 'amount',
       key: 'amount',
       render: (amount) => <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>
     },
+    {
+      title: "",
+      render: (_, record) => (
+        <IconButton onClick={() => handleDeleteAsset(record)}>
+          <TrashIcon />
+        </IconButton>
+      )
+    }
   ];
 
   const handleAddAsset = () => {
@@ -61,6 +76,7 @@ export const AddAssetDistributionForm = () => {
     }
     setAssets(newAssets);
     setFieldValue("assetDistribution", newAssets);
+    setAsset(null);
   }
 
   return (
@@ -70,9 +86,16 @@ export const AddAssetDistributionForm = () => {
         columns={columns}
         dataSource={assetDistribution || assets}
         pagination={false}
-        className="asset-distribution-table"
+        className={`asset-distribution-table ${assets && assets.length > 0 && "have-data"}`}
+        hasIconAction
       />
-      <SelectAsset addAsset={(asset) => setAsset(asset)} />
+      <SelectAsset
+        asset={asset}
+        disableSelected={{
+          selectedAssets: assets
+        }}
+        addAsset={(asset) => setAsset(asset)}
+      />
       <AppButton
         className="none-styles uppercase"
         size="xl"

@@ -12,6 +12,8 @@ import { CustomRadioItemProps } from "@/components/molecules/radio-group";
 import { SearchParams } from "@/types/global";
 import { useDevices } from "@/hooks/useMediaQuery";
 
+import { DrawerSelect } from "@/components/molecules/DrawerSelect";
+
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 import { WillTypeModal } from "../will-type-modal";
@@ -34,7 +36,7 @@ export const WillList = (props: WillListProps) => {
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
   const [isLoading, setIsLoading] = useState(false);
-  const { isMobile } = useDevices();
+  const { isTablet } = useDevices();
 
   const willService = new WillServices();
 
@@ -104,9 +106,10 @@ export const WillList = (props: WillListProps) => {
 
   return (
     <Flex vertical gap={20} className="home-page">
+      {isTablet && <DrawerSelect onFilter={onFilter} onSearch={onSearch} />}
       {type === "created" && <WillTypeModal />}
       <Flex justify="space-between" gap="5vw">
-        {!isMobile ? (
+        {!isTablet ? (
           <WillFilter onSearch={onSearch} onFilter={onFilter} type={type} />
         ) : null}
         {isLoading ? (

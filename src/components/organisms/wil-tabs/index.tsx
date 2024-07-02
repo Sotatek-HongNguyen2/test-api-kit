@@ -18,12 +18,12 @@ export const WillTabs = () => {
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "My wills",
+      label: "My will",
       children: <WillList type="created" />,
     },
     {
       key: "2",
-      label: "My inherited wills",
+      label: "My inherited will",
       children: <WillList type="inherited" />,
     },
   ];

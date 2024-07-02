@@ -36,6 +36,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
               <>
                 <AppCheckbox
                   key={`checkbox-${id}`}
+                  {...rest}
                   checked={value?.includes(checkbox?.value)}
                   onChange={(e) => {
                     const checked = e.target.checked;
@@ -48,9 +49,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
                     }
                     setValue(newArr);
                     onChange?.(newArr);
-                  }}
-                  {...rest}
-                >
+                  }}>
                   {checkbox?.title}
                 </AppCheckbox>
                 {

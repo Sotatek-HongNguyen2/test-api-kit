@@ -1,3 +1,5 @@
+@import 'src/assets/scss/_colors.scss';
+
 .beneficiary-name {
   min-width: 30%;
 }
@@ -44,4 +46,42 @@
     border-radius: 12px;
     box-shadow: none;
   }
+}
+
+.main-qr-code {
+  width: fit-content;
+  padding: 11px 12px 11px 12px;
+  gap: 2px;
+  border-radius: 8px;
+  border: 1px solid $neutral5;
+  opacity: 0px;
+
+}
+
+.btn-download-qr-code {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  color: #136AF3;
+  cursor: pointer;
+}
+
+.add-more {
+  width: fit-content;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: left;
+  color: #979BAA;
+  margin-bottom: 10px;
+  gap: 8px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.list-beneficiary--card {
+  max-width: calc(100vw - 10vw - 40vw); // 10vw is padding, 10vw is app-page padding, 40vw is app-config-container padding
+  padding-bottom: 2px;
+  overflow-x: scroll;
 }

@@ -46,20 +46,24 @@ const willTypeItems: WillTypeItem[] = [
       "When activated, assets designated by the owner will be sent directly to the public addresses of listed beneficiaries.",
     type: "forwarding",
   },
-  {
-    icon: <DestructionIcon />,
-    title: "Destruction",
-    description:
-      "When activated, all assets will be sent to the Ethereum genesis address, thus destroyed permanently.",
-    type: "destruction",
-  },
+  // {
+  //   icon: <DestructionIcon />,
+  //   title: "Destruction",
+  //   description:
+  //     "When activated, all assets will be sent to the Ethereum genesis address, thus destroyed permanently.",
+  //   type: "destruction",
+  // },
 ];
 
 export const WillTypeModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [willType, setWillType] = useState<WillType>("inheritance");
+  const [willType, setWillType] = useState<WillType | null>(null);
   const navigate = useNavigate();
-  const { isOpen: isShowFooter, onOpen: showFooter, onClose: hideFooter } = useDisclosure();
+  const {
+    isOpen: isShowFooter,
+    onOpen: showFooter,
+    onClose: hideFooter,
+  } = useDisclosure();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -114,10 +118,13 @@ export const WillTypeModal = () => {
       <WillModal
         width={672}
         open={isOpen}
-        handleCancel={onClose}
+        handleCancel={() => {
+          onClose();
+          setWillType(null);
+        }}
         title={
           <Text size="text-3xl" className="font-bold neutral-1">
-            Choose Will Type
+            Choose will type
           </Text>
         }
         hideFooter
@@ -136,14 +143,27 @@ export const WillTypeModal = () => {
 
           <Row gutter={24}>
             <Col span={12}>
-              <AppButton block size="xl" onClick={onClose}>
+              <AppButton
+                size="xl"
+                block
+                onClick={() => {
+                  onClose();
+                  setWillType(null);
+                }}
+              >
                 <Text size="text-lg" className="neutral-1 font-bold uppercase">
                   Cancel
                 </Text>
               </AppButton>
             </Col>
             <Col span={12}>
-              <AppButton block size="xl" type="primary" onClick={createAWill}>
+              <AppButton
+                block
+                size="xl"
+                type="primary"
+                onClick={createAWill}
+                disabled={!willType}
+              >
                 <Text size="text-lg" className="neutral-3 font-bold uppercase">
                   create a will
                 </Text>

@@ -1,9 +1,11 @@
+@import 'src/assets/scss/_colors.scss';
+
 .item-option-login {
     width: 100%;
     padding: 16px;
     gap: 0px;
     border-radius: 12px;
-    border: 1px solid #DCE0EA;
+    border: 1px solid $neutral5;
     display: flex;
     align-items: center;
     margin-top: 16px;

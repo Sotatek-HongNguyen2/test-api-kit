@@ -1,5 +1,5 @@
 import { Flex, Form } from "antd";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import { uniqBy } from "lodash";
@@ -66,17 +66,42 @@ export function ConfigWillPage() {
 
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
-  const { setFieldValue } = form;
+  const { setFieldValue, getFieldsError, getFieldsValue } = form;
   const [isConfigured, setIsConfigured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [willAddress, setWillAddress] = useState<string | null>(null);
+  const [isValidForm, setIsValidForm] = useState(false);
+  const watchAssetDistribution = Form.useWatch("assetDistribution", form);
+  const isValidFormConfig = useMemo(() => {
+    if (willType === "forwarding") return isValidForm;
+    return isValidForm && !!watchAssetDistribution && watchAssetDistribution?.length > 0;
+  }, [watchAssetDistribution, isValidForm, willType])
+
+  const watchBeneficiary = Form.useWatch("beneficiariesList", form);
+  const assetPercents = useMemo(() => {
+    const listAssets = watchBeneficiary?.flatMap((data: any) => (data?.assetConfig ?? [])?.map((asset: any) => ({
+      ...asset?.asset,
+      percent: asset?.percent
+    }))) || [];
+    const distinctAsset = uniqBy(listAssets, "value");
+    return distinctAsset?.map((asset: any) => ({
+      ...asset,
+      symbol: asset?.value,
+      percent: listAssets?.reduce((acc: number, item: any) => {
+        if (item?.value === asset?.value) {
+          return acc + (item?.percent ?? 0);
+        }
+        return acc;
+      }, 0)
+    }))
+  }, [watchBeneficiary])
 
   const getParams = (values: ConfigFormDataType) => {
     switch (willType) {
       case "inheritance":
         return {
           nameWill: values?.willName,
-          note: values?.note,
+          note: values?.note ?? "",
           nickNames: (values?.beneficiariesList ?? []).map((item) => item.name),
           beneficiaries: (values?.beneficiariesList ?? []).map(
             (item) => item?.address
@@ -91,7 +116,7 @@ export function ConfigWillPage() {
       case "forwarding":
         return {
           nameWill: values?.willName,
-          note: values?.note,
+          note: values?.note ?? "",
           nickNames: (values?.beneficiariesList ?? [])?.map(
             (item) => item.name
           ),
@@ -100,8 +125,8 @@ export function ConfigWillPage() {
           )?.map((item) => {
             return [
               item?.address,
-              item?.assetConfig.map((item) => item.asset?.assetAddress),
-              item.assetConfig.map((item) => item?.percent),
+              (item?.assetConfig ?? []).map((item) => item.asset?.assetAddress),
+              (item.assetConfig ?? []).map((item) => item?.percent),
             ];
           }),
           minRequiredSignatures: values?.minRequiredSignatures,
@@ -122,6 +147,14 @@ export function ConfigWillPage() {
     }
   };
 
+  const checkDividedForwarding = (beneficiaries: any) => {
+    return !beneficiaries.some((beneficiary: any) => {
+      const assetAddress = (beneficiary?.assetConfig ?? []).map((beneficiary: any) => beneficiary.asset?.assetAddress);
+      const percent = (beneficiary?.assetConfig ?? []).map((beneficiary: any) => beneficiary.percent);
+      return assetAddress.length === 0 || percent.length === 0
+    });;
+  }
+
   const onFinish = async (values: ConfigFormDataType) => {
     try {
       setLoading(true);
@@ -133,6 +166,34 @@ export function ConfigWillPage() {
       if (!addressData || !willType) {
         WillToast.error("Something went wrong, please try again later");
         return;
+      }
+      if (willType === "forwarding") {
+        const isValidConfigBeneficiaries = (values?.beneficiariesList ?? []).some(
+          (item: any) => item?.assetConfig?.length > 0
+        )
+        if (!isValidConfigBeneficiaries) {
+          WillToast.error("You have to configure at least one beneficiary's asset");
+          return;
+        }
+        if (!checkDividedForwarding(values?.beneficiariesList)) {
+          WillToast.error("There is one beneficiaries has not be configured. Please check it and save again.");
+          return;
+        }
+        const checkIsNotDonePercent = assetPercents?.some(asset => asset?.percent !== 100);
+        if (checkIsNotDonePercent) {
+          WillToast.error("Total percentage have to be 100");
+          return;
+        }
+        const listAsset = (
+          (values?.beneficiariesList ?? []) as BeneficiaryConfig[]
+        ).flatMap((item) =>
+          (item?.assetConfig ?? [])?.map((asset) => ({
+            ...asset?.asset,
+            symbol: asset?.asset?.value,
+          }))
+        );
+        const distinctArray = uniqBy(listAsset, "value");
+        setFieldValue("assetDistribution", distinctArray);
       }
       const Contract = getWillContract(willType as WillType);
       if (!Contract) {
@@ -147,18 +208,6 @@ export function ConfigWillPage() {
         },
       });
       const params = getParams(values);
-      if (willType === "forwarding") {
-        const listAsset = (
-          (values?.beneficiariesList ?? []) as BeneficiaryConfig[]
-        ).flatMap((item) =>
-          (item?.assetConfig ?? [])?.map((asset) => ({
-            ...asset?.asset,
-            symbol: asset?.asset?.value,
-          }))
-        );
-        const distinctArray = uniqBy(listAsset, "value");
-        setFieldValue("assetDistribution", distinctArray);
-      }
 
       if (!params) {
         WillToast.error("Something went wrong, please try again later");
@@ -195,6 +244,56 @@ export function ConfigWillPage() {
       setLoading(false);
     }
   };
+
+  const checkAllFormTouch = useCallback((hasErrors: boolean) => {
+    const formValues = getFieldsValue();
+    let fields: (keyof ConfigFormDataType)[] = [];
+    switch (willType) {
+      case "inheritance":
+        fields = [
+          "willName",
+          "beneficiaries",
+          "beneficiariesList",
+          "minRequiredSignatures",
+          "activationTrigger",
+          "lackOfOutgoingTxRange"
+        ]
+        break;
+      case "forwarding":
+        fields = [
+          "willName",
+          "beneficiaries",
+          "beneficiariesList",
+          "minRequiredSignatures",
+          "activationTrigger",
+          "lackOfOutgoingTxRange"
+        ]
+        break;
+      case "destruction":
+        fields = [
+          "willName",
+          "activationTrigger",
+          "lackOfOutgoingTxRange",
+        ]
+        break;
+      default:
+        break;
+    }
+    const check = fields.every(field =>
+      formValues[field] !== undefined && formValues[field] !== null && formValues[field] !== ''
+    );
+    setIsValidForm(check && !hasErrors);
+  }, [getFieldsValue, willType]);
+
+  const validateForm = () => {
+    const hasErrors = getFieldsError().some(({ errors }) => errors.length > 0);
+    if (hasErrors) {
+      setIsValidForm(false);
+      return;
+    }
+    checkAllFormTouch(hasErrors);
+  };
+
   return (
     <WrapperContainer
       title="Configure your will"
@@ -205,7 +304,13 @@ export function ConfigWillPage() {
           : undefined
       }
     >
-      <Form form={form} onFinish={onFinish} autoComplete="off">
+      <Form
+        form={form}
+        onFinish={onFinish}
+        autoComplete="off"
+        validateTrigger="onChange"
+        onFieldsChange={validateForm}
+      >
         <Flex vertical gap={16}>
           {isConfigured && willAddress ? (
             <>
@@ -231,18 +336,23 @@ export function ConfigWillPage() {
                 <AppButton
                   size="xl"
                   type="primary"
-                  className="uppercase font-bold"
                   htmlType="submit"
                   loading={loading}
+                  disabled={!isValidFormConfig}
                 >
-                  Configure will
+                  <Text
+                    size="text-lg"
+                    className="uppercase font-bold"
+                  >
+                    Configure will
+                  </Text>
                 </AppButton>
                 <AppButton
                   size="xl"
-                  className="uppercase font-bold neutral-1 transparent"
+                  className="transparent"
                   onClick={() => navigate(-1)}
                 >
-                  Cancel
+                  <Text size="text-lg" className="uppercase font-bold">Cancel</Text>
                 </AppButton>
               </Flex>
             </>
