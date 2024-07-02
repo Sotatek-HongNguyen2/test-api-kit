@@ -6,19 +6,19 @@ import { AssetDataColumn, AssetSelectType } from "../AddAssetDistributionForm"
 import { EditFormProps } from "@/components/templates/form"
 import { AppButton } from "@/components/atoms/button"
 import { Text } from "@/components/atoms/text"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import WillToast from "@/components/atoms/ToastMessage"
 import { contractAddress, getWillContract } from "@/pages/ConfigWillPage"
 import { PROVIDER_TYPE } from "@/models/contract/evm/contract"
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract"
-import { TokenWillType, WillType } from "@/types"
+import { WillType } from "@/types"
 import { getWalletSlice, useAppSelector } from "@/store"
 import { ColumnsType } from "antd/es/table"
 import formatNumber from "@/helpers/useFormatToken"
 import { AssetName } from "@/components/molecules/asset-item/AssetName"
 import { AppTable } from "@/components/molecules/table"
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset"
-import { TokenModal, TokenModalType, getTokenContract } from "@/components/molecules/asset-item/TokenModal";
+import { TokenModal, TokenModalType } from "@/components/molecules/asset-item/TokenModal";
 import useDisclosure from "@/hooks/useDisclosure";
 
 export const EditAssetDistribution = (props: EditFormProps) => {
@@ -80,7 +80,7 @@ export const EditAssetDistribution = (props: EditFormProps) => {
                   setCurrentToken({
                     ...record,
                     value: record?.symbol,
-                    assetAddress: (record as any)?.address
+                    assetAddress: (record as any)?.address || (record as any)?.assetAddress
                   });
                 }}
               >
@@ -92,8 +92,15 @@ export const EditAssetDistribution = (props: EditFormProps) => {
           }
         </Flex>
       )
-    }
+    },
   ];
+
+  useEffect(() => {
+    setAssets(assetDistribution?.map((item: any) => ({
+      ...item,
+      value: item?.symbol
+    })));
+  }, [assetDistribution]);
 
   const handleAddAsset = () => {
     const assetIndex = assets.findIndex(item => item.value === asset?.value);
@@ -176,16 +183,22 @@ export const EditAssetDistribution = (props: EditFormProps) => {
             <Text className="neutral-1">You’re a designated assets:</Text>
             <AppTable
               columns={columns}
-              dataSource={assetDistribution || assets}
+              dataSource={assets}
               pagination={false}
               className="asset-distribution-table"
             />
             <Flex gap={16} align="flex-end" className="update-asset">
-              <SelectAsset addAsset={(asset) => setAsset(asset)} />
+              <SelectAsset
+                asset={asset}
+                addAsset={(asset) => setAsset(asset)}
+                disableSelected={{
+                  selectedAssets: assets
+                }}
+              />
               {
                 (asset?.value && !assets.find(item => item.value === asset?.value)) ? (
                   <Flex style={{ width: "40%" }} gap={16}>
-                    <AppButton type="primary-outlined" size="xl">
+                    <AppButton type="primary-outlined" size="xl" onClick={handleAddAsset}>
                       <Text className="uppercase primary font-bold">
                         Select
                       </Text>

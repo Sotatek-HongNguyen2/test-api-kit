@@ -64,7 +64,7 @@ export interface ItemOwnerBalance {
 
 export interface UpdateWillBody {
   willId: string;
-  willName?: string;
+  name?: string;
   note?: string;
 }
 

@@ -15,6 +15,7 @@ export function EditWillPage() {
   const { willId } = useParams();
 
   const [form] = Form.useForm<ConfigFormDataType>();
+  const watchBeneficiaries = Form.useWatch("beneficiariesList", form);
   const { setFieldsValue } = form;
   const willService = new WillServices();
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
@@ -35,6 +36,7 @@ export function EditWillPage() {
               : formatNumber(Number(item?.amount));
             return {
               ...balance,
+              assetAddress: balance?.address,
               amount
             }
           }

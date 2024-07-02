@@ -107,14 +107,14 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
             value={getFieldValue("beneficiaries")}
             items={configOptions}
             verticalOption={false}
-            onChange={(value) => {
-              if (isEdit && value === "existing") {
-                const beneficiaries = getFieldValue("initBeneficiaries") || [];
-                setFieldValue("beneficiariesList", beneficiaries)
-              } else {
-                setFieldValue("beneficiariesList", [])
-              }
-            }}
+          // onChange={(value) => {
+          //   if (isEdit && value === "existing") {
+          //     const beneficiaries = getFieldValue("initBeneficiaries") || [];
+          //     setFieldValue("beneficiariesList", beneficiaries)
+          //   } else {
+          //     setFieldValue("beneficiariesList", [])
+          //   }
+          // }}
           />
         </Form.Item>
         {watchBeneficiariesType && (

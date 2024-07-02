@@ -16,7 +16,7 @@ export const ForwardingForm = (props: EditFormProps) => {
         isEdit ? (
           <>
             <EditConfigCard />
-            <ActivationTrigger />
+            <ActivationTrigger {...props} />
           </>
         ) : (
           <>

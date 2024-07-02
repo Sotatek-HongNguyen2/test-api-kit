@@ -40,7 +40,6 @@ export const SelectAsset = ({ asset, addAsset, disableSelected }: SelectAssetPro
       <Text className="font-semibold neutral-1">Asset</Text>
       <Flex align="center" gap={12}>
         <AppSelect
-          className="select-asset"
           value={asset}
           options={assetOptions}
           onChange={(_, option) => {

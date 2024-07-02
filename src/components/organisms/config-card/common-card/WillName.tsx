@@ -26,7 +26,7 @@ export const WillName = ({ isEdit }: EditFormProps) => {
         return;
       }
       const willService = new WillServices();
-      const willName = getFieldValue("willName");
+      const name = getFieldValue("willName");
       const error = getFieldError("willName");
       if (error?.length > 0) {
         WillToast.error(error[0]);
@@ -34,7 +34,7 @@ export const WillName = ({ isEdit }: EditFormProps) => {
       }
       const res = await willService.updateWill({
         willId,
-        willName,
+        name,
       })
       if (res) {
         WillToast.success("Update will name successfully!");
