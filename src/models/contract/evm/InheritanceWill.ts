@@ -1,7 +1,7 @@
 import InheritanceWillAbi from "@/constants/InheritanceWill";
 
 import Contract, { InitializeContractType } from "./contract";
-import { values } from "lodash";
+// import { values } from "lodash";
 
 type ABIType = typeof InheritanceWillAbi;
 

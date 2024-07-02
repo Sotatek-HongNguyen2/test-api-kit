@@ -4,6 +4,8 @@ export type WillMethod = "inherited" | "created";
 
 export interface BaseAsset {
   icon: React.ReactNode;
+  logo?: React.ReactNode;
+
   name: string;
   symbol: string;
 }
