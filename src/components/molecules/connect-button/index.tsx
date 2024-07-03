@@ -23,6 +23,8 @@ import { useLogout } from "@/hooks/useAuth";
 import { APP_ROUTES_PATHS } from "@/constants";
 import formatNumber from "@/helpers/useFormatToken";
 import { useDevices } from "@/hooks/useMediaQuery";
+import { assetDataList } from "@/constants/asset";
+import { BaseAsset } from "@/types";
 
 interface IPropsConnectButton {
   clickLogin: () => void;
@@ -68,8 +70,18 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
     navigate(APP_ROUTES_PATHS.NO_AUTH);
   };
 
+  const getLogoNetwork = (asset: BaseAsset) => {
+    const labelAsset = assetDataList.find(
+      (item) => item?.symbol === asset?.symbol
+    );
+    if (!labelAsset) {
+      return <LogoETH />;
+    }
+    return labelAsset?.icon;
+  };
+
   const items = useMemo(() => {
-    const arr = [
+    const arr: MenuProps["items"] = [
       {
         key: "1",
         label: (
@@ -83,13 +95,14 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
         type: "divider",
       },
     ];
-    listBalances.map((item: any, index: number) => {
+
+    listBalances.forEach((item, index) => {
       arr.push({
         key: `${index + 2}`,
         label: (
           <div className="item-menu space-between">
             <span className="d-flex align-center g-8">
-              <LogoETH />
+              {getLogoNetwork(item)}
               <span>{item.name}</span>
               <span className="symbol">{item.symbol}</span>
             </span>
@@ -98,6 +111,7 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
         ),
       });
     });
+
     return arr;
   }, [listBalances]) as MenuProps["items"];
 

@@ -1,36 +1,54 @@
-import { LogoETH200 } from "@/assets/icons";
+import {
+  LogoDAI,
+  LogoDAI200,
+  LogoETH,
+  LogoETH200,
+  LogoUSDC,
+  LogoUSDC200,
+} from "@/assets/icons";
 import { BaseAsset } from "@/types";
 
-export type AssetType = 'ETH' | 'DAI' | 'WV1' | 'WV2';
+export type AssetType = "ETH" | "DAI" | "WV1" | "WV2" | "USDC";
 
 export interface AssetItemData {
   icon: React.ReactNode;
+  logo: React.ReactNode;
   name: string;
 }
 
-type AssetData = Record<AssetType, AssetItemData>
+type AssetData = Record<AssetType, AssetItemData>;
 
 export const assetData: AssetData = {
-  "ETH": {
+  ETH: {
     icon: <LogoETH200 />,
-    name: 'Ethereum',
+    logo: <LogoETH />,
+    name: "Ethereum",
   },
-  "DAI": {
-    icon: <LogoETH200 />,
-    name: 'Dai Stablecoin',
+  DAI: {
+    icon: <LogoDAI200 />,
+    name: "Dai Stablecoin",
+    logo: <LogoDAI />,
   },
-  "WV1": {
-    icon: <LogoETH200 />,
-    name: 'Will V1',
+  USDC: {
+    icon: <LogoUSDC200 />,
+    name: "Dai Stablecoin",
+    logo: <LogoUSDC />,
   },
-  "WV2": {
-    icon: <LogoETH200 />,
-    name: 'Will V2',
+  WV1: {
+    icon: <LogoDAI200 />,
+    logo: <LogoDAI />,
+    name: "Will V1",
+  },
+  WV2: {
+    icon: <LogoUSDC200 />,
+    logo: <LogoUSDC />,
+    name: "Will V2",
   },
 };
 
-export const assetDataList: BaseAsset[] = (Object.entries(assetData) as [string, AssetItemData][])
-  .map(([key, value]) => ({
-    symbol: key,
-    ...value,
-  }));
+export const assetDataList: BaseAsset[] = (
+  Object.entries(assetData) as [string, AssetItemData][]
+).map(([key, value]) => ({
+  symbol: key,
+  ...value,
+}));

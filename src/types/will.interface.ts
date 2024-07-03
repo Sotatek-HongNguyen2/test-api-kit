@@ -1,10 +1,12 @@
 export type WillType = "inheritance" | "forwarding" | "destruction";
-export type TokenWillType = "WV1" | "WV2";
+export type TokenWillType = "USDC" | "WV2";
 
 export type WillMethod = "inherited" | "created";
 
 export interface BaseAsset {
   icon: React.ReactNode;
+  logo?: React.ReactNode;
+
   name: string;
   symbol: string;
 }

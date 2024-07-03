@@ -1,6 +1,7 @@
 import InheritanceWillAbi from "@/constants/InheritanceWill";
 
 import Contract, { InitializeContractType } from "./contract";
+// import { values } from "lodash";
 
 type ABIType = typeof InheritanceWillAbi;
 
@@ -59,10 +60,7 @@ export default class inheritanceWillContract extends Contract<ABIType> {
   }
 
   async setWillAssets(dto: SetWillAssetsType) {
-    return this.contractInstance.methods.setWillAssets(
-      dto.willId,
-      dto.assets
-    );
+    return this.contractInstance.methods.setWillAssets(dto.willId, dto.assets);
   }
 
   async setWillBeneficiaries(dto: SetWillBeneficiariesType) {

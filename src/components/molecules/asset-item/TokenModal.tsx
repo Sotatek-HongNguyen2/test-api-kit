@@ -14,6 +14,8 @@ import { useParams } from "react-router-dom";
 import { TokenWillType, WillType } from "@/types";
 import willV2Contract from "@/models/contract/evm/willV2Contract";
 import { ethers } from "ethers";
+import { getWeb3Instance } from "@/helpers/evmHandlers";
+import { ETH_CHAIN_ID } from "@/const/envs";
 
 export type TokenModalType = "deposit" | "withdraw" | "approve";
 
@@ -28,7 +30,7 @@ interface TokenModalProps {
 
 export const getTokenContract = (token: TokenWillType) => {
   switch (token) {
-    case "WV1":
+    case "USDC":
       return willV1Contract;
     case "WV2":
       return willV2Contract;
@@ -38,13 +40,19 @@ export const getTokenContract = (token: TokenWillType) => {
 };
 
 export const TokenModal = (props: TokenModalProps) => {
-  const { open, onClose, type, token, willAddress, willType: willTypeProp } = props;
+  const {
+    open,
+    onClose,
+    type,
+    token,
+    willAddress,
+    willType: willTypeProp,
+  } = props;
   const [amount, setAmount] = useState<string>("");
   const { address } = useAppSelector(getWalletSlice);
   const { willType: willTypeParam } = useParams<{ willType: WillType }>();
   const willType = willTypeParam || willTypeProp;
   const [loading, setLoading] = useState<boolean>(false);
-
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -77,24 +85,39 @@ export const TokenModal = (props: TokenModalProps) => {
           amount: amount,
         });
         res2 = await tx.send({
-          from: address, // my address wallet
-        })
+          from: address,
+        });
+
+        if (res2.transactionHash) {
+          WillToast.success("Approve success!");
+        }
       } else if (type === "deposit") {
         if (!window.ethereum) {
-          WillToast.error('Please connect your wallet first');
+          WillToast.error("Please connect your wallet first");
           return;
         }
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const tokenContract = new ethers.Contract(
-          token?.assetAddress,
-          [
-            'function transfer(address to, uint amount) public returns (bool)', // abi
-          ],
-          signer
-        );
-        const tx = await tokenContract.transfer(willAddress, ethers.utils.parseUnits(amount, 18));
-        await tx.wait();
+        const web3 = getWeb3Instance({
+          type: PROVIDER_TYPE.WALLET,
+          injectObject: WALLET_INJECT_OBJ.METAMASK,
+        });
+
+        const nonce = await web3.eth.getTransactionCount(address, "latest");
+        const tx = {
+          from: address,
+          to: willAddress,
+          value: web3.utils.toWei(amount, "ether"),
+          gas: "300000",
+          nonce: nonce,
+          chainId: ETH_CHAIN_ID,
+        };
+
+        // console.log(tx);
+        const transactionHash = await web3.eth.sendTransaction(tx);
+        if (transactionHash.transactionHash) {
+          WillToast.success("Deposit success!");
+        }
+        onClose();
+        // await tx.wait();
       }
       if (res2) {
         onClose();
@@ -130,9 +153,8 @@ export const TokenModal = (props: TokenModalProps) => {
             type="number"
             value={amount}
             min={1}
-            onlyNumber
             onChange={(e) => {
-              if (e.target.value === "0") return;
+              // if (e.target.value === "0") return;
               setAmount(e.target.value);
             }}
           />

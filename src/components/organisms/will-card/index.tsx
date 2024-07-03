@@ -79,15 +79,15 @@ export const WillCard = ({ will, type }: WillCardProps) => {
           </Flex>
         </Flex> */}
         <Row gutter={24}>
-          <Col md={10} lg={8} xl={8} xs={24} xxl={24} sm={24}>
+          <Col md={10} lg={8} xl={8} xxl={6} xs={24} sm={24}>
             <Assets assets={will?.willAsset} will={will} />
           </Col>
           <Col
             md={14}
             lg={16}
-            xl={16}
+            xl={18}
             xs={24}
-            xxl={24}
+            xxl={16}
             sm={24}
             className={`${isTablet && "mt-5"}`}
           >

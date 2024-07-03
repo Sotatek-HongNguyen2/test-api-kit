@@ -1,28 +1,40 @@
-import "./styles.scss"
-import { AppSelect } from "@/components/atoms/select"
-import { Text } from "@/components/atoms/text"
-import { Flex } from "antd"
-import { useState } from "react"
-import { DefaultOptionType } from "antd/es/select"
-import { AssetName } from "./AssetName"
-import { AssetSelectType } from "@/components/organisms/config-card/AddAssetDistributionForm"
-import { assetDataList } from "@/constants/asset"
-import { getBalanceSlide, useAppSelector } from "@/store"
+import "./styles.scss";
+import { Flex } from "antd";
+import { useState } from "react";
+import { DefaultOptionType } from "antd/es/select";
+
+import { Text } from "@/components/atoms/text";
+import { AppSelect } from "@/components/atoms/select";
+import { AssetSelectType } from "@/components/organisms/config-card/AddAssetDistributionForm";
+import { assetDataList } from "@/constants/asset";
+import { getBalanceSlide, useAppSelector } from "@/store";
+
+import { AssetName } from "./AssetName";
 
 interface SelectAssetProps {
   asset: AssetSelectType | null;
   addAsset?: (asset: AssetSelectType) => void;
-  disableSelected?: false | {
-    selectedAssets: AssetSelectType[];
-  }
+  disableSelected?:
+    | false
+    | {
+        selectedAssets: AssetSelectType[];
+      };
 }
 
-export const SelectAsset = ({ asset, addAsset, disableSelected }: SelectAssetProps) => {
-  const [currentAsset, setCurrentAsset] = useState<DefaultOptionType | null>(null);
+export const SelectAsset = ({
+  asset,
+  addAsset,
+  disableSelected,
+}: SelectAssetProps) => {
+  const [currentAsset, setCurrentAsset] = useState<DefaultOptionType | null>(
+    null
+  );
   const { listBalances } = useAppSelector(getBalanceSlide);
 
   const assetOptions = (listBalances ?? [])?.map((asset) => {
-    const labelAsset = assetDataList.find(item => item?.symbol === asset?.symbol);
+    const labelAsset = assetDataList.find(
+      (item) => item?.symbol === asset?.symbol
+    );
     return {
       title: asset?.name,
       value: asset?.symbol,
@@ -31,9 +43,11 @@ export const SelectAsset = ({ asset, addAsset, disableSelected }: SelectAssetPro
       label: <AssetName asset={labelAsset} />,
       disabled: !disableSelected
         ? false
-        : disableSelected?.selectedAssets?.some(item => item?.value === asset?.symbol)
-    }
-  })
+        : disableSelected?.selectedAssets?.some(
+            (item) => item?.value === asset?.symbol
+          ),
+    };
+  });
 
   return (
     <Flex vertical gap={12} className="select-asset">
@@ -47,14 +61,18 @@ export const SelectAsset = ({ asset, addAsset, disableSelected }: SelectAssetPro
             addAsset && addAsset(option as any);
           }}
           labelRender={() => {
-            return <AssetName
-              asset={assetDataList?.find(item => item?.symbol === currentAsset?.value)}
-              showSign={false}
-              iconClassName="asset-icon--small"
-            />
+            return (
+              <AssetName
+                asset={assetDataList?.find(
+                  (item) => item?.symbol === currentAsset?.value
+                )}
+                showSign={false}
+                iconClassName="asset-icon--small"
+              />
+            );
           }}
         />
       </Flex>
     </Flex>
-  )
-}
+  );
+};
