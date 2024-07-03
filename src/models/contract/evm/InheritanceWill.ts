@@ -33,6 +33,10 @@ export interface SetWillBeneficiariesType extends UpdateWillType {
   beneficiaries: string[];
   minRequiredSigs: number;
 }
+export interface WithDraw {
+  willId: number | string;
+  amount: number | string;
+}
 
 export default class inheritanceWillContract extends Contract<ABIType> {
   constructor({
@@ -69,6 +73,13 @@ export default class inheritanceWillContract extends Contract<ABIType> {
       dto.nickNames,
       dto.beneficiaries,
       dto.minRequiredSigs
+    );
+  }
+
+  async withDrawEth(dto: WithDraw) {
+    return this.contractInstance.methods.withdrawEthFromWill(
+      dto.willId,
+      dto.amount
     );
   }
 }

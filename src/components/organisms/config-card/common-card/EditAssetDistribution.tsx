@@ -263,6 +263,7 @@ export const EditAssetDistribution = (props: EditFormProps) => {
           token={currentToken}
           willAddress={willAddress}
           willType={type}
+          scWillId={scWillId}
         />
       )}
     </CartItemContainer>

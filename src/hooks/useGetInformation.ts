@@ -1,5 +1,5 @@
 import debounce from "lodash/debounce";
-
+import { useCallback } from "react";
 import { AuthServices } from "@/services/auth-service";
 import { useAppDispatch } from "@/store";
 import { informationInstanceSlideActions } from "@/store/slices/information";
@@ -7,7 +7,8 @@ import { informationInstanceSlideActions } from "@/store/slices/information";
 const useGetInformation = () => {
   const authService = new AuthServices();
   const dispatch = useAppDispatch();
-  const debouncedGetInformation = debounce(async () => {
+
+  const getInformation = async () => {
     try {
       const logoutResults = await authService.getInformation();
       if (
@@ -28,7 +29,12 @@ const useGetInformation = () => {
       console.log(err);
       throw err;
     }
-  }, 500);
+  };
+
+  const debouncedGetInformation = useCallback(
+    debounce(getInformation, 500),
+    []
+  );
 
   return debouncedGetInformation;
 };

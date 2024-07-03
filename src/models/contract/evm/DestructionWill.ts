@@ -1,8 +1,11 @@
 import DestructionWillAbi from "@/constants/DestructionWill";
 
 import Contract, { InitializeContractType } from "./contract";
-import { values } from "lodash";
-import { ActivationTriggerType, SetWillAssetsType, SetWillBeneficiariesType } from "./InheritanceWill";
+import {
+  ActivationTriggerType,
+  SetWillAssetsType,
+  SetWillBeneficiariesType,
+} from "./InheritanceWill";
 
 type ABIType = typeof DestructionWillAbi;
 
@@ -11,6 +14,11 @@ interface CreateWillType {
   assetAddresses: string[];
   lackOfOutgoingTxRange: number;
   lackOfSignedMsgRange: number;
+}
+
+export interface WithDraw {
+  willId: number | string;
+  amount: number | string;
 }
 
 export default class destructionWillContract extends Contract<ABIType> {
@@ -24,7 +32,7 @@ export default class destructionWillContract extends Contract<ABIType> {
     return this.contractInstance.methods.createWill(
       dto.nameWill,
       dto.assetAddresses,
-      Number(dto.lackOfOutgoingTxRange),
+      Number(dto.lackOfOutgoingTxRange)
       // Number(dto.lackOfSignedMsgRange)
     );
   }
@@ -36,10 +44,7 @@ export default class destructionWillContract extends Contract<ABIType> {
   }
 
   async setWillAssets(dto: SetWillAssetsType) {
-    return this.contractInstance.methods.setWillAssets(
-      dto.willId,
-      dto.assets
-    );
+    return this.contractInstance.methods.setWillAssets(dto.willId, dto.assets);
   }
 
   async setWillBeneficiaries(dto: SetWillBeneficiariesType) {
@@ -48,6 +53,13 @@ export default class destructionWillContract extends Contract<ABIType> {
       dto.nickNames,
       dto.beneficiaries,
       dto.minRequiredSigs
+    );
+  }
+
+  async withDrawEth(dto: WithDraw) {
+    return this.contractInstance.methods.withdrawEthFromWill(
+      dto.willId,
+      dto.amount
     );
   }
 }

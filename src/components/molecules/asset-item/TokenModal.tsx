@@ -7,7 +7,7 @@ import { Text } from "@/components/atoms/text";
 import { Flex } from "antd";
 import { useState } from "react";
 
-import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
+import Contract, { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import WillToast from "@/components/atoms/ToastMessage";
 import { getWalletSlice, useAppSelector } from "@/store";
@@ -17,6 +17,10 @@ import { useParams } from "react-router-dom";
 import { TOKEN_LIST, TokenWillType, WillType } from "@/types";
 import { getWeb3Instance } from "@/helpers/evmHandlers";
 import { ETH_CHAIN_ID } from "@/const/envs";
+import inheritanceWillContract from "@/models/contract/evm/InheritanceWill";
+import forwardingWillContract from "@/models/contract/evm/ForwardingWill";
+import destructionWillContract from "@/models/contract/evm/DestructionWill";
+import { formWei } from "@/helpers/common";
 
 export type TokenModalType = "deposit" | "withdraw" | "approve";
 
@@ -27,6 +31,7 @@ interface TokenModalProps {
   token: any;
   willAddress: string;
   willType?: WillType;
+  scWillId: string | undefined;
 }
 
 export const getTokenContract = (token: TokenWillType) => {
@@ -40,6 +45,30 @@ export const getTokenContract = (token: TokenWillType) => {
   }
 };
 
+export const getWillContract = (willType: WillType) => {
+  switch (willType) {
+    case "inheritance":
+      return inheritanceWillContract;
+    case "forwarding":
+      return forwardingWillContract;
+    case "destruction":
+      return destructionWillContract;
+    default:
+      return null;
+  }
+};
+
+export const contractAddress = (willType: WillType) => {
+  switch (willType) {
+    case "inheritance":
+      return import.meta.env.VITE_INHERITANCE_ROUTER;
+    case "forwarding":
+      return import.meta.env.VITE_FORWARDING_ROUTER;
+    default: // destruction
+      return import.meta.env.VITE_DESTRUCTION_ROUTER;
+  }
+};
+
 export const TokenModal = (props: TokenModalProps) => {
   const {
     open,
@@ -47,6 +76,7 @@ export const TokenModal = (props: TokenModalProps) => {
     type,
     token,
     willAddress,
+    scWillId,
     willType: willTypeProp,
   } = props;
   const [amount, setAmount] = useState<string>("");
@@ -56,6 +86,8 @@ export const TokenModal = (props: TokenModalProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async () => {
+    const Contract = getWillContract(willType as WillType);
+
     setLoading(true);
     try {
       if (!willType || !willAddress) {
@@ -120,7 +152,32 @@ export const TokenModal = (props: TokenModalProps) => {
         onClose();
         // await tx.wait();
       } else if (type === "withdraw") {
-        console.log("object");
+        const addressData = contractAddress(willType as WillType);
+
+        if (Contract) {
+          const contract = new Contract({
+            address: addressData,
+            provider: {
+              type: PROVIDER_TYPE.WALLET,
+              injectObject: WALLET_INJECT_OBJ.METAMASK,
+            },
+          });
+          const web3 = getWeb3Instance({
+            type: PROVIDER_TYPE.WALLET,
+            injectObject: WALLET_INJECT_OBJ.METAMASK,
+          });
+
+          const tx = await contract?.withDrawEth({
+            amount: web3.utils.toWei(amount, "ether"),
+            willId: Number(scWillId),
+          });
+          res2 = await tx.send({
+            from: address,
+          });
+          if (res2.transactionHash) {
+            WillToast.success("Withdraw success!");
+          }
+        }
       }
       if (res2) {
         onClose();

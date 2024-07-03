@@ -1,7 +1,11 @@
 import ForwardingWillAbi from "@/constants/ForwardingWill";
 
 import Contract, { InitializeContractType } from "./contract";
-import { ActivationTriggerType, SetWillAssetsType, SetWillBeneficiariesType } from "./InheritanceWill";
+import {
+  ActivationTriggerType,
+  SetWillAssetsType,
+  SetWillBeneficiariesType,
+} from "./InheritanceWill";
 
 type ABIType = typeof ForwardingWillAbi;
 
@@ -13,6 +17,11 @@ interface CreateWillType {
   minRequiredSignatures: number;
   lackOfOutgoingTxRange: number;
   lackOfSignedMsgRange: number;
+}
+
+export interface WithDraw {
+  willId: number | string;
+  amount: number | string;
 }
 
 export default class forwardingWillContract extends Contract<ABIType> {
@@ -40,10 +49,7 @@ export default class forwardingWillContract extends Contract<ABIType> {
   }
 
   async setWillAssets(dto: SetWillAssetsType) {
-    return this.contractInstance.methods.setWillAssets(
-      dto.willId,
-      dto.assets
-    );
+    return this.contractInstance.methods.setWillAssets(dto.willId, dto.assets);
   }
 
   async setWillBeneficiaries(dto: SetWillBeneficiariesType) {
@@ -52,6 +58,12 @@ export default class forwardingWillContract extends Contract<ABIType> {
       dto.nickNames,
       dto.beneficiaries,
       dto.minRequiredSigs
+    );
+  }
+  async withDrawEth(dto: WithDraw) {
+    return this.contractInstance.methods.withdrawEthFromWill(
+      dto.willId,
+      dto.amount
     );
   }
 }
