@@ -3,17 +3,18 @@ import "./styles.scss";
 import { AppButton } from "@/components/atoms/button";
 import WillModal from "@/components/atoms/modal";
 import { Text } from "@/components/atoms/text";
+
 import { Flex } from "antd";
 import { useState } from "react";
+
 import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import WillToast from "@/components/atoms/ToastMessage";
-import willV1Contract from "@/models/contract/evm/willV1Contract";
 import { getWalletSlice, useAppSelector } from "@/store";
+
 import { useParams } from "react-router-dom";
-import { TokenWillType, WillType } from "@/types";
-import willV2Contract from "@/models/contract/evm/willV2Contract";
-import { ethers } from "ethers";
+
+import { TOKEN_LIST, TokenWillType, WillType } from "@/types";
 import { getWeb3Instance } from "@/helpers/evmHandlers";
 import { ETH_CHAIN_ID } from "@/const/envs";
 
@@ -30,10 +31,10 @@ interface TokenModalProps {
 
 export const getTokenContract = (token: TokenWillType) => {
   switch (token) {
-    case "USDC":
-      return willV1Contract;
-    case "WV2":
-      return willV2Contract;
+    case TOKEN_LIST.USDC.NAME:
+      return TOKEN_LIST.USDC.ABI;
+    case TOKEN_LIST.DAI.NAME:
+      return TOKEN_LIST.DAI.ABI;
     default:
       return null;
   }
@@ -118,6 +119,8 @@ export const TokenModal = (props: TokenModalProps) => {
         }
         onClose();
         // await tx.wait();
+      } else if (type === "withdraw") {
+        console.log("object");
       }
       if (res2) {
         onClose();

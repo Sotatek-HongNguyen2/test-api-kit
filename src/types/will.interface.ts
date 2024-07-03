@@ -1,5 +1,19 @@
+import willV1Contract from "@/models/contract/evm/willV1Contract";
+import willV2Contract from "@/models/contract/evm/willV2Contract";
+
 export type WillType = "inheritance" | "forwarding" | "destruction";
-export type TokenWillType = "USDC" | "WV2";
+export type TokenWillType = "USDC" | "DAI";
+
+export const TOKEN_LIST = {
+  USDC: {
+    NAME: "USDC",
+    ABI: willV1Contract,
+  },
+  DAI: {
+    NAME: "DAI",
+    ABI: willV2Contract,
+  },
+};
 
 export type WillMethod = "inherited" | "created";
 
