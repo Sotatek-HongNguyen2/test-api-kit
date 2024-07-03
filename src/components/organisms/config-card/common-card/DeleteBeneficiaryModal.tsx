@@ -1,8 +1,9 @@
-import { ModalDeleteIcon } from "@/assets/icons/custom-icon";
+import WillImage from "@/components/atoms/Image";
 import { AppButton } from "@/components/atoms/button";
 import WillModal from "@/components/atoms/modal"
 import { Text } from "@/components/atoms/text";
 import { Flex } from "antd";
+import ModalDeleteIcon from "../../../../../public/images/modal-delete-icon.png";
 
 interface DeleteBeneficiaryModalProps {
   open: boolean;
@@ -20,7 +21,7 @@ export const DeleteBeneficiaryModal = (props: DeleteBeneficiaryModalProps) => {
       hideFooter
     >
       <Flex vertical justify="center" align="center" gap={32}>
-        <ModalDeleteIcon />
+        <WillImage src={ModalDeleteIcon} />
         <Flex vertical gap={8}>
           <Text
             size="text-2xl"

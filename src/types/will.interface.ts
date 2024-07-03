@@ -22,6 +22,10 @@ export interface AssetDetailData {
   walletAddress: string;
   amount: number;
   fwDetailAsset?: FWDetailAsset[];
+  user: null | {
+    avatar: string;
+    name: string;
+  }
 }
 
 export interface OwnerLastTime {

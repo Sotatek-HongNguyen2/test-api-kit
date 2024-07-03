@@ -42,8 +42,8 @@ export const SelectTime = ({ name, title, handleChangeValue }: SelectTimeProps) 
           <AppInput
             className="input-time"
             onlyNumber
-            placeholder="Enter a number"
-            min={0}
+            placeholder="Enter a month"
+            maxLength={5}
             onChange={(e) => {
               handleChangeValue?.(e.target.value as any);
             }}

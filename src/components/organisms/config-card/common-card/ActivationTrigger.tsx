@@ -29,18 +29,18 @@ export const ActivationTrigger = ({ type }: { type?: "destruction" }) => {
         />
       ),
     },
-    // {
-    //   id: 2,
-    //   title: "Lack of signed message",
-    //   value: 'lack_signed_message',
-    //   disabled: true,
-    //   itemChildren:
-    //     <SelectTime
-    //       name="lackOfSignedMsgRange"
-    //       title="Time of inactivity until will activation"
-    //       handleChangeValue={(value) => setFieldValue('lackOfSignedMsgRange', value)}
-    //     />
-    // }
+    {
+      id: 2,
+      title: "Lack of signed message",
+      value: 'lack_signed_message',
+      disabled: true,
+      itemChildren:
+        <SelectTime
+          name="lackOfSignedMsgRange"
+          title="Time of inactivity until will activation"
+          handleChangeValue={(value) => setFieldValue('lackOfSignedMsgRange', value)}
+        />
+    }
   ];
 
   return (

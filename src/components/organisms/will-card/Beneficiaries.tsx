@@ -16,7 +16,11 @@ export const Beneficiaries = ({
       <Flex gap="30px" className="list-beneficiaries">
         {(beneficiaries ?? []).map((beneficiary, index) => (
           <Flex key={`beneficiary-${index}`} gap="10px">
-            <UserOutlinedIcon />
+            {
+              beneficiary?.user?.avatar
+                ? <img src={beneficiary?.user?.avatar} alt={beneficiary?.user?.name} className="avatar" />
+                : <UserOutlinedIcon />
+            }
             <Text className="neutral-1">
               {beneficiary?.name && beneficiary?.name !== ""
                 ? beneficiary?.name
