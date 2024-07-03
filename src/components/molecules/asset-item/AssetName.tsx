@@ -21,7 +21,10 @@ export const AssetName = (props: AssetNameProps) => {
     () => assetData[asset?.symbol ?? "ETH"],
     [asset?.symbol]
   );
-
+  // const assetDataItem: AssetItemData = useMemo(
+  //   () => assetData[asset?.symbol ?? "ETH"],
+  //   [asset?.symbol]
+  // );
   return (
     <Flex align="center" gap="10px">
       <Flex align="center" gap="10px">
