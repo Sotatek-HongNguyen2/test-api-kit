@@ -16,11 +16,12 @@ interface CheckboxGroupProps {
   titleClassName?: string;
   items: CustomCheckboxItemProps[];
   onChange?: (value: CustomCheckboxItemProps['value'][]) => void;
+  checked?: CustomCheckboxItemProps['value'][];
 }
 
 export const CheckboxGroup = (props: CheckboxGroupProps) => {
-  const { title, titleClassName, items, onChange } = props;
-  const [value, setValue] = useState<CustomCheckboxItemProps['value'][]>([]);
+  const { title, titleClassName, items, onChange, checked } = props;
+  const [value, setValue] = useState<CustomCheckboxItemProps['value'][]>(checked || []);
 
   return (
     <Flex vertical gap="1rem">

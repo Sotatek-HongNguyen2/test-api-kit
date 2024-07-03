@@ -1,18 +1,27 @@
-import { AttentionIcon, TriggerIcon } from "@/assets/icons/custom-icon";
-import { CartItemContainer } from "../../details-card/CardItemContainer";
-import { Flex, Form } from "antd";
-import { Text } from "@/components/atoms/text";
-import {
-  CheckboxGroup,
-  CustomCheckboxItemProps,
-} from "@/components/molecules/checkbox-group";
-import { SelectTime } from "@/components/molecules/select-time";
-import { useState } from "react";
+import { AttentionIcon, TriggerIcon } from "@/assets/icons/custom-icon"
+import { CartItemContainer } from "../../details-card/CardItemContainer"
+import { Flex, Form } from "antd"
+import { Text } from "@/components/atoms/text"
+import { CheckboxGroup, CustomCheckboxItemProps } from "@/components/molecules/checkbox-group"
+import { SelectTime } from "@/components/molecules/select-time"
+import { useState } from "react"
+import { EditFormProps } from "@/components/templates/form"
+import { AppButton } from "@/components/atoms/button"
+import WillToast from "@/components/atoms/ToastMessage"
+import { useParams } from "react-router-dom"
+import { contractAddress, getWillContract } from "@/pages/ConfigWillPage"
+import { WillType } from "@/types"
+import { PROVIDER_TYPE } from "@/models/contract/evm/contract"
+import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract"
+import { getWalletSlice, useAppSelector } from "@/store"
 
-export const ActivationTrigger = ({ type }: { type?: "destruction" }) => {
+export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => {
   const configForm = Form.useFormInstance();
-  const { setFieldValue } = configForm;
+  const { setFieldValue, getFieldValue, getFieldError } = configForm;
   const [selected, setSelected] = useState<string[]>([]);
+  const value = getFieldValue('activationTrigger');
+  const { address } = useAppSelector(getWalletSlice);
+  const [loading, setLoading] = useState(false);
 
   const configOptions: CustomCheckboxItemProps[] = [
     {
@@ -23,25 +32,78 @@ export const ActivationTrigger = ({ type }: { type?: "destruction" }) => {
         <SelectTime
           name="lackOfOutgoingTxRange"
           title="Time of inactivity until will activation"
-          handleChangeValue={(value) =>
-            setFieldValue("lackOfOutgoingTxRange", value)
-          }
+          value={getFieldValue('lackOfOutgoingTxRange')}
+          handleChangeValue={(value) => setFieldValue('lackOfOutgoingTxRange', value)}
         />
       ),
     },
-    // {
-    //   id: 2,
-    //   title: "Lack of signed message",
-    //   value: 'lack_signed_message',
-    //   disabled: true,
-    //   itemChildren:
-    //     <SelectTime
-    //       name="lackOfSignedMsgRange"
-    //       title="Time of inactivity until will activation"
-    //       handleChangeValue={(value) => setFieldValue('lackOfSignedMsgRange', value)}
-    //     />
-    // }
-  ];
+    {
+      id: 2,
+      title: "Lack of signed message",
+      value: 'lack_signed_message',
+      disabled: true,
+      itemChildren: <Form.Item
+        name="lackOfSignedMsgRange"
+        rules={[{ required: true, message: 'Please select an option' }]}
+      >
+        <SelectTime
+          title="Time of inactivity until will activation"
+          name="lackOfSignedMsgRange"
+          value={getFieldValue('lackOfSignedMsgRange')}
+          handleChangeValue={(value) => setFieldValue('lackOfSignedMsgRange', value)}
+        />
+      </Form.Item>
+    }
+  ]
+
+  const handleUpdateTrigger = async () => {
+    try {
+      setLoading(true);
+      if (!scWillId) {
+        WillToast.error("Will not found, please try again later!");
+        return;
+      }
+      const txError = getFieldError('lackOfOutgoingTxRange');
+      if (txError?.length > 0) {
+        WillToast.error(txError[0])
+        return;
+      }
+      const lackOfOutgoingTxRange = getFieldValue('lackOfOutgoingTxRange');
+      const Contract = getWillContract(type as WillType);
+      if (!Contract) {
+        WillToast.error("Something went wrong, please try again later");
+        return;
+      }
+      const addressData = contractAddress(type as WillType);
+      const contract = new Contract({
+        address: addressData,
+        provider: {
+          type: PROVIDER_TYPE.WALLET,
+          injectObject: WALLET_INJECT_OBJ.METAMASK,
+        },
+      });
+      const res = await contract?.setActivationTrigger({
+        willId: Number(scWillId),
+        lackOfOutgoingTxRange
+      });
+
+      const estGas = await res?.estimateGas({
+        from: address,
+      });
+
+      const res2 = await res.send({
+        from: address,
+        gas: estGas.toString(),
+      });
+      if (res2) {
+        WillToast.success("Update activation trigger successfully!");
+      }
+    } catch (error: any) {
+      WillToast.error(error?.message);
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <CartItemContainer
@@ -56,6 +118,7 @@ export const ActivationTrigger = ({ type }: { type?: "destruction" }) => {
             rules={[{ required: true, message: "Please select an option" }]}
           >
             <CheckboxGroup
+              checked={value}
               items={configOptions}
               onChange={(value) => setSelected(value as string[])}
             />
@@ -72,6 +135,19 @@ export const ActivationTrigger = ({ type }: { type?: "destruction" }) => {
             </Text>
           </Flex>
         )}
+        {
+          isEdit ? (
+            <AppButton
+              type="primary"
+              size="xl"
+              className="none-styles"
+              onClick={handleUpdateTrigger}
+              loading={loading}
+            >
+              <Text className="uppercase" size="text-lg">Save</Text>
+            </AppButton>
+          ) : null
+        }
       </Flex>
     </CartItemContainer>
   );

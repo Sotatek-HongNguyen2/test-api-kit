@@ -52,9 +52,10 @@ export const AssetToBeneficiary = () => {
 
   const columns: ColumnsType<any> = [
     {
-      title: "Token",
-      dataIndex: "token",
-      key: "token",
+      title: 'Token',
+      dataIndex: 'token',
+      key: 'token',
+      render: (_, record) => <AssetName asset={record} />
     },
     {
       title: "Inheritance Percentage (%)",
@@ -129,6 +130,7 @@ export const AssetToBeneficiary = () => {
           return {
             ...item,
             amount: percent,
+            symbol: asset?.value as string
           };
         }
         return item;
@@ -154,6 +156,7 @@ export const AssetToBeneficiary = () => {
               token: asset?.label,
               amount: percent, // percentage
               value: asset?.value as string,
+              symbol: asset?.value as string,
             },
           ] as any
       );
@@ -205,6 +208,7 @@ export const AssetToBeneficiary = () => {
           token: item?.asset?.label,
           amount: item?.percent,
           value: item?.asset?.value as string,
+          symbol: item?.asset?.value as string
         }))
       );
     } else {

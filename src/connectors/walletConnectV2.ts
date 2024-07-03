@@ -17,6 +17,7 @@ export const [walletConnect, walletConnectHooks] =
           chains: [mainnet],
           showQrModal: true,
           // methods: ['personal_sign', 'eth_requestAccounts', 'eth_sign'],
+
           rpcMap: {
             [ETH_CHAIN_ID]: ETH_RPC_URL,
           },

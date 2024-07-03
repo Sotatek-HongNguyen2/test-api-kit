@@ -14,7 +14,7 @@ interface CardItemContainerProps {
 export const CartItemContainer = (props: CardItemContainerProps) => {
   const { children, title, iconTitle, hasTooltip = false } = props;
   return (
-    <Card boxShadow="large">
+    <Card boxShadow="large" className="card-item">
       <Flex vertical>
         <Flex gap={12} align="center">
           <Flex className="icon-title" justify="center" align="center">

@@ -4,6 +4,7 @@ import { DetailsContainer } from "@/components/organisms/wrapper-container/Detai
 import { WillServices } from "@/services/will-service";
 import { getWalletSlice, useAppSelector } from "@/store";
 import { WillData, WillMethod } from "@/types";
+import { Flex, Spin } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -14,15 +15,19 @@ export function DetailsPage() {
   const { address } = useAppSelector(getWalletSlice);
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
   const willService = new WillServices();
+  const [isLoading, setIsLoading] = useState(false);
 
   const method: WillMethod | null = useMemo(() => !!willDetail ? willDetail?.ownerAddress === address ? "created" : "inherited" : null, [willDetail, address])
 
   const getWillDetail = async () => {
+    setIsLoading(true);
     try {
       const data = await willService.getWillDetail({ willId });
       setWillDetail(data);
     } catch (error: any) {
       WillToast.error(error.message)
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -68,6 +73,19 @@ export function DetailsPage() {
         );
     }
   };
+
+  if (isLoading) return (
+    <Flex
+      justify="center"
+      align="center"
+      style={{
+        width: "100vw",
+        minHeight: "70vh"
+      }}
+    >
+      <Spin size="large" />
+    </Flex>
+  )
 
   return (
     <DetailsContainer
