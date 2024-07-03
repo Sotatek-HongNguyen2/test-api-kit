@@ -8,11 +8,10 @@ import { Col, Flex, Row } from "antd";
 
 import useDisclosure from "@/hooks/useDisclosure";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { WillType } from "@/types";
 import {
-  DestructionIcon,
   ForwardingIcon,
   InheritanceIcon,
 } from "@/assets/icons/custom-icon";
@@ -21,8 +20,6 @@ import { WillTypeCard } from "@/components/molecules/will-type-card";
 import { useNavigate } from "react-router-dom";
 
 import { APP_ROUTES_PATHS } from "@/constants";
-import clsx from "clsx";
-import { debounce } from "lodash";
 
 export interface WillTypeItem {
   icon: React.ReactNode;
@@ -59,29 +56,7 @@ export const WillTypeModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [willType, setWillType] = useState<WillType | null>(null);
   const navigate = useNavigate();
-  const {
-    isOpen: isShowFooter,
-    onOpen: showFooter,
-    onClose: hideFooter,
-  } = useDisclosure();
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (buttonRef.current) {
-        const buttonPosition = buttonRef.current.getBoundingClientRect().top;
-        if (buttonPosition < 0 && !isShowFooter) {
-          showFooter();
-        } else {
-          hideFooter();
-        }
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const createAWill = () => {
     navigate(`${APP_ROUTES_PATHS.CONFIG_WILL}/${willType}`);
@@ -103,18 +78,6 @@ export const WillTypeModal = () => {
         </AppButton>
       </Flex>
 
-      <Flex className={clsx("", isShowFooter ? "show-footer" : "hide-footer")}>
-        <AppButton
-          type="primary"
-          size="xl"
-          icon={<PlusOutlined />}
-          onClick={onOpen}
-        >
-          <Text size="text-lg" className="uppercase font-bold">
-            Create a Will
-          </Text>
-        </AppButton>
-      </Flex>
       <WillModal
         width={672}
         open={isOpen}

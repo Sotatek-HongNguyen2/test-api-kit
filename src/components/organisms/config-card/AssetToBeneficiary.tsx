@@ -121,10 +121,20 @@ export const AssetToBeneficiary = () => {
       return 0;
     }
 
-    const checkAssetExist = assets?.findIndex(
+    const checkAssetExist = assets?.find(
       (item) => item?.value === asset?.value
     );
-    if (checkAssetExist > -1) { // check total percent for current beneficiary
+    if (checkAssetExist) { // check total percent for current beneficiary
+      const totalPercent = assetPercents?.find(
+        (item) => item?.value === asset?.value
+      );
+      const newPercent = totalPercent?.percent - checkAssetExist?.amount + percent;
+      if (newPercent > 100) {
+        WillToast.error(
+          "Total percentage have to be 100"
+        );
+        return 0;
+      }
       const newAssets = assets.map((item) => {
         if (item?.value === asset?.value) {
           return {

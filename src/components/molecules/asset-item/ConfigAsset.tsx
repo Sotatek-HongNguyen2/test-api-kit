@@ -18,11 +18,11 @@ interface ConfigAssetProps {
 export const ConfigAsset = (props: ConfigAssetProps) => {
   const { handleAddConfigAsset, selectedAssets, currentBeneficiary } = props;
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
-  const [percent, setPercent] = useState<number>(1);
+  const [percent, setPercent] = useState<number>(0);
 
   useEffect(() => {
     setAsset(null);
-    setPercent(1);
+    setPercent(0);
   }, [currentBeneficiary]);
 
   const handleChangePercent = (value: string) => {
@@ -37,7 +37,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
   };
 
   const handleSave = async () => {
-    setPercent(1);
+    setPercent(0);
     if (asset) {
       const result = await handleAddConfigAsset(asset, Number(percent));
       result && setAsset(null);
@@ -73,6 +73,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
           <AppInput
             value={percent}
             type="number"
+            placeholder="0"
             min={1}
             style={{ minHeight: "30px !important" }}
             suffix={
@@ -84,15 +85,14 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
           />
         </Flex>
       </Flex>
-      {asset && !!percent && (
-        <AppButton
-          type="primary"
-          className="none-styles uppercase"
-          onClick={handleSave}
-        >
-          Save
-        </AppButton>
-      )}
+      <AppButton
+        type="primary"
+        className="none-styles uppercase"
+        onClick={handleSave}
+        disabled={!asset || !percent}
+      >
+        Save
+      </AppButton>
     </Flex>
   );
 };

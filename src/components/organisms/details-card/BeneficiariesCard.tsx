@@ -1,6 +1,7 @@
+import "./styles.scss";
 import { AssetDetailData, WillData } from "@/types"
 import { CartItemContainer } from "./CardItemContainer"
-import { BeneficiariesIcon, CopyIcon, DiamondIcon, UserOutlinedIcon } from "@/assets/icons/custom-icon";
+import { BeneficiariesIcon, CopyIcon, UserOutlinedIcon } from "@/assets/icons/custom-icon";
 import { AppTable } from "@/components/molecules/table";
 import { ColumnsType } from "antd/es/table";
 import { Text } from "@/components/atoms/text";
@@ -13,10 +14,12 @@ interface BeneficiariesCardProps {
   minSignature: WillData['minSignature'];
 }
 
-const NameWithAvt = ({ name }: { name: string }) => {
+const NameWithAvt = ({ name, avatar }: { name: string, avatar?: string }) => {
   return (
-    <Flex gap="10px">
-      <UserOutlinedIcon />
+    <Flex gap="10px" className="name-with-avt">
+      {
+        avatar ? <img src={avatar} alt={name} className="avatar" /> : <UserOutlinedIcon />
+      }
       <Text className="font-semibold neutral-1">{name}</Text>
     </Flex>
   )
@@ -30,7 +33,7 @@ export const BeneficiariesCard = ({ beneficiaries, minSignature }: Beneficiaries
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (name) => <NameWithAvt name={name} />
+      render: (name, record) => <NameWithAvt name={name} avatar={record?.user?.avatar} />
     },
     {
       title: 'Owner address',

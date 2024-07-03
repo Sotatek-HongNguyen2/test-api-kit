@@ -1,11 +1,11 @@
 import { Flex } from "antd";
 
 import "./styles.scss";
-import { RightOutlined, EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 import { AppButton } from "@/components/atoms/button";
-import { ArrowOutlinedIcon } from "@/assets/icons/custom-icon";
+import { ArrowOutlinedIcon, RightIcon } from "@/assets/icons/custom-icon";
 import { Text } from "@/components/atoms/text";
 import { AppBadge } from "@/components/atoms/badge";
 import { WillMethod, WillType } from "@/types";
@@ -48,7 +48,7 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
     navigate(`${APP_ROUTES_PATHS.EDIT_WILL}/${willId}`);
   };
 
-  const signToReceiveFund = () => {};
+  const signToReceiveFund = () => { };
 
   return (
     <Flex vertical className="app-details-container" gap="32px">
@@ -75,9 +75,40 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
               color="primary"
               size="lg"
             />
+            {
+              method === "inherited" ? (
+
+                <AppBadge
+                  count={
+                    <Text size="text-md" className="white capitalize">
+                      {active ? "Activated" : "Inactivated"}
+                    </Text>
+                  }
+                  color={active ? "secondary" : "error"}
+                  size="lg"
+                />
+              ) : null
+            }
           </Flex>
           <Text className="neutral-2">{description}</Text>
         </Flex>
+        {
+          method === "inherited" ? ( // inherited
+            <Flex vertical align="flex-start" gap={10}>
+              <Text className="neutral-2">{textSignatures}</Text>
+              <AppButton
+                type="primary"
+                size="xl"
+                disabled={!active}
+                onClick={signToReceiveFund}
+              >
+                <Text size="text-lg" className="uppercase font-bold">
+                  Sign to receive fund
+                </Text>
+              </AppButton>
+            </Flex>
+          ) : null
+        }
         {children}
       </Flex>
       {
@@ -95,7 +126,8 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
             </AppButton>
             <AppButton
               size="xl"
-              rightIcon={<RightOutlined />}
+              icon={<RightIcon />}
+              iconPosition="end"
               onClick={viewSmartContract}
             >
               <Text size="text-lg" className="uppercase neutral-1 font-bold">
@@ -103,21 +135,7 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
               </Text>
             </AppButton>
           </Flex>
-        ) : method === "inherited" ? ( // inherited
-          <Flex vertical align="flex-end" gap={10}>
-            <Text className="neutral-2">{textSignatures}</Text>
-            <AppButton
-              type="primary"
-              size="xl"
-              disabled={!active}
-              onClick={signToReceiveFund}
-            >
-              <Text size="text-lg" className="uppercase font-bold">
-                Sign to receive fund
-              </Text>
-            </AppButton>
-          </Flex>
-        ) : null // inherited and inactive
+        ) : null
       }
     </Flex>
   );

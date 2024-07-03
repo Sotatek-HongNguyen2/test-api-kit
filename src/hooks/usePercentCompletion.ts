@@ -11,7 +11,12 @@ export const usePercentCompletion = (
   if (totalTime <= 0) {
     return elapsedTime >= totalTime ? 100 : 0;
   }
-  const percentageElapsed = Math.round((elapsedTime / totalTime) * 100 * 100) / 100;
-  return Math.min(percentageElapsed, 100);
+  const percentageElapsed = (elapsedTime / totalTime) * 100;
+  let result = Math.min(percentageElapsed, 100).toFixed(3);
+  result = parseFloat(result).toString();
+  if (parseFloat(result) < 0.001) {
+    return "< 0.001";
+  }
+  return result;
 };
 

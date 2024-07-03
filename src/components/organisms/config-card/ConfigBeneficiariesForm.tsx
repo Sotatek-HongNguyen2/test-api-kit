@@ -1,7 +1,7 @@
 import { AppInput } from "@/components/atoms/input";
 import "./styles.scss";
 
-import { Divider, Flex, Form, Image } from "antd";
+import { Divider, Flex, Form, Image, Select } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
@@ -239,6 +239,12 @@ export const ConfigBeneficiariesForm = ({
                     maxLength={15}
                     className="input-beneficiary-name"
                     placeholder="Enter beneficiary name"
+                    onKeyDown={(e: any) => {
+                      const regex = /^[a-zA-Z0-9]+$/;
+                      if (!regex.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                   />
                 </Form.Item>
               </Flex>
@@ -258,6 +264,11 @@ export const ConfigBeneficiariesForm = ({
                     readOnly={generate}
                     maxLength={42}
                     placeholder="Enter beneficiary's wallet address"
+                    onKeyDown={(e: any) => {
+                      if (e.key === ' ') {
+                        e.preventDefault();
+                      }
+                    }}
                   />
                 </Form.Item>
               </Flex>
@@ -339,6 +350,7 @@ export const ConfigBeneficiariesForm = ({
         >
           <AppSelect
             className="select-signature"
+            popupClassName="select-signature-dropdown"
             options={minSignatureOptions}
           />
         </Form.Item>

@@ -41,13 +41,13 @@ export function DetailsPage() {
     if (method === "inherited") {
       switch (willDetail?.type) {
         case "inheritance":
-          return ["process", "done"]?.includes(willDetail?.status) ? (
+          return !["process", "done"]?.includes(willDetail?.status) ? (
             <>
               This is an <span className="capitalize">{willDetail?.type}</span> will you are a beneficiary of. When this will is activated, a minimum number of co-signatures will be required for you as a beneficiary to claim the fund in the multisig-wallet.
             </>
           ) : (
             <>
-              This is an <span className="capitalize">{willDetail?.type}</span> will you are as a beneficiary.
+              This is an <span className="capitalize">{willDetail?.type}</span> will you are as a beneficiary. Sign in Multisig-Wallet to claim funds.
             </>
           );
         default:

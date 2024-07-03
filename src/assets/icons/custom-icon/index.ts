@@ -18,5 +18,6 @@ export * from './trash-icon'
 export * from './attention-icon'
 export * from "./modal-delete-icon"
 export * from './menu-icon'
-export * from './config-icon'
 export * from './user-outlined-icon'
+export * from './right-icon'
+export * from './config-icon'
