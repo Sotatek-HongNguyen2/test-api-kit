@@ -71,6 +71,10 @@ export const ConfigBeneficiariesForm = ({
     );
     setFieldValue("beneficiariesList", newBeneficiaries);
     WillToast.success("Delete successfully");
+    const minRequiredSignatures = getFieldValue("minRequiredSignatures");
+    if (minRequiredSignatures > newBeneficiaries.length) {
+      setFieldValue("minRequiredSignatures", null);
+    }
   };
 
   const columns: ColumnsType<BeneficiaryData> = [

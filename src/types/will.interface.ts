@@ -1,4 +1,19 @@
+import willV1Contract from "@/models/contract/evm/willV1Contract";
+import willV2Contract from "@/models/contract/evm/willV2Contract";
+
 export type WillType = "inheritance" | "forwarding" | "destruction";
+export type TokenWillType = "USDC" | "DAI";
+
+export const TOKEN_LIST = {
+  USDC: {
+    NAME: "USDC",
+    ABI: willV1Contract,
+  },
+  DAI: {
+    NAME: "DAI",
+    ABI: willV2Contract,
+  },
+};
 
 export type WillMethod = "inherited" | "created";
 
@@ -53,6 +68,8 @@ export interface WillData {
   lackSignMessage: number;
   lackTransaction: number;
   owner: OwnerLastTime;
+  scWillId: string;
+  address: string; // will address
 }
 
 export interface ItemOwnerBalance {
@@ -65,9 +82,10 @@ export interface ItemOwnerBalance {
   lackTransaction: number;
 }
 
-export interface SaveAssetBody {
-  willId: number;
-  asset: string;
+export interface UpdateWillBody {
+  willId: string;
+  name?: string;
+  note?: string;
 }
 
 export interface BeneficiaryData {

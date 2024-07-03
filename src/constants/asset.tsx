@@ -31,7 +31,7 @@ export const assetData: AssetData = {
   },
   USDC: {
     icon: <LogoUSDC200 />,
-    name: "Dai Stablecoin",
+    name: "USD Coin",
     logo: <LogoUSDC />,
   },
   WV1: {

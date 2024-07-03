@@ -1,10 +1,13 @@
 import "./styles.scss";
 import { Flex } from "antd";
+// import { useMemo } from "react";
+
 import { useMemo } from "react";
 
 import { Text } from "@/components/atoms/text";
 import { BaseAsset } from "@/types";
-import { AssetItemData, assetData } from "@/constants/asset";
+import { AssetItemData, AssetType, assetData } from "@/constants/asset";
+// import { AssetItemData, assetData } from "@/constants/asset";
 import { LogoETH200 } from "@/assets/icons";
 
 interface AssetNameProps {
@@ -18,9 +21,13 @@ export const AssetName = (props: AssetNameProps) => {
   if (!asset) return null;
 
   const assetDataItem: AssetItemData = useMemo(
-    () => assetData[asset?.symbol ?? "ETH"],
+    () => assetData[(asset?.symbol ?? "ETH") as AssetType],
     [asset?.symbol]
   );
+  // const assetDataItem: AssetItemData = useMemo(
+  //   () => assetData[asset?.symbol ?? "ETH"],
+  //   [asset?.symbol]
+  // );
 
   return (
     <Flex align="center" gap="10px">

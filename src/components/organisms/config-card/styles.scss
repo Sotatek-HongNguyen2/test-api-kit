@@ -34,7 +34,23 @@
 }
 
 .asset-distribution-table {
-  width: 60%;
+  width: 70%;
+}
+
+.update-asset {
+  width: 100%;
+
+  .select-asset {
+    width: 100%;
+  }
+}
+
+.update-config {
+  .card-item {
+    border: 1px solid #DCE0EA;
+    border-radius: 12px;
+    box-shadow: none;
+  }
 }
 
 .main-qr-code {

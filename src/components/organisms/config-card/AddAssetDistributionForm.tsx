@@ -1,17 +1,19 @@
 import { TrashIcon } from "@/assets/icons/custom-icon";
-import "./styles.scss"
+import "./styles.scss";
 import { AppButton, IconButton } from "@/components/atoms/button";
-import { Text } from "@/components/atoms/text"
+import { Text } from "@/components/atoms/text";
+import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
-import { AppTable } from "@/components/molecules/table"
+import { AppTable } from "@/components/molecules/table";
 import formatNumber from "@/helpers/useFormatToken";
-import { Flex, Form } from "antd"
+
+import { Flex, Form } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 
 export interface AssetDataColumn {
-  token: React.ReactNode;
+  symbol: any;
   amount: number;
   value: string;
   assetAddress: string;
@@ -19,33 +21,40 @@ export interface AssetDataColumn {
 
 export type AssetSelectType = DefaultOptionType & {
   amount: number;
-}
+};
 
 export const AddAssetDistributionForm = () => {
-
   const configForm = Form.useFormInstance();
   const { setFieldValue } = configForm;
+  const assetDistribution = Form.useWatch("assetDistribution", {
+    form: configForm,
+  });
 
-  const [assets, setAssets] = useState<AssetDataColumn[]>([]);
+  const [assets, setAssets] = useState<AssetDataColumn[]>(
+    assetDistribution || []
+  );
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
 
   const handleDeleteAsset = (record: DefaultOptionType) => {
-    const newAssets = assets.filter(item => item.value !== record.value);
+    const newAssets = assets.filter((item) => item.value !== record.value);
     setAssets(newAssets);
     setFieldValue("assetDistribution", newAssets);
-  }
+  };
 
   const columns: ColumnsType<DefaultOptionType> = [
     {
-      title: 'Token',
-      dataIndex: 'token',
-      key: 'token',
+      title: "Token",
+      dataIndex: "token",
+      key: "token",
+      render: (_, record) => <AssetName asset={record as any} />,
     },
     {
-      title: 'Total balance',
-      dataIndex: 'amount',
-      key: 'amount',
-      render: (amount) => <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>
+      title: "Total balance",
+      dataIndex: "amount",
+      key: "amount",
+      render: (amount) => (
+        <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>
+      ),
     },
     {
       title: "",
@@ -53,18 +62,18 @@ export const AddAssetDistributionForm = () => {
         <IconButton onClick={() => handleDeleteAsset(record)}>
           <TrashIcon />
         </IconButton>
-      )
-    }
+      ),
+    },
   ];
 
   const handleAddAsset = () => {
-    const assetIndex = assets.findIndex(item => item.value === asset?.value);
+    const assetIndex = assets.findIndex((item) => item.value === asset?.value);
     const newAsset: AssetDataColumn = {
-      token: asset?.label,
+      symbol: asset?.value,
       amount: asset?.amount as number,
       value: asset?.value as string,
       assetAddress: asset?.assetAddress as string,
-    }
+    };
     const newAssets = [...assets];
     if (assetIndex > -1) {
       newAssets[assetIndex] = newAsset;
@@ -74,22 +83,24 @@ export const AddAssetDistributionForm = () => {
     setAssets(newAssets);
     setFieldValue("assetDistribution", newAssets);
     setAsset(null);
-  }
+  };
 
   return (
     <Flex vertical gap={16}>
       <Text className="neutral-1">You’re a designated assets:</Text>
       <AppTable
         columns={columns}
-        dataSource={assets}
+        dataSource={assetDistribution || assets}
         pagination={false}
-        className={`asset-distribution-table ${assets && assets.length > 0 && "have-data"}`}
+        className={`asset-distribution-table ${
+          assets && assets.length > 0 && "have-data"
+        }`}
         hasIconAction
       />
       <SelectAsset
         asset={asset}
         disableSelected={{
-          selectedAssets: assets
+          selectedAssets: assets,
         }}
         addAsset={(asset) => setAsset(asset)}
       />
@@ -102,6 +113,6 @@ export const AddAssetDistributionForm = () => {
       >
         Save
       </AppButton>
-    </Flex >
-  )
-}
+    </Flex>
+  );
+};

@@ -113,7 +113,7 @@ export const fetchBalances = createAsyncThunk(
       decimal: 18,
       name: "Ethereum",
       symbol: "ETH",
-      assetAddress: "",
+      assetAddress: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     });
 
     return fetchedBalances;

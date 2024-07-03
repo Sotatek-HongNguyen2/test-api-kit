@@ -6,19 +6,28 @@ import { InHeritanceForm } from "./inheritance-form";
 import { ForwardingForm } from "./forwarding-form";
 import { DestructionForm } from "./destruction-form";
 
-export const WillForm = () => {
-  const { willType } = useParams<{ willType: WillType }>();
+export interface EditFormProps {
+  isEdit?: boolean;
+  type?: WillType;
+  scWillId?: string;
+  willAddress?: string;
+}
+
+export const WillForm = (props: EditFormProps) => {
+  const { type } = props;
+
+  const { willType: willTypeParams } = useParams<{ willType: WillType }>();
+  const willType = willTypeParams || type;
 
   const renderForm = () => {
     switch (willType) {
-      case "inheritance":
-        return <InHeritanceForm />;
-      case "forwarding":
-        return <ForwardingForm />;
-      case "destruction":
-        return <DestructionForm />;
-      default:
-        return <></>;
+      case 'inheritance':
+        return <InHeritanceForm {...props} />
+      case 'forwarding':
+        return <ForwardingForm {...props} />
+      case 'destruction':
+        return <DestructionForm />
+      default: return <></>
     }
   };
 

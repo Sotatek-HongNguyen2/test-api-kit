@@ -12,6 +12,11 @@ import { ProtectedRouteNoAuth } from "./protected-route-no-auth";
 const { HomePage } = lazyImport(() => import("@/pages/HomePage"), "HomePage");
 const { NoAuth } = lazyImport(() => import("@/pages/NoAuth"), "NoAuth");
 
+const { EditWillPage } = lazyImport(
+  () => import("@/pages/EditWillPage"),
+  "EditWillPage"
+);
+
 const { ConfigWillPage } = lazyImport(
   () => import("@/pages/ConfigWillPage"),
   "ConfigWillPage"
@@ -80,6 +85,10 @@ export function AppRoutes() {
             {
               path: `${APP_ROUTES_PATHS.CONFIG_WILL}/:willType`,
               element: <ConfigWillPage />,
+            },
+            {
+              path: `${APP_ROUTES_PATHS.EDIT_WILL}/:willId`,
+              element: <EditWillPage />,
             },
             {
               path: `${APP_ROUTES_PATHS.USER_PROFILE}`,
