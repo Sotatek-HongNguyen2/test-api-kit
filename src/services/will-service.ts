@@ -2,6 +2,7 @@ import { SearchParams } from "@/types/global";
 
 import { API_CONFIG } from "./api-config";
 import { ServiceBase } from "./core/service-base";
+import { UpdateWillBody } from "@/types";
 
 export class WillServices extends ServiceBase {
   getMyWill = async (params: SearchParams) => {
@@ -19,8 +20,8 @@ export class WillServices extends ServiceBase {
     return res?.data?.data;
   };
 
-  saveAsset = async (body: any) => {
-    const res: any = await this.post(API_CONFIG.will.saveAsset, body);
+  updateWill = async ({willId, ...body}: UpdateWillBody) => {
+    const res: any = await this.put(`${API_CONFIG.will.update}/${willId}`, body);
     return res?.data?.data;
   };
 }

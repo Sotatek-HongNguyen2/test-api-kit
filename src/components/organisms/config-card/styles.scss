@@ -32,6 +32,22 @@
   width: 70%;
 }
 
+.update-asset {
+  width: 100%;
+
+  .select-asset {
+    width: 100%;
+  }
+}
+
+.update-config {
+  .card-item {
+    border: 1px solid #DCE0EA;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+}
+
 .main-qr-code {
   width: fit-content;
   padding: 11px 12px 11px 12px;

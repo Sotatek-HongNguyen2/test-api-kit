@@ -29,12 +29,15 @@ export interface ConfigFormDataType {
   willName: string;
   note: string;
   beneficiariesList: BeneficiaryData[];
+  initBeneficiaries: BeneficiaryData[];
   lackOfOutgoingTxRange: number;
   lackOfSignedMsgRange: number;
   minRequiredSignatures: number;
   assetDistribution: AssetDataColumn[];
-  beneficiaries: string;
   activationTrigger: string[];
+  lackOfOutgoingTxRange_customTime: number;
+  lackOfSignedMsgRange_customTime: number;
+  beneficiaries: "existing" | "generate";
 }
 
 export const contractAddress = (willType: WillType) => {
@@ -43,11 +46,23 @@ export const contractAddress = (willType: WillType) => {
       return import.meta.env.VITE_INHERITANCE_ROUTER;
     case "forwarding":
       return import.meta.env.VITE_FORWARDING_ROUTER;
-    default:
+    default: // destruction
       return import.meta.env.VITE_DESTRUCTION_ROUTER;
   }
 };
 
+export const getWillContract = (willType: WillType) => {
+  switch (willType) {
+    case "inheritance":
+      return inheritanceWillContract;
+    case "forwarding":
+      return forwardingWillContract;
+    case "destruction":
+      return destructionWillContract;
+    default:
+      return null;
+  }
+};
 export function ConfigWillPage() {
   const { address } = useAppSelector(getWalletSlice);
   const { willType } = useParams();
@@ -90,19 +105,6 @@ export function ConfigWillPage() {
       }, 0),
     }));
   }, [watchBeneficiary]);
-
-  const getWillContract = () => {
-    switch (willType) {
-      case "inheritance":
-        return inheritanceWillContract;
-      case "forwarding":
-        return forwardingWillContract;
-      case "destruction":
-        return destructionWillContract;
-      default:
-        return null;
-    }
-  };
 
   const getParams = (values: ConfigFormDataType) => {
     const arr = [] as any;
@@ -215,7 +217,7 @@ export function ConfigWillPage() {
         const distinctArray = uniqBy(listAsset, "value");
         setFieldValue("assetDistribution", distinctArray);
       }
-      const Contract = getWillContract();
+      const Contract = getWillContract(willType as WillType);
       if (!Contract) {
         WillToast.error("Something went wrong, please try again later");
         return;
@@ -229,7 +231,6 @@ export function ConfigWillPage() {
       });
 
       const params = getParams(values);
-
       if (!params) {
         WillToast.error("Something went wrong, please try again later");
         return;
@@ -242,7 +243,7 @@ export function ConfigWillPage() {
 
       const block = await web3.eth.getBlock("latest");
       const baseFeePerGas = BigInt(block.baseFeePerGas as any);
-      const maxPriorityFeePerGas = BigInt(web3.utils.toWei("2", "gwei"));
+      const maxPriorityFeePerGas = BigInt(web3.utils.toWei("1", "gwei"));
       const maxFeePerGas = baseFeePerGas + maxPriorityFeePerGas;
 
       const estGas = await res.estimateGas({
@@ -254,9 +255,9 @@ export function ConfigWillPage() {
       const res2 = await res.send({
         from: address,
         value: "0",
-        gas: estGas.toString(),
-        maxFeePerGas: maxFeePerGas.toString(),
-        maxPriorityFeePerGas: maxPriorityFeePerGas.toString(),
+        // gas: estGas.toString(),
+        // maxFeePerGas: baseFeePerGas.toString(),
+        // maxPriorityFeePerGas: maxPriorityFeePerGas.toString(),
       });
 
       const providerUrl = import.meta.env.VITE_ETH_RPC_URL;

@@ -8,8 +8,13 @@ import { Text } from "@/components/atoms/text";
 import { APP_ROUTES_PATHS } from "@/constants";
 import { WillType } from "@/types";
 
-export const WillTypeCard = () => {
-  const { willType } = useParams<{ willType: WillType }>();
+interface WillTypeCardProps {
+  type?: WillType;
+}
+
+export const WillTypeCard = ({ type }: WillTypeCardProps) => {
+  const { willType: willTypeParams } = useParams<{ willType: WillType }>();
+  const willType = willTypeParams || type;
   const location = useLocation();
 
   if (

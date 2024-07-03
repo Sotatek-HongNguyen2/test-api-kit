@@ -14,13 +14,23 @@ interface RadioGroupProps {
   title?: string;
   titleClassName?: string;
   items: CustomRadioItemProps[];
+  value?: CustomRadioItemProps["value"];
   onChange?: (value: CustomRadioItemProps["value"]) => void;
   verticalOption?: boolean;
+  defaultValue?: CustomRadioItemProps["value"];
 }
 
 export const RadioGroup = (props: RadioGroupProps) => {
-  const { title, titleClassName, items, onChange, verticalOption = true } = props;
-  const [value, setValue] = useState<CustomRadioItemProps["value"]>("all");
+  const {
+    title,
+    titleClassName,
+    items,
+    value: valueRadio,
+    defaultValue,
+    verticalOption = true,
+    onChange
+  } = props;
+  const [value, setValue] = useState<CustomRadioItemProps["value"]>(valueRadio || defaultValue || "");
 
   return (
     <Flex vertical gap={12}>
