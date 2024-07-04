@@ -1,6 +1,6 @@
 import "./styles.scss";
-import { Flex, Spin } from "antd";
-import { useEffect, useState } from "react";
+import { Flex, Pagination, Spin } from "antd";
+import { useCallback, useEffect, useState } from "react";
 
 import { WillData } from "@/types";
 import AppPagination from "@/components/molecules/Pagination";
@@ -17,47 +17,47 @@ import { DrawerSelect } from "@/components/molecules/DrawerSelect";
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 import { WillTypeModal } from "../will-type-modal";
+import { useSearchParams } from "react-router-dom";
+import { debounce } from "lodash";
 
 export interface WillListProps {
   type?: "created" | "inherited";
 }
 
 const initSearch: SearchParams = {
-  limit: 10,
+  limit: 4,
   page: 1,
   type: "all",
   keyword: "",
 };
 
-export const WillList = (props: WillListProps) => {
-  const { type } = props;
+export const WillList = () => {
 
   const [myWills, setMyWills] = useState<WillData[]>([]);
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
   const [isLoading, setIsLoading] = useState(false);
   const { isTablet } = useDevices();
+  const [params] = useSearchParams();
+  const type = (params.get("willType") || "created") as WillListProps['type'];
 
-  const willService = new WillServices();
+  const willServices = new WillServices();
 
-  const getWills = async () => {
+  const getWills = useCallback(async () => {
     try {
       setIsLoading(true);
-      const params: SearchParams = {
-        limit: 10,
+      const paramsService: SearchParams = {
+        ...searchParams,
         page: searchParams?.page || 1,
+        type: searchParams?.type === "all" ? "" : searchParams?.type || "",
+        keyword: searchParams?.keyword || "",
       };
-      searchParams?.type &&
-        (params["type"] =
-          searchParams?.type === "all" ? "" : searchParams?.type || "");
-      searchParams?.keyword &&
-        (params["keyword"] = searchParams?.keyword || "");
-      const data =
-        type === "created"
-          ? await willService.getMyWill(params)
-          : type === "inherited"
-          ? await willService.getMyInheritedWill(params)
-          : null;
+      let data;
+      if (type === "inherited") {
+        data = await willServices.getMyInheritedWill(paramsService);
+      } else {
+        data = await willServices.getMyWill(paramsService);
+      }
       if (data) {
         setMyWills(data?.data);
         setTotalPage(data?.metadata?.total);
@@ -67,11 +67,14 @@ export const WillList = (props: WillListProps) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [searchParams, type]);
+
+  const debouncedGetWills = useCallback(debounce(getWills, 300), [searchParams, type]);
 
   useEffect(() => {
-    getWills();
+    debouncedGetWills();
   }, [searchParams, type]);
+
 
   const getTitle = () => {
     if (type === "created" && (!myWills || (myWills && myWills.length === 0)))
@@ -136,6 +139,7 @@ export const WillList = (props: WillListProps) => {
 
                   <Flex justify="flex-end">
                     <AppPagination
+                      pageSize={4}
                       total={totalPage}
                       current={searchParams?.page || 1}
                       onChange={(page) =>

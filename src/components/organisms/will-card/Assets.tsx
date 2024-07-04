@@ -22,7 +22,7 @@ export const Assets = ({ will }: AssetsProps) => {
           ...asset,
           ...ownerBalance,
           amount:
-            Number(asset?.amount) > Number(ownerBalance?.balance)
+            Number(asset?.amount ?? 0) > Number(ownerBalance?.balance)
               ? formatNumber(Number(ownerBalance?.balance))
               : formatNumber(Number(asset?.amount)),
         };

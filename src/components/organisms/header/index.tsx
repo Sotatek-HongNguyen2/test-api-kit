@@ -3,7 +3,7 @@ import { CloseOutlined } from "@ant-design/icons";
 
 import "./styles.scss";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MenuProps } from "rc-menu";
 
@@ -37,6 +37,7 @@ export const Header = () => {
   const { avatar, name } = useAppSelector(getInformationInstanceSlide);
   const [activeKey, setActiveKey] = useState<string>("1");
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handelOpenModalLogin = async () => {
     await setOpen(false);
@@ -59,8 +60,8 @@ export const Header = () => {
     {
       type: "divider",
     },
-    { key: "1", label: "My Will" },
-    { key: "2", label: "My Inherited Will" },
+    { key: "created", label: "My Will" },
+    { key: "inherited", label: "My Inherited Will" },
   ];
 
   const getInformation = async () => {
@@ -72,6 +73,12 @@ export const Header = () => {
   useEffect(() => {
     getInformation();
   }, [avatar]);
+
+  useEffect(() => {
+    if (searchParams.get("willType")) {
+      setActiveKey(searchParams.get("willType") || "created");
+    }
+  }, [searchParams]);
 
   const itemDesktop = () => {
     return (
@@ -95,9 +102,7 @@ export const Header = () => {
     if (e.key === "0") {
       navigate("/user-profile");
     } else {
-      if (location.pathname !== "/") {
-        navigate(`/?typeWill=${e.key}`);
-      } else navigate(`?typeWill=${e.key}`);
+      setSearchParams({ willType: e.key });
     }
   };
 
