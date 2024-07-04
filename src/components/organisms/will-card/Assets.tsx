@@ -23,7 +23,7 @@ export const Assets = ({ will }: AssetsProps) => {
     );
   };
   const getAmount = (asset: AssetData, ownerBalance: any) => {
-    if (ownerBalance.symbol === "ETH") {
+    if (ownerBalance && ownerBalance?.symbol === "ETH") {
       return Number(will.willBalance ?? 0) > Number(ownerBalance?.balance)
         ? getTooltip(ownerBalance?.balance)
         : getTooltip(will.willBalance);
