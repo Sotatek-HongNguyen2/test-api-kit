@@ -7,45 +7,54 @@ import { useEffect, useState } from "react";
 import { useDevices } from "@/hooks/useMediaQuery";
 import useQuery from "@/hooks/useQuery";
 
-import { WillList } from "./will-list";
+import { WillList, WillListProps } from "./will-list";
+import { useSearchParams } from "react-router-dom";
+
+type WillType = WillListProps['type'];
 
 export const WillTabs = () => {
   const { isTablet } = useDevices();
-  const [willType, setWillType] = useState<string>("");
+  const [willType, setWillType] = useState<WillType>("created");
 
   const query = useQuery();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const items: TabsProps["items"] = [
     {
-      key: "1",
+      key: "created",
       label: "My will",
-      children: <WillList type="created" />,
+      children: <WillList />,
     },
     {
-      key: "2",
+      key: "inherited",
       label: "My inherited will",
-      children: <WillList type="inherited" />,
+      children: <WillList />,
     },
   ];
 
   const getComponent = () => {
     switch (willType) {
-      case "1":
-        return <WillList type="created" />;
-      case "2":
-        return <WillList type="inherited" />;
+      case "created":
+        return <WillList />;
+      case "inherited":
+        return <WillList />;
       default:
-        return <WillList type="created" />;
+        return null;
     }
   };
 
   useEffect(() => {
-    const str = query.get("typeWill");
-    if (str) setWillType(str);
-  }, [query.get("typeWill")]);
+    const willType = searchParams.get("willType") || "created";
+    setSearchParams({ willType: willType });
+    setWillType(willType as WillType);
+  }, [searchParams]);
+
+  const handleChangeTab = (key: string) => {
+    setSearchParams({ willType: key });
+  }
 
   return !isTablet ? (
-    <Tabs defaultActiveKey="1" items={items} />
+    <Tabs activeKey={willType} items={items} onChange={handleChangeTab} />
   ) : (
     getComponent()
   );
