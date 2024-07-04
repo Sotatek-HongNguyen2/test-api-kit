@@ -3,20 +3,18 @@ import { Tabs, TabsProps } from "antd";
 import "./styles.scss";
 
 import { useEffect, useState } from "react";
-
-import { useDevices } from "@/hooks/useMediaQuery";
-import useQuery from "@/hooks/useQuery";
-
-import { WillList, WillListProps } from "./will-list";
 import { useSearchParams } from "react-router-dom";
 
-type WillType = WillListProps['type'];
+import { useDevices } from "@/hooks/useMediaQuery";
+
+import { WillList, WillListProps } from "./will-list";
+
+type WillType = WillListProps["type"];
 
 export const WillTabs = () => {
   const { isTablet } = useDevices();
   const [willType, setWillType] = useState<WillType>("created");
 
-  const query = useQuery();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const items: TabsProps["items"] = [
@@ -51,7 +49,7 @@ export const WillTabs = () => {
 
   const handleChangeTab = (key: string) => {
     setSearchParams({ willType: key });
-  }
+  };
 
   return !isTablet ? (
     <Tabs activeKey={willType} items={items} onChange={handleChangeTab} />

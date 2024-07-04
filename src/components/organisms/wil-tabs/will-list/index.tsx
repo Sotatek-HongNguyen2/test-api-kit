@@ -1,6 +1,8 @@
 import "./styles.scss";
-import { Flex, Pagination, Spin } from "antd";
+import { Flex, Spin } from "antd";
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { debounce } from "lodash";
 
 import { WillData } from "@/types";
 import AppPagination from "@/components/molecules/Pagination";
@@ -11,14 +13,11 @@ import { NoData } from "@/assets/icons";
 import { CustomRadioItemProps } from "@/components/molecules/radio-group";
 import { SearchParams } from "@/types/global";
 import { useDevices } from "@/hooks/useMediaQuery";
-
 import { DrawerSelect } from "@/components/molecules/DrawerSelect";
 
 import { WillFilter } from "./WillFilter";
 import { WillCard } from "../../will-card";
 import { WillTypeModal } from "../will-type-modal";
-import { useSearchParams } from "react-router-dom";
-import { debounce } from "lodash";
 
 export interface WillListProps {
   type?: "created" | "inherited";
@@ -32,14 +31,13 @@ const initSearch: SearchParams = {
 };
 
 export const WillList = () => {
-
   const [myWills, setMyWills] = useState<WillData[]>([]);
   const [totalPage, setTotalPage] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchParams>(initSearch);
   const [isLoading, setIsLoading] = useState(false);
   const { isTablet } = useDevices();
   const [params] = useSearchParams();
-  const type = (params.get("willType") || "created") as WillListProps['type'];
+  const type = (params.get("willType") || "created") as WillListProps["type"];
 
   const willServices = new WillServices();
 
@@ -69,12 +67,14 @@ export const WillList = () => {
     }
   }, [searchParams, type]);
 
-  const debouncedGetWills = useCallback(debounce(getWills, 300), [searchParams, type]);
+  const debouncedGetWills = useCallback(debounce(getWills, 300), [
+    searchParams,
+    type,
+  ]);
 
   useEffect(() => {
     debouncedGetWills();
   }, [searchParams, type]);
-
 
   const getTitle = () => {
     if (type === "created" && (!myWills || (myWills && myWills.length === 0)))
