@@ -15,7 +15,7 @@ export class HttpClient {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      timeout: 5000,
+      timeout: 10000,
       transformRequest: [
         (data, headers) => {
           if (data instanceof FormData) {

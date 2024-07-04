@@ -26,58 +26,71 @@ export function EditWillPage() {
     try {
       const data = await willService.getWillDetail({ willId });
       const activationTrigger = [];
-      data?.lackTransaction && activationTrigger.push("lack_outgoing_transactions");
+      data?.lackTransaction &&
+        activationTrigger.push("lack_outgoing_transactions");
       data?.lackSignedMessage && activationTrigger.push("lack_signed_message");
       const assetDistribution = (data?.willAsset ?? []).flatMap((item: any) =>
-        data?.ownerBalance?.filter((balance: any) => balance?.address === item?.asset)
+        data?.ownerBalance
+          ?.filter((balance: any) => balance?.address === item?.asset)
           ?.map((balance: any) => {
-            const amount = Number(item?.amount) > Number(balance?.balance)
-              ? formatNumber(Number(balance?.balance))
-              : formatNumber(Number(item?.amount));
+            const amount =
+              Number(item?.amount) > Number(balance?.balance)
+                ? formatNumber(Number(balance?.balance))
+                : formatNumber(Number(item?.amount));
             return {
               ...balance,
               assetAddress: balance?.address,
-              amount
-            }
-          }
-          ))
-      const beneficiariesList = (data?.willDetail ?? [])?.map((beneficiary: any) => ({
-        ...beneficiary,
-        address: beneficiary?.walletAddress,
-        assetConfig: !beneficiary?.fwDetailAsset
-          ? []
-          : beneficiary?.fwDetailAsset?.map((item: any) => ({
-            percent: item?.percent,
-            asset: {
-              assetAddress: item?.asset,
-              value: data?.ownerBalance?.find((balance: any) => balance?.address === item?.asset)?.symbol,
-              ...data?.ownerBalance?.find((balance: any) => balance?.address === item?.asset)
-            }
-          }))
-      }))
+              amount,
+            };
+          })
+      );
+      const beneficiariesList = (data?.willDetail ?? [])?.map(
+        (beneficiary: any) => ({
+          ...beneficiary,
+          address: beneficiary?.walletAddress,
+          assetConfig: !beneficiary?.fwDetailAsset
+            ? []
+            : beneficiary?.fwDetailAsset?.map((item: any) => ({
+                percent: item?.percent,
+                asset: {
+                  assetAddress: item?.asset,
+                  value: data?.ownerBalance?.find(
+                    (balance: any) => balance?.address === item?.asset
+                  )?.symbol,
+                  ...data?.ownerBalance?.find(
+                    (balance: any) => balance?.address === item?.asset
+                  ),
+                },
+              })),
+        })
+      );
       setFieldsValue({
-        "willName": data?.name,
-        "note": data?.note,
-        "minRequiredSignatures": data?.minSignature,
-        "activationTrigger": activationTrigger,
-        "lackOfOutgoingTxRange": [6, 12, 24].includes(data?.lackTransaction) ? data?.lackTransaction : "custom",
-        "lackOfOutgoingTxRange_customTime": data?.lackTransaction,
-        "lackOfSignedMsgRange": [6, 12, 24].includes(data?.lackSignMessage) ? data?.lackSignMessage : "custom",
-        "lackOfSignedMsgRange_customTime": data?.lackSignMessage,
-        "beneficiaries": "existing",
-        "beneficiariesList": beneficiariesList,
-        "initBeneficiaries": beneficiariesList,
-        "assetDistribution": assetDistribution
+        willName: data?.name,
+        note: data?.note,
+        minRequiredSignatures: data?.minSignature,
+        activationTrigger: activationTrigger,
+        lackOfOutgoingTxRange: [6, 12, 24].includes(data?.lackTransaction)
+          ? data?.lackTransaction
+          : "custom",
+        lackOfOutgoingTxRange_customTime: data?.lackTransaction,
+        lackOfSignedMsgRange: [6, 12, 24].includes(data?.lackSignMessage)
+          ? data?.lackSignMessage
+          : "custom",
+        lackOfSignedMsgRange_customTime: data?.lackSignMessage,
+        beneficiaries: "existing",
+        beneficiariesList: beneficiariesList,
+        initBeneficiaries: beneficiariesList,
+        assetDistribution: assetDistribution,
       });
       setWillDetail(data);
     } catch (error: any) {
-      WillToast.error(error.message)
+      WillToast.error(error.message);
     }
   }, [willId, setFieldsValue]);
 
   useEffect(() => {
     setFormValue();
-  }, [])
+  }, []);
 
   if (!willDetail) return null;
 

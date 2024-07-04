@@ -114,7 +114,6 @@ export const ConnectButton = ({ clickLogin }: IPropsConnectButton) => {
 
     return arr;
   }, [listBalances]) as MenuProps["items"];
-
   useEffect(() => {
     setPreviewImage(avatar);
   }, [avatar]);

@@ -1,23 +1,38 @@
 import WillToast from "@/components/atoms/ToastMessage";
-import { AssetCard, AssetDetailCard, BeneficiariesCard, NoteBeneficiariesCard, ProgressCard } from "@/components/organisms/details-card";
+import {
+  AssetCard,
+  AssetDetailCard,
+  BeneficiariesCard,
+  NoteBeneficiariesCard,
+  ProgressCard,
+} from "@/components/organisms/details-card";
 import { DetailsContainer } from "@/components/organisms/wrapper-container/DetailsContainer";
 import { WillServices } from "@/services/will-service";
 import { getWalletSlice, useAppSelector } from "@/store";
 import { WillData, WillMethod } from "@/types";
 import { Flex, Spin } from "antd";
+import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export function DetailsPage() {
-  const { willId } = useParams<{ willId: string }>();
-  if (!willId) return null;
-
-  const { address } = useAppSelector(getWalletSlice);
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
-  const willService = new WillServices();
+  const { address } = useAppSelector(getWalletSlice);
   const [isLoading, setIsLoading] = useState(false);
 
-  const method: WillMethod | null = useMemo(() => !!willDetail ? willDetail?.ownerAddress === address ? "created" : "inherited" : null, [willDetail, address])
+  const willService = new WillServices();
+
+  const method: WillMethod | null = useMemo(
+    () =>
+      !!willDetail
+        ? willDetail?.ownerAddress === address
+          ? "created"
+          : "inherited"
+        : null,
+    [willDetail, address]
+  );
+  const { willId } = useParams<{ willId: string }>();
+  if (!willId) return null;
 
   const getWillDetail = async () => {
     setIsLoading(true);
@@ -25,16 +40,17 @@ export function DetailsPage() {
       const data = await willService.getWillDetail({ willId });
       setWillDetail(data);
     } catch (error: any) {
-      WillToast.error(error.message)
+      WillToast.error(error.message);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
+
+  const debouncedGetWillDetail = debounce(getWillDetail, 500);
 
   useEffect(() => {
-    getWillDetail();
-  }, [])
-
+    debouncedGetWillDetail();
+  }, []);
 
   if (!willDetail || !method) return null;
   const getPageDescription = () => {
@@ -43,17 +59,23 @@ export function DetailsPage() {
         case "inheritance":
           return !["process", "done"]?.includes(willDetail?.status) ? (
             <>
-              This is an <span className="capitalize">{willDetail?.type}</span> will you are a beneficiary of. When this will is activated, a minimum number of co-signatures will be required for you as a beneficiary to claim the fund in the multisig-wallet.
+              This is an <span className="capitalize">{willDetail?.type}</span>{" "}
+              will you are a beneficiary of. When this will is activated, a
+              minimum number of co-signatures will be required for you as a
+              beneficiary to claim the fund in the multisig-wallet.
             </>
           ) : (
             <>
-              This is an <span className="capitalize">{willDetail?.type}</span> will you are as a beneficiary. Sign in Multisig-Wallet to claim funds.
+              This is an <span className="capitalize">{willDetail?.type}</span>{" "}
+              will you are as a beneficiary. Sign in Multisig-Wallet to claim
+              funds.
             </>
           );
         default:
           return (
             <>
-              This is an <span className="capitalize">{willDetail?.type}</span> will you are as a beneficiary.
+              This is an <span className="capitalize">{willDetail?.type}</span>{" "}
+              will you are as a beneficiary.
             </>
           );
       }
@@ -62,30 +84,33 @@ export function DetailsPage() {
       case "destruction":
         return (
           <>
-            This is a <span className="capitalize">{willDetail?.type}</span> will you created with a list of assets.
+            This is a <span className="capitalize">{willDetail?.type}</span>{" "}
+            will you created with a list of assets.
           </>
         );
       default:
         return (
           <>
-            This is a <span className="capitalize">{willDetail?.type}</span> will you created with a list of beneficiaries.
+            This is a <span className="capitalize">{willDetail?.type}</span>{" "}
+            will you created with a list of beneficiaries.
           </>
         );
     }
   };
 
-  if (isLoading) return (
-    <Flex
-      justify="center"
-      align="center"
-      style={{
-        width: "100vw",
-        minHeight: "70vh"
-      }}
-    >
-      <Spin size="large" />
-    </Flex>
-  )
+  if (isLoading)
+    return (
+      <Flex
+        justify="center"
+        align="center"
+        style={{
+          width: "100vw",
+          minHeight: "70vh",
+        }}
+      >
+        <Spin size="large" />
+      </Flex>
+    );
 
   return (
     <DetailsContainer
@@ -93,28 +118,26 @@ export function DetailsPage() {
       willType={willDetail?.type}
       description={getPageDescription()}
       active={!["process", "done"]?.includes(willDetail?.status) ? false : true}
-      textSignatures={`There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature} needed signatures to receive fund`}
+      textSignatures={`There are ${willDetail?.willSignature?.length || 0} of ${
+        willDetail?.minSignature
+      } needed signatures to receive fund`}
       method={method}
       contractId={willDetail?.txHash}
       willId={willId}
     >
       <AssetCard willDetail={willDetail} />
-      {
-        willDetail?.type !== 'destruction' && (
-          <BeneficiariesCard
-            beneficiaries={willDetail?.willDetail}
-            minSignature={willDetail?.minSignature}
-          />
-        )
-      }
-      {
-        willDetail?.type === 'forwarding' && (
-          <AssetDetailCard
-            beneficiaries={willDetail?.willDetail}
-            ownerBalance={willDetail?.ownerBalance}
-          />
-        )
-      }
+      {willDetail?.type !== "destruction" && (
+        <BeneficiariesCard
+          beneficiaries={willDetail?.willDetail}
+          minSignature={willDetail?.minSignature}
+        />
+      )}
+      {willDetail?.type === "forwarding" && (
+        <AssetDetailCard
+          beneficiaries={willDetail?.willDetail}
+          ownerBalance={willDetail?.ownerBalance}
+        />
+      )}
       <ProgressCard
         activeDate={willDetail?.expTime}
         createdDate={willDetail?.createdAt}
@@ -124,11 +147,9 @@ export function DetailsPage() {
         lackTransaction={willDetail?.lackTransaction}
         owner={willDetail?.owner}
       />
-      {
-        willDetail?.type !== 'destruction' && (
-          <NoteBeneficiariesCard note={willDetail?.note} />
-        )
-      }
+      {willDetail?.type !== "destruction" && (
+        <NoteBeneficiariesCard note={willDetail?.note} />
+      )}
     </DetailsContainer>
   );
 }

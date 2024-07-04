@@ -10,12 +10,14 @@ interface AssetItemProps {
   asset: AssetData;
 }
 export const AssetItem = ({ asset }: AssetItemProps) => {
-
+  const showBalance = () => {
+    return asset?.amount;
+  };
   return (
     <Flex align="center" justify="space-between">
       <AssetName asset={asset} />
       <Flex vertical>
-        <Text className="font-semibold neutral-1">{asset?.amount}</Text>
+        <Text className="font-semibold neutral-1">{showBalance()}</Text>
       </Flex>
     </Flex>
   );

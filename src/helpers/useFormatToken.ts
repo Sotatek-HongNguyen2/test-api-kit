@@ -13,17 +13,20 @@ import BigNumber from "bignumber.js";
 //   return `${integerPart}.${decimalPart}`;
 // };
 
-
 const formatNumber = (number: number): string => {
   const bigNumber = new BigNumber(number);
 
-  if (bigNumber.isGreaterThan(0) && bigNumber.isLessThan(0.001)) return "< 0.001";
+  if (bigNumber.isGreaterThan(0) && bigNumber.isLessThan(0.001))
+    return "< 0.001";
 
-  const suffixes = ['', 'M', 'B', 'T', 'q', 'Q', 's', 'S'];
+  const suffixes = ["", "M", "B", "T", "q", "Q", "s", "S"];
   let suffixIndex = 0;
   let displayNumber = bigNumber;
 
-  while (displayNumber.isGreaterThanOrEqualTo(1000000) && suffixIndex < suffixes.length - 1) {
+  while (
+    displayNumber.isGreaterThanOrEqualTo(1000000) &&
+    suffixIndex < suffixes.length - 1
+  ) {
     displayNumber = displayNumber.dividedBy(1000000);
     suffixIndex++;
   }
@@ -33,15 +36,16 @@ const formatNumber = (number: number): string => {
   const numberStr = displayNumber.toString();
   const parts = numberStr.split(".");
   let integerPart = parts[0];
-  let decimalPart = parts[1] || "";
+  const decimalPart = parts[1] || "";
 
   if (suffixIndex === 0) {
     integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  return decimalPart ? `${integerPart}.${decimalPart}${suffixes[suffixIndex]}` : `${integerPart}${suffixes[suffixIndex]}`;
+  return decimalPart
+    ? `${integerPart}.${decimalPart}${suffixes[suffixIndex]}`
+    : `${integerPart}${suffixes[suffixIndex]}`;
 };
-
 
 // const useFormattedNumber = (number: number): string => {
 //   const [formattedNumber, setFormattedNumber] = useState<string>("");

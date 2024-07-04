@@ -26,7 +26,7 @@ export interface BaseAsset {
 }
 export interface AssetData extends BaseAsset {
   balance?: string;
-  amount: string | null;
+  amount: string | null | React.ReactNode;
   asset: string;
   willId: string | number;
 }
@@ -40,7 +40,7 @@ export interface AssetDetailData {
   user: null | {
     avatar: string;
     name: string;
-  }
+  };
 }
 
 export interface OwnerLastTime {
@@ -70,6 +70,7 @@ export interface WillData {
   owner: OwnerLastTime;
   scWillId: string;
   address: string; // will address
+  willBalance: string;
 }
 
 export interface ItemOwnerBalance {

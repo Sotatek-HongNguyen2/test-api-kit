@@ -1,10 +1,11 @@
-import { Col, Flex, Row } from "antd";
+import { Col, Flex, Row, Tooltip } from "antd";
 
 import { Text } from "@/components/atoms/text";
 import { AssetItem } from "@/components/molecules";
 import { AssetData, WillData } from "@/types";
 import { useMemo } from "react";
 import formatNumber from "@/helpers/useFormatToken";
+import { getBalanceSlide, useAppSelector } from "@/store";
 
 interface AssetsProps {
   assets: AssetData[];
@@ -12,24 +13,41 @@ interface AssetsProps {
 }
 
 export const Assets = ({ will }: AssetsProps) => {
+  const { listBalances } = useAppSelector(getBalanceSlide);
+
+  const getTooltip = (data: any) => {
+    return (
+      <Tooltip title={data} placement="top">
+        {formatNumber(Number(data))}
+      </Tooltip>
+    );
+  };
+  const getAmount = (asset: AssetData, ownerBalance: any) => {
+    if (ownerBalance.symbol === "ETH") {
+      return Number(will.willBalance ?? 0) > Number(ownerBalance?.balance)
+        ? getTooltip(ownerBalance?.balance)
+        : getTooltip(will.willBalance);
+    }
+    return Number(asset?.amount ?? 0) > Number(ownerBalance?.balance)
+      ? getTooltip(ownerBalance?.balance)
+      : getTooltip(asset?.amount);
+  };
+
   const listAsset = useMemo(
     () =>
       will?.willAsset?.map((asset) => {
-        const ownerBalance = will?.ownerBalance?.find(
-          (item) => item.address == asset.asset
+        const ownerBalance = listBalances?.find(
+          (item) => item.assetAddress == asset.asset
         );
+
         return {
           ...asset,
           ...ownerBalance,
-          amount:
-            Number(asset?.amount ?? 0) > Number(ownerBalance?.balance)
-              ? formatNumber(Number(ownerBalance?.balance))
-              : formatNumber(Number(asset?.amount)),
+          amount: getAmount(asset, ownerBalance),
         };
       }),
     [will]
   );
-
   return (
     <Row>
       <Col span={24}>

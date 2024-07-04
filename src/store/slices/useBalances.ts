@@ -89,6 +89,7 @@ export const fetchBalances = createAsyncThunk(
       const callsReturnContext = results.results[key].callsReturnContext;
       const assetAddress: string =
         results.results[key].originalContractCallContext.contractAddress;
+
       return {
         balance: formWei(
           callsReturnContext[0].returnValues[0].hex,
@@ -100,6 +101,7 @@ export const fetchBalances = createAsyncThunk(
         assetAddress,
       };
     });
+
     const web3 = getWeb3Instance({
       type: PROVIDER_TYPE.WALLET,
       injectObject: WALLET_INJECT_OBJ.METAMASK,

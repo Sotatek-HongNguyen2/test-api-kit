@@ -23,7 +23,7 @@ export const formWei = (amount: string | number, decimal: string | number) => {
   decimal = typeof decimal === "number" ? decimal : parseInt(decimal);
   if (decimal != 0) {
     const amountToBN = new BigNumber(amount);
-    let decimalPow = "1" + "0".repeat(decimal);
+    const decimalPow = "1" + "0".repeat(decimal);
 
     const decimalToBN = new BigNumber(decimalPow);
     const newAmount = amountToBN.dividedBy(decimalToBN);
@@ -39,8 +39,8 @@ export const formWei = (amount: string | number, decimal: string | number) => {
 
 export const serializeFormQuery = (params: any) => {
   return Object.keys(params)
-      .map(
-        key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
-      )
-      .join('&');
-}
+    .map(
+      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+    )
+    .join("&");
+};
