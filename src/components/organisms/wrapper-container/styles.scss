@@ -1,9 +1,28 @@
+@import "@/assets/scss/responsive.scss";
+
 .app-details-container {
   background-color: #F6F7FB;
   padding: 0vh 20vw;
 
   @media (max-width: 1600px) {
     padding: 0vh 15vw;
+  }
+
+  @media (max-width: $tablet-width) {
+    padding: 0px;
+  }
+
+  .back-mobile {
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .text-description {
+    @media (max-width: $tablet-width) {
+      font-size: 14px;
+    }
   }
 
   .details-container--footer {

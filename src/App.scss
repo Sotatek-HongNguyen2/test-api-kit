@@ -322,4 +322,8 @@ input:-webkit-autofill:active {
 
 .ant-divider {
   color: $neutral5;
+
+  @media (max-width: $mobile-width) {
+    margin: 16px 0px;
+  }
 }

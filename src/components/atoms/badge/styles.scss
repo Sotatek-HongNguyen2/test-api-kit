@@ -1,4 +1,5 @@
 @import 'src/assets/scss/_colors.scss';
+@import "@/assets/scss/responsive.scss";
 // ======== badge color ========
 
 .app-badge-primary {
@@ -41,4 +42,13 @@
   justify-content: center;
   align-items: center;
   border-radius: 40px;
+
+  @media (max-width: $mobile-width) {
+    height: 20px;
+    padding: 1px 7px 3px 7px;
+
+    p {
+      font-size: 12px;
+    }
+  }
 }

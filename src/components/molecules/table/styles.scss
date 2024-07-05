@@ -1,6 +1,13 @@
+@import "@/assets/scss/responsive.scss";
+@import "@/assets/scss/_colors.scss";
+
 .ant-table-container {
   border: 1px solid #E6E8EC;
   border-radius: 8px;
+
+  @media (max-width: $mobile-width) {
+    overflow-x: scroll;
+  }
 
   .ant-table-thead {
 
@@ -20,6 +27,10 @@
       &:last-child {
         text-align: end;
       }
+
+      @media (max-width: $mobile-width) {
+        padding: 14px 12px !important;
+      }
     }
   }
 
@@ -30,6 +41,10 @@
 
         &:last-child {
           text-align: end;
+        }
+
+        @media (max-width: $mobile-width) {
+          padding: 14px 12px !important;
         }
       }
     }

@@ -6,7 +6,7 @@ import {
 import { DaiIcon, EthIcon, UsdcIcon } from "@/assets/icons/custom-icon";
 import { BaseAsset } from "@/types";
 
-export type AssetType = "ETH" | "DAI" | "WV1" | "WV2" | "USDC";
+export type AssetType = "ETH" | "DAI" | "WV1" | "WV2" | "USDC" | "Sepolia";
 
 export interface AssetItemData {
   icon: React.ReactNode;
@@ -24,7 +24,7 @@ export const assetData: AssetData = {
   },
   DAI: {
     icon: <LogoDAI200 />,
-    name: "Dai Stablecoin",
+    name: "Dai",
     logo: <DaiIcon />,
   },
   USDC: {
@@ -41,6 +41,11 @@ export const assetData: AssetData = {
     icon: <LogoUSDC200 />,
     logo: <UsdcIcon />,
     name: "Will V2",
+  },
+  Sepolia: {
+    icon: <LogoETH200 />,
+    logo: <EthIcon />,
+    name: "Sepolia",
   },
 };
 

@@ -21,13 +21,9 @@ export const AssetName = (props: AssetNameProps) => {
   if (!asset) return null;
 
   const assetDataItem: AssetItemData = useMemo(
-    () => assetData[(asset?.symbol ?? "ETH") as AssetType],
+    () => assetData[(asset?.symbol ?? "Sepolia") as AssetType],
     [asset?.symbol]
   );
-  // const assetDataItem: AssetItemData = useMemo(
-  //   () => assetData[asset?.symbol ?? "ETH"],
-  //   [asset?.symbol]
-  // );
 
   return (
     <Flex align="center" gap="10px">
@@ -35,7 +31,7 @@ export const AssetName = (props: AssetNameProps) => {
         {assetDataItem?.logo ?? <LogoETH200 />}
         <Flex vertical>
           <Text className="font-semibold neutral-1">
-            {asset?.name ?? assetDataItem?.name}
+            {assetDataItem?.name ?? asset?.name}
           </Text>
           {showSign && (
             <Text size="text-sm" className="neutral-2">

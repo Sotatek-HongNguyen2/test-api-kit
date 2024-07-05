@@ -9,7 +9,7 @@ export const NoteBeneficiariesCard = ({ note }: { note?: string }) => {
       title="Note to beneficiaries"
       iconTitle={<NoteIcon />}
     >
-      <Text size="text-sm" className="neutral">{note}</Text>
+      <Text className="neutral">{note}</Text>
     </CartItemContainer>
   )
 }

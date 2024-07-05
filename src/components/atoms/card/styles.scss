@@ -1,10 +1,15 @@
 @import 'src/assets/scss/_colors.scss';
+@import "@/assets/scss/responsive.scss";
 
 .app-card {
   background-color: white;
   padding: 24px;
   border-radius: 4px; // default: small
   box-shadow: 0px 0px 8px rgba($color: #2330431A, $alpha: 0.1); // default: small
+
+  @media (max-width: $tablet-width) {
+    padding: 16px;
+  }
 }
 
 .box-shadow-large {
