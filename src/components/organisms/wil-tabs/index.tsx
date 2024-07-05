@@ -2,7 +2,6 @@ import { Tabs, TabsProps } from "antd";
 
 import "./styles.scss";
 
-import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useDevices } from "@/hooks/useMediaQuery";
@@ -13,9 +12,10 @@ type WillType = WillListProps["type"];
 
 export const WillTabs = () => {
   const { isTablet } = useDevices();
-  const [willType, setWillType] = useState<WillType>("created");
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const willType = (searchParams.get("willType") ?? "created") as WillType;
 
   const items: TabsProps["items"] = [
     {
@@ -41,18 +41,14 @@ export const WillTabs = () => {
     }
   };
 
-  useEffect(() => {
-    const willType = searchParams.get("willType") || "created";
-    setSearchParams({ willType: willType });
-    setWillType(willType as WillType);
-  }, [searchParams]);
-
   const handleChangeTab = (key: string) => {
     setSearchParams({ willType: key });
   };
 
-  return !isTablet ? (
-    <Tabs activeKey={willType} items={items} onChange={handleChangeTab} />
+  return !isTablet && !!willType ? (
+    <>
+      <Tabs activeKey={willType} items={items} onChange={handleChangeTab} />
+    </>
   ) : (
     getComponent()
   );

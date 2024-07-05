@@ -1,11 +1,9 @@
 import {
-  LogoDAI,
   LogoDAI200,
-  LogoETH,
   LogoETH200,
-  LogoUSDC,
   LogoUSDC200,
 } from "@/assets/icons";
+import { DaiIcon, EthIcon, UsdcIcon } from "@/assets/icons/custom-icon";
 import { BaseAsset } from "@/types";
 
 export type AssetType = "ETH" | "DAI" | "WV1" | "WV2" | "USDC";
@@ -21,27 +19,27 @@ type AssetData = Record<AssetType, AssetItemData>;
 export const assetData: AssetData = {
   ETH: {
     icon: <LogoETH200 />,
-    logo: <LogoETH />,
+    logo: <EthIcon />,
     name: "Ethereum",
   },
   DAI: {
     icon: <LogoDAI200 />,
     name: "Dai Stablecoin",
-    logo: <LogoDAI />,
+    logo: <DaiIcon />,
   },
   USDC: {
     icon: <LogoUSDC200 />,
     name: "USD Coin",
-    logo: <LogoUSDC />,
+    logo: <UsdcIcon />,
   },
   WV1: {
     icon: <LogoDAI200 />,
-    logo: <LogoDAI />,
+    logo: <DaiIcon />,
     name: "Will V1",
   },
   WV2: {
     icon: <LogoUSDC200 />,
-    logo: <LogoUSDC />,
+    logo: <UsdcIcon />,
     name: "Will V2",
   },
 };

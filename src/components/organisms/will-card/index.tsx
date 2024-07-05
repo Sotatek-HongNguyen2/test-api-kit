@@ -37,7 +37,7 @@ export const WillCard = ({ will, type }: WillCardProps) => {
                 {will?.name}
               </Text>
               {["process", "done"]?.includes(will?.status) &&
-              type === "inherited" ? (
+                type === "inherited" ? (
                 <AppBadge
                   color="secondary"
                   count={
@@ -80,7 +80,7 @@ export const WillCard = ({ will, type }: WillCardProps) => {
         </Flex> */}
         <Row gutter={24}>
           <Col md={10} lg={8} xl={8} xxl={6} xs={24} sm={24}>
-            <Assets assets={will?.willAsset} will={will} />
+            <Assets assets={will?.willAsset} will={will} type={type} />
           </Col>
           <Col
             md={14}

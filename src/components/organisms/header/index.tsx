@@ -38,6 +38,7 @@ export const Header = () => {
   const [activeKey, setActiveKey] = useState<string>("1");
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+  console.log("searchParams: ", searchParams);
 
   const handelOpenModalLogin = async () => {
     await setOpen(false);
@@ -75,9 +76,7 @@ export const Header = () => {
   }, [avatar]);
 
   useEffect(() => {
-    if (searchParams.get("willType")) {
-      setActiveKey(searchParams.get("willType") || "created");
-    }
+    setActiveKey(searchParams.get("willType") || "created");
   }, [searchParams]);
 
   const itemDesktop = () => {
