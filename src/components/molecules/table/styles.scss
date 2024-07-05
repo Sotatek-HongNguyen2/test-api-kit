@@ -36,9 +36,6 @@
   }
 }
 
-// .have-data {
-
-
 .have-data.has-icon-action {
 
   .ant-table-container {
@@ -56,6 +53,7 @@
 
       &:nth-last-child(2) {
         border-top-right-radius: 8px;
+        text-align: end;
       }
 
       &:last-child {
@@ -75,6 +73,7 @@
 
         &:nth-last-child(2) {
           border-right: 1px solid #E6E8EC !important;
+          text-align: end;
         }
 
         &:last-child {

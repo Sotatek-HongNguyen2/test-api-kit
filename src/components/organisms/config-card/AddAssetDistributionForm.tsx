@@ -53,7 +53,7 @@ export const AddAssetDistributionForm = () => {
       dataIndex: "amount",
       key: "amount",
       render: (amount) => (
-        <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>
+        <Text className="neutral-1 font-semibold" align="right">{formatNumber(amount)}</Text>
       ),
     },
     {
@@ -92,9 +92,8 @@ export const AddAssetDistributionForm = () => {
         columns={columns}
         dataSource={assetDistribution || assets}
         pagination={false}
-        className={`asset-distribution-table ${
-          assets && assets.length > 0 && "have-data"
-        }`}
+        className={`asset-distribution-table ${assets && assets.length > 0 && "have-data"
+          }`}
         hasIconAction
       />
       <SelectAsset

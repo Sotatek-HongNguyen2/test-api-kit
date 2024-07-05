@@ -94,8 +94,8 @@ export const ConfigBeneficiariesForm = ({
       dataIndex: "address",
       key: "address",
       render: (address, _, index) => (
-        <Flex align="center" justify="flex-start" gap={4}>
-          <Text className="neutral-1 text-left">{address}</Text>
+        <Flex align="center" justify="flex-end" gap={4}>
+          <Text className="neutral-1">{address}</Text>
           <IconButton
             onClick={() => {
               handleCopyToClipboard(address);

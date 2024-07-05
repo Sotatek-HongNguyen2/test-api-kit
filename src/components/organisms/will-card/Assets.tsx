@@ -6,15 +6,16 @@ import { AssetData, WillData } from "@/types";
 import { useMemo } from "react";
 import formatNumber from "@/helpers/useFormatToken";
 import { getBalanceSlide, useAppSelector } from "@/store";
+import { WillListProps } from "../wil-tabs/will-list";
 
 interface AssetsProps {
   assets: AssetData[];
   will: WillData;
+  type: WillListProps["type"];
 }
 
-export const Assets = ({ will }: AssetsProps) => {
+export const Assets = ({ will, type }: AssetsProps) => {
   const { listBalances } = useAppSelector(getBalanceSlide);
-
   const getTooltip = (data: any) => {
     return (
       <Tooltip title={data} placement="top">
@@ -23,21 +24,22 @@ export const Assets = ({ will }: AssetsProps) => {
     );
   };
   const getAmount = (asset: AssetData, ownerBalance: any) => {
+    const ownerBalanceValue = ownerBalance?.balance ?? 0;
     if (ownerBalance && ownerBalance?.symbol === "ETH") {
-      return Number(will.willBalance ?? 0) > Number(ownerBalance?.balance)
-        ? getTooltip(ownerBalance?.balance)
+      return Number(will.willBalance ?? 0) > Number(ownerBalanceValue)
+        ? getTooltip(ownerBalanceValue)
         : getTooltip(will.willBalance);
     }
-    return Number(asset?.amount ?? 0) > Number(ownerBalance?.balance)
-      ? getTooltip(ownerBalance?.balance)
+    return Number(asset?.amount ?? 0) > Number(ownerBalanceValue)
+      ? getTooltip(ownerBalanceValue)
       : getTooltip(asset?.amount);
   };
 
   const listAsset = useMemo(
     () =>
       will?.willAsset?.map((asset) => {
-        const ownerBalance = listBalances?.find(
-          (item) => item.assetAddress == asset.asset
+        const ownerBalance = (type === "created" ? listBalances : will?.ownerBalance)?.find(
+          (item) => (type === "created" ? item?.assetAddress : item.address) == asset.asset
         );
 
         return {
