@@ -1,20 +1,19 @@
 import "../styles.scss";
-import { NoteIcon } from "@/assets/icons/custom-icon";
-import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer";
 import { Flex, Form } from "antd";
-import { AssetDataColumn, AssetSelectType } from "../AddAssetDistributionForm";
+import { useEffect, useState } from "react";
+import { ColumnsType } from "antd/es/table";
+
 import { EditFormProps } from "@/components/templates/form";
 import { AppButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text";
-import { useEffect, useState } from "react";
 import WillToast from "@/components/atoms/ToastMessage";
 import { contractAddress, getWillContract } from "@/pages/ConfigWillPage";
 import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import { WillType } from "@/types";
 import { getWalletSlice, useAppSelector } from "@/store";
-import { ColumnsType } from "antd/es/table";
-import formatNumber from "@/helpers/useFormatToken";
+import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer";
+import { NoteIcon } from "@/assets/icons/custom-icon";
 import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { AppTable } from "@/components/molecules/table";
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
@@ -23,6 +22,8 @@ import {
   TokenModalType,
 } from "@/components/molecules/asset-item/TokenModal";
 import useDisclosure from "@/hooks/useDisclosure";
+
+import { AssetDataColumn, AssetSelectType } from "../AddAssetDistributionForm";
 
 export const EditAssetDistribution = (props: EditFormProps) => {
   const configForm = Form.useFormInstance();
@@ -55,7 +56,9 @@ export const EditAssetDistribution = (props: EditFormProps) => {
       dataIndex: "amount",
       key: "amount",
       render: (amount) => (
-        <Text className="neutral-1 font-semibold">{formatNumber(amount)}</Text>
+        <Text className="neutral-1 font-semibold">
+          <div>{amount}</div>
+        </Text>
       ),
     },
     {
@@ -120,6 +123,20 @@ export const EditAssetDistribution = (props: EditFormProps) => {
       ),
     },
   ];
+
+  const handleSuccess = (amount: any) => {
+    for (let i = 0; i < assetDistribution.length; i++) {
+      if (assetDistribution[i].assetAddress === currentToken.assetAddress) {
+        assetDistribution[i].amount = amount;
+      }
+    }
+    setAssets(
+      assetDistribution?.map((item: any) => ({
+        ...item,
+        value: item?.symbol,
+      }))
+    );
+  };
 
   useEffect(() => {
     setAssets(
@@ -263,6 +280,7 @@ export const EditAssetDistribution = (props: EditFormProps) => {
           token={currentToken}
           willAddress={willAddress}
           willType={type}
+          successSend={handleSuccess}
           scWillId={scWillId}
         />
       )}

@@ -1,4 +1,4 @@
-import { Flex, Form } from "antd";
+import { Flex, Form, Tooltip } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -22,6 +22,31 @@ export function EditWillPage() {
 
   if (!willId) return null;
 
+  const getTooltip = (data: any) => {
+    return (
+      <Tooltip title={data} placement="top">
+        {formatNumber(Number(data))}
+      </Tooltip>
+    );
+  };
+
+  const getAmount = (willDetail: any, asset: any, ownerBalance: any) => {
+    console.log(
+      willDetail,
+      asset,
+      ownerBalance,
+      "willDetail, asset, ownerBalance"
+    );
+    if (ownerBalance && ownerBalance?.symbol === "ETH") {
+      return Number(willDetail.willBalance ?? 0) > Number(ownerBalance?.balance)
+        ? getTooltip(ownerBalance?.balance)
+        : getTooltip(willDetail.willBalance);
+    }
+    return Number(asset?.amount ?? 0) > Number(ownerBalance?.balance)
+      ? getTooltip(ownerBalance?.balance)
+      : getTooltip(asset?.amount);
+  };
+
   const setFormValue = useCallback(async () => {
     try {
       const data = await willService.getWillDetail({ willId });
@@ -29,18 +54,15 @@ export function EditWillPage() {
       data?.lackTransaction &&
         activationTrigger.push("lack_outgoing_transactions");
       data?.lackSignedMessage && activationTrigger.push("lack_signed_message");
+
       const assetDistribution = (data?.willAsset ?? []).flatMap((item: any) =>
         data?.ownerBalance
           ?.filter((balance: any) => balance?.address === item?.asset)
           ?.map((balance: any) => {
-            const amount =
-              Number(item?.amount) > Number(balance?.balance)
-                ? formatNumber(Number(balance?.balance))
-                : formatNumber(Number(item?.amount));
             return {
               ...balance,
               assetAddress: balance?.address,
-              amount,
+              amount: getAmount(data, item, balance),
             };
           })
       );

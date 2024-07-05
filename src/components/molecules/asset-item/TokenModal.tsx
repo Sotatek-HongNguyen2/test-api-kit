@@ -5,12 +5,12 @@ import WillModal from "@/components/atoms/modal";
 import { Text } from "@/components/atoms/text";
 
 import { Flex } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Contract, { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import WillToast from "@/components/atoms/ToastMessage";
-import { getWalletSlice, useAppSelector } from "@/store";
+import { getBalanceSlide, getWalletSlice, useAppSelector } from "@/store";
 
 import { useParams } from "react-router-dom";
 
@@ -22,6 +22,8 @@ import forwardingWillContract from "@/models/contract/evm/ForwardingWill";
 import destructionWillContract from "@/models/contract/evm/DestructionWill";
 import { formWei } from "@/helpers/common";
 
+import { ethers } from "ethers";
+
 export type TokenModalType = "deposit" | "withdraw" | "approve";
 
 interface TokenModalProps {
@@ -31,7 +33,8 @@ interface TokenModalProps {
   token: any;
   willAddress: string;
   willType?: WillType;
-  scWillId: string | undefined;
+  scWillId?: string | undefined;
+  successSend?: (amount: string | undefined) => void;
 }
 
 export const getTokenContract = (token: TokenWillType) => {
@@ -78,12 +81,15 @@ export const TokenModal = (props: TokenModalProps) => {
     willAddress,
     scWillId,
     willType: willTypeProp,
+    successSend,
   } = props;
   const [amount, setAmount] = useState<string>("");
   const { address } = useAppSelector(getWalletSlice);
   const { willType: willTypeParam } = useParams<{ willType: WillType }>();
   const willType = willTypeParam || willTypeProp;
   const [loading, setLoading] = useState<boolean>(false);
+  const { listBalances } = useAppSelector(getBalanceSlide);
+  const [decimal, setDecimal] = useState<string | number>();
 
   const handleSubmit = async () => {
     const Contract = getWillContract(willType as WillType);
@@ -113,16 +119,25 @@ export const TokenModal = (props: TokenModalProps) => {
             injectObject: WALLET_INJECT_OBJ.METAMASK,
           },
         });
+
         const tx = await contract.approve({
           address: willAddress.toString(),
-          amount: amount,
+          amount: ethers.utils
+            .parseUnits(amount.toString(), decimal)
+            .toString(),
         });
-        res2 = await tx.send({
+        res2 = (await tx.send({
           from: address,
-        });
+        })) as any;
 
         if (res2.transactionHash) {
           WillToast.success("Approve success!");
+
+          if (successSend) {
+            successSend(
+              formWei(res2.events.Approval.returnValues.value, `${decimal}`)
+            );
+          }
         }
       } else if (type === "deposit") {
         if (!window.ethereum) {
@@ -144,13 +159,14 @@ export const TokenModal = (props: TokenModalProps) => {
           chainId: ETH_CHAIN_ID,
         };
 
-        // console.log(tx);
-        const transactionHash = await web3.eth.sendTransaction(tx);
+        const transactionHash = (await web3.eth.sendTransaction(tx)) as any;
         if (transactionHash.transactionHash) {
           WillToast.success("Deposit success!");
+          if (successSend) {
+            successSend(formWei(amount, `${decimal}`));
+          }
         }
         onClose();
-        // await tx.wait();
       } else if (type === "withdraw") {
         const addressData = contractAddress(willType as WillType);
 
@@ -171,11 +187,14 @@ export const TokenModal = (props: TokenModalProps) => {
             amount: web3.utils.toWei(amount, "ether"),
             willId: Number(scWillId),
           });
-          res2 = await tx.send({
+          res2 = (await tx.send({
             from: address,
-          });
+          })) as any;
           if (res2.transactionHash) {
             WillToast.success("Withdraw success!");
+            if (successSend) {
+              successSend(formWei(amount, `${decimal}`));
+            }
           }
         }
       }
@@ -189,6 +208,12 @@ export const TokenModal = (props: TokenModalProps) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const obj = listBalances.find((e) => e.assetAddress === token.assetAddress);
+    setDecimal(obj.decimal);
+  }, [token]);
+
   return (
     <WillModal
       open={open}
@@ -228,7 +253,9 @@ export const TokenModal = (props: TokenModalProps) => {
           <AppButton
             size="xl"
             className="token-modal--footer-btn"
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+            }}
           >
             <Text size="text-lg" className="uppercase font-bold neutral-1">
               Cancel
