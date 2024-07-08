@@ -1,5 +1,5 @@
 import { Flex, Form } from "antd";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import { uniqBy } from "lodash";
@@ -21,9 +21,8 @@ import forwardingWillContract from "@/models/contract/evm/ForwardingWill";
 import destructionWillContract from "@/models/contract/evm/DestructionWill";
 import { APP_ROUTES_PATHS } from "@/constants";
 import { BeneficiaryConfig } from "@/components/organisms/config-card/AssetToBeneficiary";
-import { formWei } from "@/helpers/common";
-import BigNumber from "bignumber.js";
 import { getWeb3Instance } from "@/helpers/evmHandlers";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 export interface ConfigFormDataType {
   willName: string;
@@ -66,6 +65,7 @@ export const getWillContract = (willType: WillType) => {
 export function ConfigWillPage() {
   const { address } = useAppSelector(getWalletSlice);
   const { willType } = useParams();
+  const { isTablet } = useDevices();
 
   const navigate = useNavigate();
   const [form] = Form.useForm<ConfigFormDataType>();
@@ -358,6 +358,9 @@ export function ConfigWillPage() {
                   WillToast.success("Configure assets details successfully");
                   navigate(APP_ROUTES_PATHS.HOME);
                 }}
+                style={{
+                  width: isTablet ? "100%" : "fit-content"
+                }}
               >
                 <Text size="text-lg" className="font-bold">
                   Save
@@ -368,7 +371,11 @@ export function ConfigWillPage() {
             <>
               <WillTypeCard />
               <WillForm />
-              <Flex align="center" gap={16}>
+              <Flex
+                vertical={isTablet ? true : false}
+                align={isTablet ? "normal" : "center"}
+                gap={isTablet ? 12 : 16}
+              >
                 <AppButton
                   size="xl"
                   type="primary"

@@ -1,3 +1,4 @@
+import { SVGAttributes } from "react";
 import ReactSVG from "react-inlinesvg";
 
 export const ConnectWallet = () => (
@@ -20,7 +21,9 @@ export const NotifyNoAuth = () => (
   <ReactSVG src={"/icons/no-auth/notify.svg"} />
 );
 
-export const NoData = () => <ReactSVG src={"/images/lists/no-data.svg"} />;
+type SvgIconProps = Omit<React.SVGProps<SVGElement>, 'onLoad' | 'onError' | 'ref'>;
+
+export const NoData = (props: SvgIconProps) => <ReactSVG {...props} src={"/images/lists/no-data.svg"} />;
 export const IconError = () => <ReactSVG src={"/icons/toast/icon-error.svg"} />;
 export const IconSuccess = () => (
   <ReactSVG src={"/icons/toast/icon-success.svg"} />
