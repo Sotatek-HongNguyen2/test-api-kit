@@ -23,6 +23,10 @@
       padding: 2vh 5vw 2vh;
     }
 
+    @media (max-width: $mobile-width) {
+      padding: 2vh 16px 40px;
+    }
+
     min-height: calc(100vh - $header-height);
     background: #F6F7FB;
   }

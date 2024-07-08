@@ -38,7 +38,6 @@ export const Header = () => {
   const [activeKey, setActiveKey] = useState<string>("1");
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log("searchParams: ", searchParams);
 
   const handelOpenModalLogin = async () => {
     await setOpen(false);

@@ -8,6 +8,7 @@ import { TriggerCard } from "@/components/molecules/trigger-card";
 import NotGoingImage from '../../../../public/images/details/no-outgoing.png'
 import NotSignedImage from '../../../../public/images/details/no-signed.png'
 import { useGetDiffMonth } from "@/hooks/useGetDiffMonths";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 interface ProgressCardProps extends WillProgressProps, Pick<WillData, "lackTransaction" | "lackSignMessage" | "owner"> {
   method: WillMethod;
@@ -15,8 +16,7 @@ interface ProgressCardProps extends WillProgressProps, Pick<WillData, "lackTrans
 
 export const ProgressCard = (props: ProgressCardProps) => {
   const { method, lackTransaction, lackSignMessage, owner, ...restProps } = props;
-
-  const { lastTxTime, lastLoginTime } = owner;
+  const { isMobile } = useDevices();
 
   const getTimeMonths = (time: number | null) => {
     if (time === null || time === undefined) return "_ months";
@@ -36,7 +36,16 @@ export const ProgressCard = (props: ProgressCardProps) => {
                 {...restProps}
                 title="You have configured to activate your will using Outgoing transaction and Signed transaction ."
               />
-              <Flex align="center" justify="space-between" gap={24}>
+              <Flex
+                vertical={isMobile ? true : false}
+                {
+                ...(!isMobile && {
+                  align: "center",
+                  justify: "space-between",
+                })
+                }
+                gap={isMobile ? 16 : 24}
+              >
                 {
                   lackTransaction && lackTransaction > 0 ? (
                     <TriggerCard

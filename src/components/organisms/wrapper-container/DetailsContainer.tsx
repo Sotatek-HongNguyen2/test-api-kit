@@ -4,13 +4,14 @@ import "./styles.scss";
 import { EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-import { AppButton } from "@/components/atoms/button";
+import { AppButton, IconButton } from "@/components/atoms/button";
 import { ArrowOutlinedIcon, RightIcon } from "@/assets/icons/custom-icon";
 import { Text } from "@/components/atoms/text";
 import { AppBadge } from "@/components/atoms/badge";
 import { WillMethod, WillType } from "@/types";
 import { APP_ROUTES_PATHS } from "@/constants";
 import { ETH_BLOCK_EXPLORER_URL } from "@/const/envs";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 interface DetailsContainerProps {
   children: React.ReactNode;
@@ -37,6 +38,8 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
     textSignatures,
   } = props;
   const navigate = useNavigate();
+  const { isMobile } = useDevices();
+
 
   const viewSmartContract = () => {
     if (contractId) {
@@ -52,46 +55,61 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
 
   return (
     <Flex vertical className="app-details-container" gap="32px">
-      <AppButton type="normal" onClick={() => navigate(-1)}>
-        <Flex gap="16px">
-          <ArrowOutlinedIcon />
-          <Text size="text-lg" className="font-semibold">
-            Back
-          </Text>
-        </Flex>
-      </AppButton>
-      <Flex vertical gap="24px">
-        <Flex vertical gap={4}>
-          <Flex gap={8} align="center">
-            <Text size="text-xl" className="font-bold neutral-1 capitalize">
-              {willName} details
-            </Text>
-            <AppBadge
-              count={
-                <Text size="text-md" className="white capitalize">
-                  {willType} will
-                </Text>
-              }
-              color="primary"
-              size="lg"
-            />
-            {
-              method === "inherited" ? (
+      {
+        !isMobile ? (
 
-                <AppBadge
-                  count={
-                    <Text size="text-md" className="white capitalize">
-                      {active ? "Activated" : "Inactivated"}
-                    </Text>
-                  }
-                  color={active ? "secondary" : "error"}
-                  size="lg"
-                />
-              ) : null
-            }
+          <AppButton type="normal" onClick={() => navigate(-1)}>
+            <Flex gap="16px">
+              <ArrowOutlinedIcon />
+              <Text size="text-lg" className="font-semibold">
+                Back
+              </Text>
+            </Flex>
+          </AppButton>
+        ) : null
+      }
+      <Flex vertical gap="24px">
+        <Flex gap={10}>
+          {
+            isMobile ? (
+              <IconButton className="back-mobile" onClick={() => navigate(-1)}>
+                <ArrowOutlinedIcon />
+              </IconButton>
+            ) : null
+          }
+          <Flex vertical gap={4}>
+            <Flex vertical={isMobile ? true : false} gap={8} align={isMobile ? "flex-start" : "center"}>
+              <Text size="text-xl" className="font-bold neutral-1 capitalize">
+                {willName} details
+              </Text>
+              <AppBadge
+                count={
+                  <Text size="text-md" className="white capitalize">
+                    {willType} will
+                  </Text>
+                }
+                color="primary"
+                size="lg"
+              />
+              {
+                method === "inherited" ? (
+
+                  <AppBadge
+                    count={
+                      <Text size="text-md" className="white capitalize">
+                        {active ? "Activated" : "Inactivated"}
+                      </Text>
+                    }
+                    color={active ? "secondary" : "error"}
+                    size="lg"
+                  />
+                ) : null
+              }
+            </Flex>
+            <Text className="neutral-2 text-description">{description}</Text>
           </Flex>
-          <Text className="neutral-2">{description}</Text>
         </Flex>
+
         {
           method === "inherited" ? ( // inherited
             <Flex vertical align="flex-start" gap={10}>
@@ -110,33 +128,42 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
           ) : null
         }
         {children}
+        {
+          method === "created" ? (
+            <Flex
+              vertical={isMobile ? true : false}
+              className="details-container--footer"
+              gap={isMobile ? 12 : 20}
+              {
+              ...(!isMobile && {
+                align: "center",
+              })
+              }
+            >
+              <AppButton
+                type="primary"
+                size="xl"
+                icon={<EditOutlined />}
+                onClick={goToEdit}
+              >
+                <Text size="text-lg" className="uppercase white font-bold">
+                  Edit will
+                </Text>
+              </AppButton>
+              <AppButton
+                size="xl"
+                icon={<RightIcon />}
+                iconPosition="end"
+                onClick={viewSmartContract}
+              >
+                <Text size="text-lg" className="uppercase neutral-1 font-bold">
+                  View smart contract
+                </Text>
+              </AppButton>
+            </Flex>
+          ) : null
+        }
       </Flex>
-      {
-        method === "created" ? (
-          <Flex align="center" className="details-container--footer" gap={20}>
-            <AppButton
-              type="primary"
-              size="xl"
-              icon={<EditOutlined />}
-              onClick={goToEdit}
-            >
-              <Text size="text-lg" className="uppercase white font-bold">
-                Edit will
-              </Text>
-            </AppButton>
-            <AppButton
-              size="xl"
-              icon={<RightIcon />}
-              iconPosition="end"
-              onClick={viewSmartContract}
-            >
-              <Text size="text-lg" className="uppercase neutral-1 font-bold">
-                View smart contract
-              </Text>
-            </AppButton>
-          </Flex>
-        ) : null
-      }
     </Flex>
   );
 };

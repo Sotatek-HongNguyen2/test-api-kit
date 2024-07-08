@@ -7,6 +7,7 @@ import {
   ProgressCard,
 } from "@/components/organisms/details-card";
 import { DetailsContainer } from "@/components/organisms/wrapper-container/DetailsContainer";
+import { useDevices } from "@/hooks/useMediaQuery";
 import { WillServices } from "@/services/will-service";
 import { getWalletSlice, useAppSelector } from "@/store";
 import { WillData, WillMethod } from "@/types";
@@ -19,6 +20,7 @@ export function DetailsPage() {
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
   const { address } = useAppSelector(getWalletSlice);
   const [isLoading, setIsLoading] = useState(false);
+  const { isMobile } = useDevices();
 
   const willService = new WillServices();
 
@@ -118,38 +120,39 @@ export function DetailsPage() {
       willType={willDetail?.type}
       description={getPageDescription()}
       active={!["process", "done"]?.includes(willDetail?.status) ? false : true}
-      textSignatures={`There are ${willDetail?.willSignature?.length || 0} of ${
-        willDetail?.minSignature
-      } needed signatures to receive fund`}
+      textSignatures={`There are ${willDetail?.willSignature?.length || 0} of ${willDetail?.minSignature
+        } needed signatures to receive fund`}
       method={method}
       contractId={willDetail?.txHash}
       willId={willId}
     >
-      <AssetCard willDetail={willDetail} />
-      {willDetail?.type !== "destruction" && (
-        <BeneficiariesCard
-          beneficiaries={willDetail?.willDetail}
-          minSignature={willDetail?.minSignature}
+      <Flex vertical gap={isMobile ? 20 : 24}>
+        <AssetCard willDetail={willDetail} />
+        {willDetail?.type !== "destruction" && (
+          <BeneficiariesCard
+            beneficiaries={willDetail?.willDetail}
+            minSignature={willDetail?.minSignature}
+          />
+        )}
+        {willDetail?.type === "forwarding" && (
+          <AssetDetailCard
+            beneficiaries={willDetail?.willDetail}
+            ownerBalance={willDetail?.ownerBalance}
+          />
+        )}
+        <ProgressCard
+          activeDate={willDetail?.expTime}
+          createdDate={willDetail?.createdAt}
+          minimumSignatures={willDetail?.minSignature}
+          method={method}
+          lackSignMessage={willDetail?.lackSignMessage}
+          lackTransaction={willDetail?.lackTransaction}
+          owner={willDetail?.owner}
         />
-      )}
-      {willDetail?.type === "forwarding" && (
-        <AssetDetailCard
-          beneficiaries={willDetail?.willDetail}
-          ownerBalance={willDetail?.ownerBalance}
-        />
-      )}
-      <ProgressCard
-        activeDate={willDetail?.expTime}
-        createdDate={willDetail?.createdAt}
-        minimumSignatures={willDetail?.minSignature}
-        method={method}
-        lackSignMessage={willDetail?.lackSignMessage}
-        lackTransaction={willDetail?.lackTransaction}
-        owner={willDetail?.owner}
-      />
-      {willDetail?.type !== "destruction" && (
-        <NoteBeneficiariesCard note={willDetail?.note} />
-      )}
+        {willDetail?.type !== "destruction" && (
+          <NoteBeneficiariesCard note={willDetail?.note} />
+        )}
+      </Flex>
     </DetailsContainer>
   );
 }
