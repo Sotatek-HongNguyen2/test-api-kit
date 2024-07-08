@@ -191,9 +191,8 @@ export const ConfigBeneficiariesForm = ({
     const link = document.createElement("a");
     link.href = image as string;
     const beneficiaryName = form.getFieldValue("beneficiaryName") as any;
-    link.download = `${
-      beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
-    }.png`;
+    link.download = `${beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
+      }.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -244,6 +243,7 @@ export const ConfigBeneficiariesForm = ({
                     maxLength={15}
                     className="input-beneficiary-name"
                     placeholder="Enter beneficiary name"
+                    preventPasteSpecialChar
                     onKeyDown={(e: any) => {
                       const regex = /^[a-zA-Z0-9]+$/;
                       if (!regex.test(e.key)) {
@@ -269,6 +269,7 @@ export const ConfigBeneficiariesForm = ({
                     readOnly={generate}
                     maxLength={42}
                     placeholder="Enter beneficiary's wallet address"
+                    preventPasteSpecialChar
                     onKeyDown={(e: any) => {
                       if (e.key === " ") {
                         e.preventDefault();
@@ -330,9 +331,8 @@ export const ConfigBeneficiariesForm = ({
             Existing beneficiaries:
           </Text>
           <AppTable
-            className={`${
-              watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
-            }`}
+            className={`${watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
+              }`}
             columns={columns}
             dataSource={
               watchBeneficiaries && watchBeneficiaries.length > 0
