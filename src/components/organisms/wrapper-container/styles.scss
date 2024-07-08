@@ -4,9 +4,14 @@
   background-color: #F6F7FB;
   padding: 0vh 20vw;
 
-  @media (max-width: 1600px) {
-    padding: 0vh 15vw;
+  @media (max-width: 1400px) {
+    padding: 0vh;
   }
+
+  @media (max-width: $tablet-width) {
+    padding: 0px;
+  }
+
 
   @media (max-width: $tablet-width) {
     padding: 0px;
