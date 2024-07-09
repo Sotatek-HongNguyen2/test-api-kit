@@ -8,6 +8,7 @@ import { AppButton } from "@/components/atoms/button";
 import { AssetSelectType } from "@/components/organisms/config-card/AddAssetDistributionForm";
 
 import { SelectAsset } from "./SelectAsset";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 interface ConfigAssetProps {
   handleAddConfigAsset: (asset: AssetSelectType, percent: number) => number;
@@ -19,6 +20,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
   const { handleAddConfigAsset, selectedAssets, currentBeneficiary } = props;
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
   const [percent, setPercent] = useState<number | string>('');
+  const { isTablet } = useDevices();
 
   useEffect(() => {
     setAsset(null);
@@ -46,6 +48,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
   return (
     <Flex vertical gap={10}>
       <Flex
+        vertical={isTablet ? true : false}
         gap={16}
         align="center"
         justify="space-between"
@@ -73,7 +76,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
             value={percent ?? ''}
             type="number"
             placeholder="0"
-            min={1}
+            min={0}
             style={{ minHeight: "30px !important" }}
             suffix={
               <div style={{ cursor: "pointer" }} onClick={handleMaxPercent}>

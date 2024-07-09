@@ -13,14 +13,16 @@ import { BeneficiaryData, WillType } from "@/types"
 import { PROVIDER_TYPE } from "@/models/contract/evm/contract"
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract"
 import { getWalletSlice, useAppSelector } from "@/store"
+import { useDevices } from "@/hooks/useMediaQuery"
 
 export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) => {
 
   const configForm = Form.useFormInstance();
-  const { getFieldValue, setFieldValue, getFieldError } = configForm;
+  const { getFieldValue, getFieldError } = configForm;
   const watchBeneficiariesType = Form.useWatch("beneficiaries", configForm);
   const [loading, setLoading] = useState(false);
   const { address } = useAppSelector(getWalletSlice);
+  const { isTablet } = useDevices();
 
   const configOptions: CustomRadioItemProps[] = [
     {
@@ -98,7 +100,7 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
       title="Configure beneficiaries"
       iconTitle={<BeneficiariesIcon />}
     >
-      <Flex vertical gap={24}>
+      <Flex vertical gap={isTablet ? 16 : 24}>
         <Form.Item
           name="beneficiaries"
           rules={[{ required: true, message: 'Please select an option' }]}
@@ -106,15 +108,7 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
           <RadioGroup
             value={getFieldValue("beneficiaries")}
             items={configOptions}
-            verticalOption={false}
-          // onChange={(value) => {
-          //   if (isEdit && value === "existing") {
-          //     const beneficiaries = getFieldValue("initBeneficiaries") || [];
-          //     setFieldValue("beneficiariesList", beneficiaries)
-          //   } else {
-          //     setFieldValue("beneficiariesList", [])
-          //   }
-          // }}
+            verticalOption={isTablet ? true : false}
           />
         </Form.Item>
         {watchBeneficiariesType && (

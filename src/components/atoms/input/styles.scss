@@ -1,13 +1,21 @@
 @import 'src/assets/scss/_colors.scss';
+@import "@/assets/scss/responsive.scss";
+
+.ant-input-affix-wrapper {
+  padding: 0px 16px 0px 0px;
+}
 
 .ant-input {
   border: 1px solid $neutral5;
   min-height: 36px;
+  height: 46px;
   border-radius: 8px;
   font-size: 1rem;
+  padding: 13px 16px !important;
+  box-sizing: border-box;
 
   &::placeholder {
-    color: #6F7688;
+    color: $neutral4;
     font-size: 1rem;
   }
 

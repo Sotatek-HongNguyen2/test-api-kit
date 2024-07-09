@@ -1,11 +1,20 @@
 @import 'src/assets/scss/_colors.scss';
+@import "@/assets/scss/responsive.scss";
 
 .beneficiary-name {
   min-width: 30%;
+
+  @media (max-width: $tablet-width) {
+    min-width: 100%;
+  }
 }
 
 .beneficiary-address {
-  width: 60%;
+  min-width: 60%;
+
+  @media (max-width: $tablet-width) {
+    min-width: 100%;
+  }
 }
 
 .beneficiaries-wrapper {
@@ -14,6 +23,10 @@
 
 .beneficiaries-wrapper--generate {
   width: 50%;
+
+  @media (max-width: $tablet-width) {
+    width: 100%;
+  }
 }
 
 .generate {
@@ -22,10 +35,18 @@
 
 .generate-QR {
   width: 30%;
+
+  @media (max-width: $tablet-width) {
+    width: 100%;
+  }
 }
 
 .select-signature {
   max-width: 30%;
+
+  @media (max-width: $tablet-width) {
+    max-width: 100%;
+  }
 }
 
 .select-signature-dropdown {
@@ -35,6 +56,10 @@
 
 .asset-distribution-table {
   width: 70%;
+
+  @media (max-width: $tablet-width) {
+    width: 100%;
+  }
 }
 
 .update-asset {
@@ -89,4 +114,8 @@
   max-width: calc(100vw - 10vw - 40vw); // 10vw is padding, 10vw is app-page padding, 40vw is app-config-container padding
   padding-bottom: 2px;
   overflow-x: scroll;
+
+  @media (max-width: $tablet-width) {
+    max-width: calc(100vw - 32px - 32px);
+  }
 }

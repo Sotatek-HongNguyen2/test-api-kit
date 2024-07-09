@@ -1,4 +1,17 @@
 @import 'src/assets/scss/_colors.scss';
+@import "@/assets/scss/responsive.scss";
+
+.app-asset-name {
+  svg {
+    width: 40px;
+    height: 40px;
+
+    @media (max-width: $tablet-width) {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
 
 .asset-icon {
   width: 40px;
@@ -22,6 +35,10 @@
 
 .select-asset {
   max-width: 70%;
+
+  @media (max-width: $tablet-width) {
+    max-width: 100%;
+  }
 
   .asset-icon--small {
     width: 26px;

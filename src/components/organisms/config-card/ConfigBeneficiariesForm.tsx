@@ -25,10 +25,11 @@ import { BENEFICIARY_RULES, ETHEREUM_ADDRESS_RULES } from "@/helpers/rule";
 import { useAppDispatch } from "@/store";
 import { walletSliceActions } from "@/store/slices/walletSlice";
 import WALLETS from "@/models/wallet";
-import { Plus } from "@/assets/icons";
+import { NoData, Plus } from "@/assets/icons";
 
 import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal";
 import { getWalletSlice, useAppSelector } from "@/store";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 export const ConfigBeneficiariesForm = ({
   generate = false,
@@ -52,6 +53,7 @@ export const ConfigBeneficiariesForm = ({
   const dispatch = useAppDispatch();
   const { createNewAccount } = walletSliceActions;
   const [image, setImage] = useState<string>();
+  const { isTablet } = useDevices();
 
   // const [addressGenerate,setAddressGenerate] = useState()
 
@@ -213,7 +215,7 @@ export const ConfigBeneficiariesForm = ({
   }, [watchBeneficiaries?.length, isValidBeneficiary, image]);
 
   return (
-    <Flex vertical gap={12} className="mt-3">
+    <Flex vertical gap={isTablet ? 24 : 12} className="mt-3">
       <Form
         form={form}
         onFinish={onAddBeneficiary}
@@ -221,9 +223,9 @@ export const ConfigBeneficiariesForm = ({
         onFieldsChange={validateForm}
       >
         <Flex vertical gap={12}>
-          <Flex gap={24}>
+          <Flex vertical={isTablet} gap={24}>
             <Flex
-              vertical={generate}
+              vertical={generate || isTablet}
               gap={16}
               className={clsx(
                 "beneficiaries-wrapper",
@@ -341,6 +343,41 @@ export const ConfigBeneficiariesForm = ({
             }
             pagination={false}
             hasIconAction={true}
+            locale={{
+              emptyText: (
+                <Flex
+                  vertical
+                  align="center"
+                  justify="center"
+                  gap={4}
+                  style={{
+                    padding: isTablet ? "24px 0px" : "40px 0px"
+                  }}
+                >
+                  <NoData
+                    width={isTablet ? 70 : 76}
+                    height={isTablet ? 70 : 76}
+                  />
+                  <Text className=" font-semibold">No data</Text>
+                  <Flex vertical>
+                    <Text
+                      className="neutral-2"
+                      align="center"
+                      size="text-sm"
+                    >
+                      You currently have no will.
+                    </Text>
+                    <Text
+                      className="neutral-2"
+                      align="center"
+                      size="text-sm"
+                    >
+                      Get started by creating a will
+                    </Text>
+                  </Flex>
+                </Flex>
+              ),
+            }}
           />
         </Flex>
       </Form.Item>
