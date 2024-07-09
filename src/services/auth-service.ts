@@ -16,4 +16,7 @@ export class AuthServices extends ServiceBase {
   getInformation = async () => {
     return this.get(API_CONFIG.auth.getInformation);
   };
+  findByWallet = async (body: { walletAddress: string }) => {
+    return this.post(API_CONFIG.auth.findByWallet, body);
+  }
 }

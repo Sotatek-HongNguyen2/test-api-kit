@@ -15,7 +15,6 @@ export function EditWillPage() {
   const { willId } = useParams();
 
   const [form] = Form.useForm<ConfigFormDataType>();
-  const watchBeneficiaries = Form.useWatch("beneficiariesList", form);
   const { setFieldsValue } = form;
   const willService = new WillServices();
   const [willDetail, setWillDetail] = useState<WillData | null>(null);
@@ -31,12 +30,6 @@ export function EditWillPage() {
   };
 
   const getAmount = (willDetail: any, asset: any, ownerBalance: any) => {
-    console.log(
-      willDetail,
-      asset,
-      ownerBalance,
-      "willDetail, asset, ownerBalance"
-    );
     if (ownerBalance && ownerBalance?.symbol === "ETH") {
       return Number(willDetail.willBalance ?? 0) > Number(ownerBalance?.balance)
         ? getTooltip(ownerBalance?.balance)
@@ -70,20 +63,21 @@ export function EditWillPage() {
         (beneficiary: any) => ({
           ...beneficiary,
           address: beneficiary?.walletAddress,
+          avatar: beneficiary?.user?.avatar,
           assetConfig: !beneficiary?.fwDetailAsset
             ? []
             : beneficiary?.fwDetailAsset?.map((item: any) => ({
-                percent: item?.percent,
-                asset: {
-                  assetAddress: item?.asset,
-                  value: data?.ownerBalance?.find(
-                    (balance: any) => balance?.address === item?.asset
-                  )?.symbol,
-                  ...data?.ownerBalance?.find(
-                    (balance: any) => balance?.address === item?.asset
-                  ),
-                },
-              })),
+              percent: item?.percent,
+              asset: {
+                assetAddress: item?.asset,
+                value: data?.ownerBalance?.find(
+                  (balance: any) => balance?.address === item?.asset
+                )?.symbol,
+                ...data?.ownerBalance?.find(
+                  (balance: any) => balance?.address === item?.asset
+                ),
+              },
+            })),
         })
       );
       setFieldsValue({

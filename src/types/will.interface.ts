@@ -94,6 +94,7 @@ export interface BeneficiaryData {
   name: string;
   address: string;
   percentage?: number;
+  avatar?: string;
 }
 
 export interface FWDetailAsset {
