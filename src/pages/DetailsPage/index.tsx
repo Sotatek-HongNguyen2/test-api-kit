@@ -60,7 +60,7 @@ export function DetailsPage() {
       return !["process", "done"]?.includes(willDetail?.status) ? (
         <>
           This is {willDetail?.type === "inheritance" ? "an" : "a"} <span className="capitalize">{willDetail?.type}</span>{" "}
-          will you are a beneficiary of. When this will is activated, a
+          will you are a beneficiary. When this will is activated, a
           minimum number of co-signatures will be required for you as a
           beneficiary to claim the fund in the multisig-wallet.
         </>
