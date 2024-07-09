@@ -1,4 +1,4 @@
-import { Flex, Form, Table, Tooltip } from "antd";
+import { Flex, Form, Tooltip } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useMemo, useState } from "react";
 
@@ -6,10 +6,13 @@ import { AppButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text";
 import formatNumber from "@/helpers/useFormatToken";
 import useDisclosure from "@/hooks/useDisclosure";
-import { assetData } from "@/constants/asset";
+import { AssetType, assetData } from "@/constants/asset";
 
 import { AssetName } from "./AssetName";
 import { TokenModal, TokenModalType } from "./TokenModal";
+import { AppTable } from "../table";
+import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer";
+import { DiamondIcon } from "@/assets/icons/custom-icon";
 
 export const AssetTableWithAction = ({
   willAddress,
@@ -54,7 +57,7 @@ export const AssetTableWithAction = ({
       render: (_, record) => (
         <AssetName
           asset={{
-            ...assetData[record?.value],
+            ...assetData[record?.value as AssetType],
             symbol: record?.value,
           }}
         />
@@ -135,8 +138,11 @@ export const AssetTableWithAction = ({
   ];
 
   return (
-    <>
-      <Table
+    <CartItemContainer
+      title={`Asset (${selectOptions?.length ?? 0})`}
+      iconTitle={<DiamondIcon />}
+    >
+      <AppTable
         columns={columns}
         dataSource={selectOptions}
         pagination={false}
@@ -152,6 +158,6 @@ export const AssetTableWithAction = ({
           willAddress={willAddress}
         />
       )}
-    </>
+    </CartItemContainer>
   );
 };

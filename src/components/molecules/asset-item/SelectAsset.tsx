@@ -15,10 +15,10 @@ interface SelectAssetProps {
   asset: AssetSelectType | null;
   addAsset?: (asset: AssetSelectType) => void;
   disableSelected?:
-    | false
-    | {
-        selectedAssets: AssetSelectType[];
-      };
+  | false
+  | {
+    selectedAssets: AssetSelectType[];
+  };
 }
 
 export const SelectAsset = ({
@@ -44,13 +44,13 @@ export const SelectAsset = ({
       disabled: !disableSelected
         ? false
         : disableSelected?.selectedAssets?.some(
-            (item) => item?.value === asset?.symbol
-          ),
+          (item) => item?.value === asset?.symbol
+        ),
     };
   });
 
   return (
-    <Flex vertical gap={12} className="select-asset">
+    <Flex vertical gap={10} className="select-asset">
       <Text className="font-semibold neutral-1">Asset</Text>
       <Flex align="center" gap={12}>
         <AppSelect

@@ -40,4 +40,8 @@
 
 .app-config-container {
   padding: 0vh 20vw;
+
+  @media (max-width: $tablet-width) {
+    padding: 0px;
+  }
 }
