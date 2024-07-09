@@ -56,48 +56,28 @@ export function DetailsPage() {
 
   if (!willDetail || !method) return null;
   const getPageDescription = () => {
-    if (method === "inherited") {
-      switch (willDetail?.type) {
-        case "inheritance":
-          return !["process", "done"]?.includes(willDetail?.status) ? (
-            <>
-              This is an <span className="capitalize">{willDetail?.type}</span>{" "}
-              will you are a beneficiary of. When this will is activated, a
-              minimum number of co-signatures will be required for you as a
-              beneficiary to claim the fund in the multisig-wallet.
-            </>
-          ) : (
-            <>
-              This is an <span className="capitalize">{willDetail?.type}</span>{" "}
-              will you are as a beneficiary. Sign in Multisig-Wallet to claim
-              funds.
-            </>
-          );
-        default:
-          return (
-            <>
-              This is an <span className="capitalize">{willDetail?.type}</span>{" "}
-              will you are as a beneficiary.
-            </>
-          );
-      }
+    if (['inheritance', 'forwarding'].includes(willDetail?.type) && method === "inherited") {
+      return !["process", "done"]?.includes(willDetail?.status) ? (
+        <>
+          This is {willDetail?.type === "inheritance" ? "an" : "a"} <span className="capitalize">{willDetail?.type}</span>{" "}
+          will you are a beneficiary of. When this will is activated, a
+          minimum number of co-signatures will be required for you as a
+          beneficiary to claim the fund in the multisig-wallet.
+        </>
+      ) : (
+        <>
+          This is {willDetail?.type === "inheritance" ? "an" : "a"} <span className="capitalize">{willDetail?.type}</span>{" "}
+          will you are as a beneficiary. Sign in Multisig-Wallet to claim
+          funds.
+        </>
+      );
     }
-    switch (willDetail?.type) {
-      case "destruction":
-        return (
-          <>
-            This is a <span className="capitalize">{willDetail?.type}</span>{" "}
-            will you created with a list of assets.
-          </>
-        );
-      default:
-        return (
-          <>
-            This is a <span className="capitalize">{willDetail?.type}</span>{" "}
-            will you created with a list of beneficiaries.
-          </>
-        );
-    }
+    return (
+      <>
+        This is {willDetail?.type === "inheritance" ? "an" : "a"} <span className="capitalize">{willDetail?.type}</span>{" "}
+        will you created with a list of beneficiaries.
+      </>
+    );
   };
 
   if (isLoading)

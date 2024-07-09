@@ -227,7 +227,7 @@ export const TokenModal = (props: TokenModalProps) => {
     >
       <Flex vertical gap={24}>
         <Flex vertical gap={10}>
-          <Text size="text-lg" className="neutral-1 font-semibold">
+          <Text className="neutral-1 font-semibold">
             Amount
           </Text>
           <AppInput
@@ -251,17 +251,6 @@ export const TokenModal = (props: TokenModalProps) => {
           gap={20}
         >
           <AppButton
-            size="xl"
-            className="token-modal--footer-btn"
-            onClick={() => {
-              onClose();
-            }}
-          >
-            <Text size="text-lg" className="uppercase font-bold neutral-1">
-              Cancel
-            </Text>
-          </AppButton>
-          <AppButton
             type="primary"
             className="token-modal--footer-btn capitalize"
             size="xl"
@@ -271,6 +260,17 @@ export const TokenModal = (props: TokenModalProps) => {
           >
             <Text size="text-lg" className="uppercase font-bold">
               {type}
+            </Text>
+          </AppButton>
+          <AppButton
+            size="xl"
+            className="token-modal--footer-btn"
+            onClick={() => {
+              onClose();
+            }}
+          >
+            <Text size="text-lg" className="uppercase font-bold neutral-1">
+              Cancel
             </Text>
           </AppButton>
         </Flex>

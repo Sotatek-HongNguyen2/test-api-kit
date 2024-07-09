@@ -4,7 +4,7 @@ import "./styles.scss"
 
 interface TextProps {
   children?: React.ReactNode;
-  size?: 'text-3xl' | 'text-2xl' | 'text-xl' | 'text-lg' | 'text-md' | 'text-sm' | 'text-xs'
+  size?: 'text-4xl' | 'text-3xl' | 'text-2xl' | 'text-xl' | 'text-lg' | 'text-md' | 'text-sm' | 'text-xs'
   color?: string;
   className?: string;
   align?: 'left' | 'center' | 'right';

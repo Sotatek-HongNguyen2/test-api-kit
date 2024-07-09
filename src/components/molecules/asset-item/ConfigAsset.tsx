@@ -19,12 +19,11 @@ interface ConfigAssetProps {
 export const ConfigAsset = (props: ConfigAssetProps) => {
   const { handleAddConfigAsset, selectedAssets, currentBeneficiary } = props;
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
-  const [percent, setPercent] = useState<number>(0);
+  const [percent, setPercent] = useState<number | string>('');
   const { isTablet } = useDevices();
 
   useEffect(() => {
     setAsset(null);
-    setPercent(0);
   }, [currentBeneficiary]);
 
   const handleChangePercent = (value: string) => {
@@ -32,7 +31,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
       setPercent(100);
       return;
     }
-    setPercent(Number(value));
+    setPercent(value);
   };
   const handleMaxPercent = () => {
     setPercent(100);
@@ -74,7 +73,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
             Inheritance Percentage
           </Text>
           <AppInput
-            value={percent}
+            value={percent ?? ''}
             type="number"
             placeholder="0"
             min={0}
@@ -85,6 +84,20 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
               </div>
             }
             onChange={(e) => handleChangePercent(e.target.value)}
+            onKeyPress={(event) => {
+              if (event.key === "0" && percent === "") {
+                event.preventDefault();
+              }
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
+            onPaste={(e) => {
+              const pastedText = e.clipboardData.getData('Text');
+              if (!/^[0-9]+$/.test(pastedText) || pastedText.startsWith('0')) {
+                e.preventDefault();
+              }
+            }}
           />
         </Flex>
       </Flex>

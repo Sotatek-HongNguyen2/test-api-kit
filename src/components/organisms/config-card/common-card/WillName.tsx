@@ -56,6 +56,7 @@ export const WillName = ({ isEdit }: EditFormProps) => {
           <AppInput
             maxLength={30}
             placeholder="Enter will name"
+            preventPasteSpecialChar
             onChange={(e) => {
               setFieldValue("willName", e.target.value);
             }}
