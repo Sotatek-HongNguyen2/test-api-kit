@@ -93,7 +93,7 @@ export const WillTypeModal = () => {
         hideFooter
       >
         <Flex vertical gap={24}>
-          <Flex gap={24} align="center">
+          <Flex gap={24}>
             {willTypeItems?.map((item, index) => (
               <WillTypeCard
                 key={`${item?.type}-${index}`}
