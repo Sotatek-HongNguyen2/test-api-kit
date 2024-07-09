@@ -30,12 +30,6 @@ export function EditWillPage() {
   };
 
   const getAmount = (willDetail: any, asset: any, ownerBalance: any) => {
-    console.log(
-      willDetail,
-      asset,
-      ownerBalance,
-      "willDetail, asset, ownerBalance"
-    );
     if (ownerBalance && ownerBalance?.symbol === "ETH") {
       return Number(willDetail.willBalance ?? 0) > Number(ownerBalance?.balance)
         ? getTooltip(ownerBalance?.balance)

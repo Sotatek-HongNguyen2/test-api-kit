@@ -1,6 +1,6 @@
 import { Flex } from "antd";
 import "./styles.scss";
-import Title from "antd/es/typography/Title";
+import { Text } from "@/components/atoms/text";
 
 interface DashboardProps {
   title: string;
@@ -9,7 +9,7 @@ interface DashboardProps {
 export const Dashboard = ({ title }: DashboardProps) => {
   return (
     <Flex align="center" justify="center" className="dashboard-page">
-      <Title level={1}>{title}</Title>
+      <Text size="text-4xl" className="font-semibold white">{title}</Text>
     </Flex>
   );
 };

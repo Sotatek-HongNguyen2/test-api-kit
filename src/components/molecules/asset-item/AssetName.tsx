@@ -27,7 +27,7 @@ export const AssetName = (props: AssetNameProps) => {
 
   return (
     <Flex align="center" gap="10px">
-      <Flex align="center" gap="10px">
+      <Flex align="center" gap="10px" className="app-asset-name">
         {assetDataItem?.logo ?? <LogoETH200 />}
         <Flex vertical>
           <Text className="font-semibold neutral-1">

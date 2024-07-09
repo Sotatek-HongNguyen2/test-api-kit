@@ -32,7 +32,7 @@ export const Assets = ({ will, type }: AssetsProps) => {
     }
     return Number(asset?.amount ?? 0) > Number(ownerBalanceValue)
       ? getTooltip(ownerBalanceValue)
-      : getTooltip(asset?.amount);
+      : getTooltip(asset?.amount ?? 0);
   };
 
   const listAsset = useMemo(

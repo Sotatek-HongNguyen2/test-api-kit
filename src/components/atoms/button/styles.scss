@@ -1,4 +1,5 @@
 @import 'src/assets/scss/_colors.scss';
+@import "@/assets/scss/responsive.scss";
 
 // ============icon-button-color================
 .app-icon-button {
@@ -99,6 +100,11 @@
 .app-button--xl {
   height: 46px;
   padding: 11px 20px 11px 24px;
+
+  @media (max-width: $tablet-width) {
+    height: 40px;
+    padding: 8px 16px;
+  }
 }
 
 .app-button--small {

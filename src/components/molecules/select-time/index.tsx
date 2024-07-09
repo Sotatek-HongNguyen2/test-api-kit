@@ -3,6 +3,8 @@ import { Text } from "@/components/atoms/text";
 import { Flex, Form } from "antd";
 import { RadioGroup } from "../radio-group";
 import { AppInput } from "@/components/atoms/input";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { WILL_NAME_RULES } from "@/helpers/rule";
 
 interface SelectTimeProps {
   title?: string;
@@ -12,6 +14,7 @@ interface SelectTimeProps {
 }
 export const SelectTime = (props: SelectTimeProps) => {
   const { title, handleChangeValue, value, name } = props;
+  const configForm = useFormInstance();
 
   const options = [
     {
@@ -42,12 +45,25 @@ export const SelectTime = (props: SelectTimeProps) => {
           ]}
         >
           <AppInput
-            className="input-time"
-            onlyNumber
-            placeholder="Enter a month"
             maxLength={5}
+            className="input-time"
+            placeholder="Enter a month"
             onChange={(e) => {
               handleChangeValue?.(e.target.value as any);
+            }}
+            onKeyPress={(event) => {
+              if (!/^[0-9]+$/.test(event.key)) {
+                event.preventDefault();
+              }
+              if (event.key === "0" && configForm.getFieldValue(`${name ?? ''}_customTime`) == "") {
+                event.preventDefault();
+              }
+            }}
+            onPaste={(e) => {
+              const pastedText = e.clipboardData.getData('Text');
+              if (!/^[0-9]+$/.test(pastedText) || pastedText.startsWith('0')) {
+                e.preventDefault();
+              }
             }}
           />
         </Form.Item>

@@ -297,14 +297,6 @@ input:-webkit-autofill:active {
   margin-left: 8px;
 }
 
-.ant-input {
-  padding: 9.5px 11px !important;
-
-  @media screen and (max-width: $tablet-width) {
-    padding: 9.5px 0px !important;
-  }
-}
-
 .ant-input-group .ant-input-group-addon {
   @media screen and (max-width: $tablet-width) {
     padding: 0 8px !important;

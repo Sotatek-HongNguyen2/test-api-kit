@@ -1,4 +1,4 @@
-import { Flex } from "antd";
+import { Divider, Flex } from "antd";
 import { useMemo } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import { DiamondIcon } from "@/assets/icons/custom-icon";
 import { Text } from "@/components/atoms/text";
 import { APP_ROUTES_PATHS } from "@/constants";
 import { WillType } from "@/types";
+import { useDevices } from "@/hooks/useMediaQuery";
 
 interface WillTypeCardProps {
   type?: WillType;
@@ -16,6 +17,7 @@ export const WillTypeCard = ({ type }: WillTypeCardProps) => {
   const { willType: willTypeParams } = useParams<{ willType: WillType }>();
   const willType = willTypeParams || type;
   const location = useLocation();
+  const { isTablet } = useDevices();
 
   if (
     !willType ||
@@ -59,12 +61,28 @@ export const WillTypeCard = ({ type }: WillTypeCardProps) => {
 
   return (
     <Card>
-      <Flex gap={20} align="flex-start">
-        <DiamondIcon />
+      <Flex vertical={isTablet ? true : false} gap={isTablet ? 0 : 20} align="flex-start">
+        <Flex gap={12}>
+          <DiamondIcon />
+          {
+            isTablet && (
+              <Text size="text-lg" className="font-semibold neutral-1">
+                {willTypeData?.title}
+              </Text>
+            )
+          }
+        </Flex>
+        {
+          isTablet && <Divider />
+        }
         <Flex vertical gap={10}>
-          <Text size="text-lg" className="font-semibold neutral-1">
-            {willTypeData?.title}
-          </Text>
+          {
+            !isTablet && (
+              <Text size="text-lg" className="font-semibold neutral-1">
+                {willTypeData?.title}
+              </Text>
+            )
+          }
           {willTypeData?.description &&
             typeof willTypeData?.description === "string" ? (
             <Text size="text-sm" className="neutral-2">
