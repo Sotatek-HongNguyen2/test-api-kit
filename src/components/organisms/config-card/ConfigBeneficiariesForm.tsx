@@ -1,7 +1,7 @@
 import { AppInput } from "@/components/atoms/input";
 import "./styles.scss";
 
-import { Divider, Flex, Form, Image, Select } from "antd";
+import { Divider, Flex, Form, Image } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
@@ -29,6 +29,8 @@ import { Plus } from "@/assets/icons";
 
 import { DeleteBeneficiaryModal } from "./common-card/DeleteBeneficiaryModal";
 import { getWalletSlice, useAppSelector } from "@/store";
+import { AuthServices } from "@/services/auth-service";
+import WillImage from "@/components/atoms/Image";
 
 export const ConfigBeneficiariesForm = ({
   generate = false,
@@ -42,7 +44,6 @@ export const ConfigBeneficiariesForm = ({
   const watchBeneficiaries = Form.useWatch("beneficiariesList", {
     form: configForm,
   });
-
   const { handleCopyToClipboard, isCopied } = useCopyToClipBoard();
   const [indexCopied, setIndexCopied] = useState<number>(-1);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,6 +53,7 @@ export const ConfigBeneficiariesForm = ({
   const dispatch = useAppDispatch();
   const { createNewAccount } = walletSliceActions;
   const [image, setImage] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   // const [addressGenerate,setAddressGenerate] = useState()
 
@@ -82,9 +84,16 @@ export const ConfigBeneficiariesForm = ({
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (name) => (
-        <Flex gap={10} align="center">
-          <UserOutlinedIcon />
+      render: (name, record) => (
+        <Flex gap={10} align="center" className="beneficiary-table--name">
+          {
+            record?.avatar ? (
+              <WillImage
+                src={record?.avatar}
+              />
+            ) : <UserOutlinedIcon />
+          }
+
           <Text className="neutral-1 font-semibold">{name}</Text>
         </Flex>
       ),
@@ -136,33 +145,44 @@ export const ConfigBeneficiariesForm = ({
     }
   }, [generate]);
 
-  const onAddBeneficiary = (values: any) => {
-    if (values?.beneficiaryAddress === address) {
-      WillToast.error("You can't add your own address as a beneficiary");
-      return;
+  const onAddBeneficiary = async (values: any) => {
+    const authServices = new AuthServices();
+    setLoading(true);
+    try {
+      if (values?.beneficiaryAddress === address) {
+        WillToast.error("You can't add your own address as a beneficiary");
+        return;
+      }
+      const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
+      const beneficiaryIndex = currentBeneficiaries.findIndex(
+        (beneficiary: BeneficiaryData) =>
+          beneficiary?.address === values?.beneficiaryAddress
+      );
+      if (beneficiaryIndex > -1) {
+        WillToast.error("Beneficiary already exists");
+        return;
+      }
+      const res = await authServices.findByWallet({ walletAddress: values?.beneficiaryAddress });
+      const avatar = res?.data?.data?.data?.avatar;
+      const newBeneficiary: BeneficiaryData = {
+        id: currentBeneficiaries.length + 1,
+        name: values.beneficiaryName,
+        address: values.beneficiaryAddress,
+        avatar,
+      };
+      setFieldValue("beneficiariesList", [
+        newBeneficiary,
+        ...currentBeneficiaries,
+      ]);
+      WillToast.success("Add beneficiary successfully");
+      resetFields();
+      setIsValidBeneficiary(false);
+      setImage("");
+    } catch (error: any) {
+      WillToast.error(error?.message);
+    } finally {
+      setLoading(false);
     }
-    const currentBeneficiaries = getFieldValue("beneficiariesList") || [];
-    const beneficiaryIndex = currentBeneficiaries.findIndex(
-      (beneficiary: BeneficiaryData) =>
-        beneficiary?.address === values?.beneficiaryAddress
-    );
-    if (beneficiaryIndex > -1) {
-      WillToast.error("Beneficiary already exists");
-      return;
-    }
-    const newBeneficiary: BeneficiaryData = {
-      id: currentBeneficiaries.length + 1,
-      name: values.beneficiaryName,
-      address: values.beneficiaryAddress,
-    };
-    setFieldValue("beneficiariesList", [
-      newBeneficiary,
-      ...currentBeneficiaries,
-    ]);
-    WillToast.success("Add beneficiary successfully");
-    resetFields();
-    setIsValidBeneficiary(false);
-    setImage("");
   };
 
   const validateForm = () => {
@@ -191,9 +211,8 @@ export const ConfigBeneficiariesForm = ({
     const link = document.createElement("a");
     link.href = image as string;
     const beneficiaryName = form.getFieldValue("beneficiaryName") as any;
-    link.download = `${
-      beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
-    }.png`;
+    link.download = `${beneficiaryName ? beneficiaryName.toLowerCase().trim() : "qrcode"
+      }.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -317,6 +336,7 @@ export const ConfigBeneficiariesForm = ({
               size="xl"
               className="none-styles beneficiary-name"
               onClick={submit}
+              loading={loading}
             >
               <Text className="uppercase font-bold">Save this beneficiary</Text>
             </AppButton>
@@ -330,9 +350,8 @@ export const ConfigBeneficiariesForm = ({
             Existing beneficiaries:
           </Text>
           <AppTable
-            className={`${
-              watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
-            }`}
+            className={`${watchBeneficiaries && watchBeneficiaries.length > 0 && "have-data"
+              }`}
             columns={columns}
             dataSource={
               watchBeneficiaries && watchBeneficiaries.length > 0

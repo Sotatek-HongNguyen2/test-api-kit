@@ -4,7 +4,8 @@ export const API_CONFIG = {
     login: "/auth/login/metamask",
     logout: "/auth/logout",
     updateUserProfile: '/auth/edit-profile',
-    getInformation: '/auth/me'
+    getInformation: '/auth/me',
+    findByWallet: '/auth/find-by-wallet'
   },
   will: {
     myWill: "/will/my",
