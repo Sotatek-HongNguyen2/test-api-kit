@@ -24,6 +24,13 @@ export interface WithDraw {
   amount: number | string;
 }
 
+interface UpdateWillAssetsDistributionType {
+  willId: number;
+  nickNames: string[];
+  distributions: [string, string[], number[]][];
+  minRequiredSigs: number;
+}
+
 export default class forwardingWillContract extends Contract<ABIType> {
   constructor({
     address,
@@ -64,6 +71,15 @@ export default class forwardingWillContract extends Contract<ABIType> {
     return this.contractInstance.methods.withdrawEthFromWill(
       dto.willId,
       dto.amount
+    );
+  }
+
+  async updateWillAssetsDistribution(dto: UpdateWillAssetsDistributionType) {
+    return this.contractInstance.methods.updateWillAssetsDistribution(
+      dto.willId,
+      dto.nickNames,
+      dto.distributions,
+      dto.minRequiredSigs
     );
   }
 }

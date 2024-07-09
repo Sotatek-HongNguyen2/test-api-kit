@@ -1,6 +1,6 @@
 import "./styles.scss";
 import { Flex, Form } from "antd";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnsType } from "antd/es/table";
 
 import { Text } from "@/components/atoms/text";
@@ -13,9 +13,11 @@ import { ConfigAsset } from "@/components/molecules/asset-item/ConfigAsset";
 import WillToast from "@/components/atoms/ToastMessage";
 
 import { AssetDataColumn, AssetSelectType } from "./AddAssetDistributionForm";
-import { CartItemContainer } from "../details-card/CardItemContainer";
+import { CardDisclosureProps, CartItemContainer } from "../details-card/CardItemContainer";
 import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { uniqBy } from "lodash";
+import { NodataTable } from "./ConfigBeneficiariesForm";
+import { EditFormProps } from "@/components/templates/form";
 
 export interface BeneficiaryConfig extends BeneficiaryData {
   assetConfig: {
@@ -24,10 +26,12 @@ export interface BeneficiaryConfig extends BeneficiaryData {
   }[];
 }
 
-export const AssetToBeneficiary = () => {
+export const AssetToBeneficiary = (props: CardDisclosureProps & EditFormProps) => {
+  const { isEdit, hasIcon, isDisclosure } = props;
   const configForm = Form.useFormInstance();
   const { getFieldValue, setFieldValue } = configForm;
   const watchBeneficiary = Form.useWatch("beneficiariesList", configForm);
+  const watchAssetDistribution = Form.useWatch("assetDistribution", configForm);
 
   const [currentSelected, setCurrentSelected] =
     useState<BeneficiaryData | null>(null);
@@ -35,7 +39,7 @@ export const AssetToBeneficiary = () => {
   const assetPercents = useMemo(() => {
     const listAssets = watchBeneficiary?.flatMap((data: any) => (data?.assetConfig ?? [])?.map((asset: any) => ({
       ...asset?.asset,
-      percent: asset?.percent
+      percent: asset?.percent ? Number(asset?.percent) : 0
     }))) || [];
     const distinctAsset = uniqBy(listAssets, "value");
     return distinctAsset?.map((asset: any) => ({
@@ -230,6 +234,8 @@ export const AssetToBeneficiary = () => {
     <CartItemContainer
       title="Configure asset to beneficiary"
       iconTitle={<NoteIcon />}
+      hasIcon={hasIcon}
+      isDisclosure={isDisclosure}
     >
       <Flex vertical gap={16}>
         <Text>You’re a designated beneficiary of the following assets:</Text>
@@ -237,6 +243,7 @@ export const AssetToBeneficiary = () => {
           columns={totalColumn}
           dataSource={assetPercents}
           pagination={false}
+          locale={{ emptyText: <NodataTable /> }}
         />
         <Flex gap={16} className="list-beneficiary--card">
           {watchBeneficiary?.map((beneficiary: any) => (
@@ -254,11 +261,14 @@ export const AssetToBeneficiary = () => {
           dataSource={assets ?? []}
           hasIconAction
           pagination={false}
+          locale={{ emptyText: <NodataTable /> }}
         />
         <ConfigAsset
           handleAddConfigAsset={handleAddConfigAsset}
           selectedAssets={assets}
           currentBeneficiary={currentSelected}
+          totalOptions={watchAssetDistribution}
+          isEdit={isEdit}
         />
       </Flex>
     </CartItemContainer>

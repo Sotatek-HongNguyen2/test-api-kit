@@ -18,3 +18,32 @@
     border-radius: 50%;
   }
 }
+
+.cart-item--container--disclosure {
+  box-shadow: none;
+  border: 1px solid $neutral5;
+  padding: 13px 16px;
+  border-radius: 10px;
+
+  .cart-item--children {
+    overflow-y: hidden;
+    transition: max-height 0.3s ease-in-out;
+
+    &.children--hide {
+      max-height: 0;
+    }
+
+    &.visible {
+      max-height: 1000px;
+    }
+  }
+
+  .icon-disclosure {
+    transition: transform 0.3s ease-in-out;
+
+    &.visible {
+      transform: rotate(180deg);
+    }
+  }
+
+}

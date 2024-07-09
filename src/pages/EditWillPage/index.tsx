@@ -10,6 +10,7 @@ import { WillData } from "@/types";
 import { ConfigFormDataType } from "../ConfigWillPage";
 import { WillServices } from "@/services/will-service";
 import formatNumber from "@/helpers/useFormatToken";
+import { Text } from "@/components/atoms/text";
 
 export function EditWillPage() {
   const { willId } = useParams();
@@ -24,7 +25,10 @@ export function EditWillPage() {
   const getTooltip = (data: any) => {
     return (
       <Tooltip title={data} placement="top">
-        {formatNumber(Number(data))}
+        <Text className="font-semibold">
+          {formatNumber(Number(data))}
+        </Text>
+
       </Tooltip>
     );
   };
@@ -56,6 +60,7 @@ export function EditWillPage() {
               ...balance,
               assetAddress: balance?.address,
               amount: getAmount(data, item, balance),
+              value: balance?.symbol
             };
           })
       );
