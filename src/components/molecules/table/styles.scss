@@ -29,6 +29,7 @@
       }
 
       @media (max-width: $tablet-width) {
+        min-width: 50vw;
         padding: 14px 12px !important;
       }
     }
@@ -76,6 +77,11 @@
         border-top: none;
         border-right: none;
         width: 5vw !important;
+        min-width: 5vw;
+
+        @media (max-width: $tablet-width) {
+          min-width: 10vw;
+        }
       }
     }
   }
@@ -93,8 +99,7 @@
         }
 
         &:last-child {
-          max-width: 5vw !important;
-          min-width: 0vw;
+          text-align: start;
 
           @media (max-width: $tablet-width) {
             padding: 0px !important;
