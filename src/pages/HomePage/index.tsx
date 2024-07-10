@@ -1,7 +1,7 @@
 import { Flex } from "antd";
-import { ethers } from "ethers";
+import { ethers, BrowserProvider } from "ethers";
 import SafeApiKit from "@safe-global/api-kit";
-import Safe from "@safe-global/protocol-kit";
+import Safe, { SafeFactory, EthersAdapter } from "@safe-global/protocol-kit";
 import {
   MetaTransactionData,
   OperationType,
@@ -32,22 +32,32 @@ export function HomePage() {
     //   safeAddress: "0x0E0e097a14Ea275C8DFA1B421bF33EaaEc1E1778",
     // });
     // console.log(protocolKitOwner1);
-
-    const provider = new ethers.providers.Web3Provider(
-      window.ethereum as any
-    ) as any;
+    const isUnlocked = await (window.ethereum as any)._metamask.isUnlocked();
+    console.log({ isUnlocked });
+    const provider = new BrowserProvider(window.ethereum as any);
 
     // Yêu cầu người dùng kết nối ví
     const signer = await provider.send("eth_requestAccounts", []);
+    console.log({ signer });
+
+    const ethAdapter = new EthersAdapter({
+      ethers,
+      signerOrProvider: provider,
+    });
+    // const safeFactory = await SafeFactory.create({
+    //   ethAdapter,
+    // });
 
     // Khởi tạo Safe
-    const protocolKitOwner1 = await Safe.init({
-      provider,
-      signer: signer[0],
+    const protocolKitOwner1 = await Safe.create({
+      ethAdapter,
       safeAddress: "0x0E0e097a14Ea275C8DFA1B421bF33EaaEc1E1778",
     });
 
-    console.log(protocolKitOwner1);
+    const guard = await protocolKitOwner1.getGuard();
+    console.log({ guard });
+    //
+    // console.log(protocolKitOwner1);
   };
 
   return (
