@@ -17,5 +17,11 @@ export default ({ mode }: { mode: string }) => {
     resolve: {
       alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
     },
+    define: {
+      global: "window",
+      "process.env": {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      },
+    },
   });
 };
