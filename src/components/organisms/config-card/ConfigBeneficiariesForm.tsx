@@ -32,6 +32,44 @@ import { getWalletSlice, useAppSelector } from "@/store";
 import { AuthServices } from "@/services/auth-service";
 import WillImage from "@/components/atoms/Image";
 import { useDevices } from "@/hooks/useMediaQuery";
+import { AppInputArea } from "@/components/atoms/input-area";
+
+export const NodataTable = () => {
+  const { isTablet } = useDevices();
+  return (
+    <Flex
+      vertical
+      align="center"
+      justify="center"
+      gap={4}
+      style={{
+        padding: isTablet ? "24px 0px" : "40px 0px"
+      }}
+    >
+      <NoData
+        width={isTablet ? 70 : 76}
+        height={isTablet ? 70 : 76}
+      />
+      <Text className=" font-semibold">No data</Text>
+      <Flex vertical>
+        <Text
+          className="neutral-2"
+          align="center"
+          size="text-sm"
+        >
+          You currently have no will.
+        </Text>
+        <Text
+          className="neutral-2"
+          align="center"
+          size="text-sm"
+        >
+          Get started by creating a will
+        </Text>
+      </Flex>
+    </Flex>
+  )
+}
 
 export const ConfigBeneficiariesForm = ({
   generate = false,
@@ -287,17 +325,36 @@ export const ConfigBeneficiariesForm = ({
                   name="beneficiaryAddress"
                   rules={ETHEREUM_ADDRESS_RULES}
                 >
-                  <AppInput
-                    readOnly={generate}
-                    maxLength={42}
-                    placeholder="Enter beneficiary's wallet address"
-                    preventPasteSpecialChar
-                    onKeyDown={(e: any) => {
-                      if (e.key === " ") {
-                        e.preventDefault();
-                      }
-                    }}
-                  />
+                  {
+                    !isTablet ? (
+                      <AppInput
+                        readOnly={generate}
+                        maxLength={42}
+                        placeholder="Enter beneficiary's wallet address"
+                        preventPasteSpecialChar
+                        onKeyDown={(e: any) => {
+                          if (e.key === " ") {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
+                    ) : (
+                      <AppInputArea
+                        className="input-beneficiary-address"
+                        readOnly={generate}
+                        maxLength={42}
+                        placeholder="Enter beneficiary's wallet address"
+                        preventPasteSpecialChar
+                        autoSize={{ minRows: 1, maxRows: 2 }}
+                        onKeyDown={(e: any) => {
+                          if (e.key === " ") {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
+                    )
+                  }
+
                 </Form.Item>
               </Flex>
             </Flex>
@@ -366,37 +423,7 @@ export const ConfigBeneficiariesForm = ({
             hasIconAction={true}
             locale={{
               emptyText: (
-                <Flex
-                  vertical
-                  align="center"
-                  justify="center"
-                  gap={4}
-                  style={{
-                    padding: isTablet ? "24px 0px" : "40px 0px"
-                  }}
-                >
-                  <NoData
-                    width={isTablet ? 70 : 76}
-                    height={isTablet ? 70 : 76}
-                  />
-                  <Text className=" font-semibold">No data</Text>
-                  <Flex vertical>
-                    <Text
-                      className="neutral-2"
-                      align="center"
-                      size="text-sm"
-                    >
-                      You currently have no will.
-                    </Text>
-                    <Text
-                      className="neutral-2"
-                      align="center"
-                      size="text-sm"
-                    >
-                      Get started by creating a will
-                    </Text>
-                  </Flex>
-                </Flex>
+                <NodataTable />
               ),
             }}
           />

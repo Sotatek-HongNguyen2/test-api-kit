@@ -1,6 +1,6 @@
 import { BeneficiariesIcon } from "@/assets/icons/custom-icon"
 import { CustomRadioItemProps, RadioGroup } from "@/components/molecules/radio-group"
-import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer"
+import { CardDisclosureProps, CartItemContainer } from "@/components/organisms/details-card/CardItemContainer"
 import { Flex, Form } from "antd"
 import { ConfigBeneficiariesForm } from "../ConfigBeneficiariesForm"
 import { EditFormProps } from "@/components/templates/form"
@@ -14,8 +14,12 @@ import { PROVIDER_TYPE } from "@/models/contract/evm/contract"
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract"
 import { getWalletSlice, useAppSelector } from "@/store"
 import { useDevices } from "@/hooks/useMediaQuery"
+import clsx from "clsx"
 
-export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) => {
+type ConfigBeneficiariesProps = EditFormProps & CardDisclosureProps;
+
+export const ConfigBeneficiaries = (props: ConfigBeneficiariesProps) => {
+  const { isEdit, scWillId, type, hasIcon, isDisclosure } = props;
 
   const configForm = Form.useFormInstance();
   const { getFieldValue, getFieldError } = configForm;
@@ -99,6 +103,8 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
     <CartItemContainer
       title="Configure beneficiaries"
       iconTitle={<BeneficiariesIcon />}
+      hasIcon={hasIcon}
+      isDisclosure={isDisclosure}
     >
       <Flex vertical gap={isTablet ? 16 : 24}>
         <Form.Item
@@ -119,7 +125,7 @@ export const ConfigBeneficiaries = ({ isEdit, scWillId, type }: EditFormProps) =
             <AppButton
               type="primary"
               size="xl"
-              className="none-styles"
+              className={clsx("", !isTablet && "none-styles")}
               onClick={handleUpdateBeneficiaries}
               loading={loading}
             >

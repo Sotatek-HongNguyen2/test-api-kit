@@ -8,12 +8,13 @@ import { useState } from "react"
 import { EditFormProps } from "@/components/templates/form"
 import { AppButton } from "@/components/atoms/button"
 import WillToast from "@/components/atoms/ToastMessage"
-import { useParams } from "react-router-dom"
 import { contractAddress, getWillContract } from "@/pages/ConfigWillPage"
 import { WillType } from "@/types"
 import { PROVIDER_TYPE } from "@/models/contract/evm/contract"
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract"
 import { getWalletSlice, useAppSelector } from "@/store"
+import clsx from "clsx"
+import { useDevices } from "@/hooks/useMediaQuery"
 
 export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => {
   const configForm = Form.useFormInstance();
@@ -22,6 +23,7 @@ export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => 
   const value = getFieldValue('activationTrigger');
   const { address } = useAppSelector(getWalletSlice);
   const [loading, setLoading] = useState(false);
+  const { isTablet } = useDevices();
 
   const configOptions: CustomCheckboxItemProps[] = [
     {
@@ -140,7 +142,7 @@ export const ActivationTrigger = ({ type, isEdit, scWillId }: EditFormProps) => 
             <AppButton
               type="primary"
               size="xl"
-              className="none-styles"
+              className={clsx("", !isTablet && "none-styles")}
               onClick={handleUpdateTrigger}
               loading={loading}
             >

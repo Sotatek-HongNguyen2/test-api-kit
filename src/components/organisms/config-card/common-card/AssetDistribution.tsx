@@ -1,14 +1,14 @@
 import { NoteIcon } from "@/assets/icons/custom-icon"
-import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer"
+import { CardDisclosureProps, CartItemContainer } from "@/components/organisms/details-card/CardItemContainer"
 import { Form } from "antd"
 import { AddAssetDistributionForm } from "../AddAssetDistributionForm"
-import { EditFormProps } from "@/components/templates/form"
 
-export const AssetDistribution = (props: EditFormProps) => {
+export const AssetDistribution = (props: CardDisclosureProps) => {
   return (
     <CartItemContainer
       title="Configure asset distribution"
       iconTitle={<NoteIcon />}
+      {...props}
     >
       <Form.Item
         name="assetDistribution"

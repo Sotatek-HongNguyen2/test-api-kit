@@ -5,8 +5,10 @@ import { AppInputArea } from "@/components/atoms/input-area"
 import { Text } from "@/components/atoms/text"
 import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer"
 import { EditFormProps } from "@/components/templates/form"
+import { useDevices } from "@/hooks/useMediaQuery"
 import { WillServices } from "@/services/will-service"
 import { Flex, Form } from "antd"
+import clsx from "clsx"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 
@@ -16,6 +18,7 @@ export const NoteToBeneficiaries = ({ isEdit }: EditFormProps) => {
   const { getFieldValue, getFieldError, setFieldValue } = configForm;
   const { willId } = useParams();
   const [loading, setLoading] = useState(false);
+  const { isTablet } = useDevices();
 
   const handleUpdateNote = async () => {
     try {
@@ -80,7 +83,7 @@ export const NoteToBeneficiaries = ({ isEdit }: EditFormProps) => {
             <AppButton
               type="primary"
               size="xl"
-              className="none-styles"
+              className={clsx("", !isTablet && "none-styles")}
               onClick={handleUpdateNote}
               loading={loading}
             >

@@ -112,15 +112,21 @@
       }
 
       &:last-child {
+        border-bottom: 1px solid #E6E8EC !important;
+
         td {
+          border-bottom: 1px solid #E6E8EC !important;
+
           &:first-child {
             border-bottom-left-radius: 8px;
-            border-bottom: 1px solid #E6E8EC !important;
           }
 
           &:nth-last-child(2) {
             border-bottom-right-radius: 8px;
-            border-bottom: 1px solid #E6E8EC !important;
+          }
+
+          &:last-child {
+            border-bottom: none !important;
           }
         }
       }

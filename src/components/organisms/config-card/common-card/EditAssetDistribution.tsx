@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ColumnsType } from "antd/es/table";
 
 import { EditFormProps } from "@/components/templates/form";
-import { AppButton } from "@/components/atoms/button";
+import { AppButton, IconButton } from "@/components/atoms/button";
 import { Text } from "@/components/atoms/text";
 import WillToast from "@/components/atoms/ToastMessage";
 import { contractAddress, getWillContract } from "@/pages/ConfigWillPage";
@@ -12,8 +12,8 @@ import { PROVIDER_TYPE } from "@/models/contract/evm/contract";
 import { WALLET_INJECT_OBJ } from "@/models/wallet/wallet.abstract";
 import { WillType } from "@/types";
 import { getWalletSlice, useAppSelector } from "@/store";
-import { CartItemContainer } from "@/components/organisms/details-card/CardItemContainer";
-import { NoteIcon } from "@/assets/icons/custom-icon";
+import { CardDisclosureProps, CartItemContainer } from "@/components/organisms/details-card/CardItemContainer";
+import { NoteIcon, TrashIcon } from "@/assets/icons/custom-icon";
 import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { AppTable } from "@/components/molecules/table";
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
@@ -24,8 +24,12 @@ import {
 import useDisclosure from "@/hooks/useDisclosure";
 
 import { AssetDataColumn, AssetSelectType } from "../AddAssetDistributionForm";
+import clsx from "clsx";
+import { useDevices } from "@/hooks/useMediaQuery";
+import formatNumber from "@/helpers/useFormatToken";
+import { DefaultOptionType } from "antd/es/select";
 
-export const EditAssetDistribution = (props: EditFormProps) => {
+export const EditAssetDistribution = (props: EditFormProps & CardDisclosureProps) => {
   const configForm = Form.useFormInstance();
   const { getFieldValue, getFieldError, setFieldValue } = configForm;
   const assetDistribution = Form.useWatch("assetDistribution", {
@@ -35,7 +39,7 @@ export const EditAssetDistribution = (props: EditFormProps) => {
   const [currentType, setCurrentType] = useState<TokenModalType | null>(null);
   const [currentToken, setCurrentToken] = useState<any>(null);
 
-  const { scWillId, type, willAddress } = props;
+  const { scWillId, type, willAddress, hasIcon, isDisclosure, isEdit } = props;
   const [loading, setLoading] = useState(false);
   const { address } = useAppSelector(getWalletSlice);
 
@@ -43,6 +47,13 @@ export const EditAssetDistribution = (props: EditFormProps) => {
     assetDistribution || []
   );
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
+  const { isTablet } = useDevices();
+
+  const handleDeleteAsset = (record: DefaultOptionType) => {
+    const newAssets = assets.filter((item) => item.value !== record.value);
+    setAssets(newAssets);
+    setFieldValue("assetDistribution", newAssets);
+  };
 
   const columns: ColumnsType<AssetDataColumn> = [
     {
@@ -57,7 +68,7 @@ export const EditAssetDistribution = (props: EditFormProps) => {
       key: "amount",
       render: (amount) => (
         <Text className="neutral-1 font-semibold">
-          <div>{amount}</div>
+          {amount}
         </Text>
       ),
     },
@@ -122,12 +133,20 @@ export const EditAssetDistribution = (props: EditFormProps) => {
         </Flex>
       ),
     },
+    {
+      title: "",
+      render: (_, record) => (
+        <IconButton onClick={() => handleDeleteAsset(record)}>
+          <TrashIcon />
+        </IconButton>
+      ),
+    },
   ];
 
   const handleSuccess = (amount: any) => {
     for (let i = 0; i < assetDistribution.length; i++) {
       if (assetDistribution[i].assetAddress === currentToken.assetAddress) {
-        assetDistribution[i].amount = amount;
+        assetDistribution[i].amount = formatNumber(amount);
       }
     }
     setAssets(
@@ -218,6 +237,8 @@ export const EditAssetDistribution = (props: EditFormProps) => {
     <CartItemContainer
       title="Configure asset distribution"
       iconTitle={<NoteIcon />}
+      hasIcon={hasIcon}
+      isDisclosure={isDisclosure}
     >
       <Flex vertical gap={24}>
         <Form.Item
@@ -235,7 +256,8 @@ export const EditAssetDistribution = (props: EditFormProps) => {
               columns={columns}
               dataSource={assets}
               pagination={false}
-              className="asset-distribution-table"
+              className={`asset-distribution-table ${assets && assets.length > 0 && "have-data"}`}
+              hasIconAction
             />
             <Flex gap={16} align="flex-end" className="update-asset">
               <SelectAsset
@@ -246,7 +268,7 @@ export const EditAssetDistribution = (props: EditFormProps) => {
                 }}
               />
               {asset?.value &&
-              !assets.find((item) => item.value === asset?.value) ? (
+                !assets.find((item) => item.value === asset?.value) ? (
                 <Flex style={{ width: "40%" }} gap={16}>
                   <AppButton
                     type="primary-outlined"
@@ -260,17 +282,21 @@ export const EditAssetDistribution = (props: EditFormProps) => {
             </Flex>
           </Flex>
         </Form.Item>
-        <AppButton
-          type="primary"
-          size="xl"
-          className="none-styles"
-          onClick={handleUpdateAsset}
-          loading={loading}
-        >
-          <Text className="uppercase" size="text-lg">
-            Save
-          </Text>
-        </AppButton>
+        {
+          isEdit && type === "inheritance" && (
+            <AppButton
+              type="primary"
+              size="xl"
+              className={clsx("", !isTablet && "none-styles")}
+              onClick={handleUpdateAsset}
+              loading={loading}
+            >
+              <Text className="uppercase" size="text-lg">
+                Save
+              </Text>
+            </AppButton>
+          )
+        }
       </Flex>
       {isOpen && currentType && currentToken && willAddress && (
         <TokenModal

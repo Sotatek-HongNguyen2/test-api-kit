@@ -5,12 +5,11 @@ import { Text } from "@/components/atoms/text";
 import { AssetName } from "@/components/molecules/asset-item/AssetName";
 import { SelectAsset } from "@/components/molecules/asset-item/SelectAsset";
 import { AppTable } from "@/components/molecules/table";
-import formatNumber from "@/helpers/useFormatToken";
 
 import { Flex, Form } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface AssetDataColumn {
   symbol: any;
@@ -30,10 +29,12 @@ export const AddAssetDistributionForm = () => {
     form: configForm,
   });
 
-  const [assets, setAssets] = useState<AssetDataColumn[]>(
-    assetDistribution || []
-  );
+  const [assets, setAssets] = useState<AssetDataColumn[]>([]);
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
+
+  useEffect(() => {
+    setAssets(assetDistribution || []);
+  }, [assetDistribution])
 
   const handleDeleteAsset = (record: DefaultOptionType) => {
     const newAssets = assets.filter((item) => item.value !== record.value);
@@ -52,9 +53,6 @@ export const AddAssetDistributionForm = () => {
       title: "Total balance",
       dataIndex: "amount",
       key: "amount",
-      render: (amount) => (
-        <Text className="neutral-1 font-semibold" align="right">{formatNumber(amount)}</Text>
-      ),
     },
     {
       title: "",
@@ -90,7 +88,7 @@ export const AddAssetDistributionForm = () => {
       <Text className="neutral-1">You’re a designated assets:</Text>
       <AppTable
         columns={columns}
-        dataSource={assetDistribution || assets}
+        dataSource={assets}
         pagination={false}
         className={`asset-distribution-table ${assets && assets.length > 0 && "have-data"
           }`}

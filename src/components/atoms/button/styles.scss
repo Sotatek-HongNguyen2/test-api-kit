@@ -77,6 +77,14 @@
   &:hover {
     border-color: #646CFF;
   }
+
+  &:disabled {
+    border-color: $neutral5;
+
+    p {
+      color: $neutral5
+    }
+  }
 }
 
 .app-button--error {

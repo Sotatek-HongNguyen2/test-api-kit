@@ -38,7 +38,7 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
     textSignatures,
   } = props;
   const navigate = useNavigate();
-  const { isMobile } = useDevices();
+  const { isTablet } = useDevices();
 
 
   const viewSmartContract = () => {
@@ -56,7 +56,7 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
   return (
     <Flex vertical className="app-details-container" gap="32px">
       {
-        !isMobile ? (
+        !isTablet ? (
 
           <AppButton type="normal" onClick={() => navigate(-1)}>
             <Flex gap="16px">
@@ -71,16 +71,20 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
       <Flex vertical gap="24px">
         <Flex gap={10}>
           {
-            isMobile ? (
+            isTablet ? (
               <IconButton className="back-mobile" onClick={() => navigate(-1)}>
                 <ArrowOutlinedIcon />
               </IconButton>
             ) : null
           }
           <Flex vertical gap={4}>
-            <Flex vertical={isMobile ? true : false} gap={8} align={isMobile ? "flex-start" : "center"}>
+            <Flex vertical={isTablet ? true : false} gap={8} align={isTablet ? "flex-start" : "center"}>
               <Text size="text-xl" className="font-bold neutral-1 capitalize">
-                {willName} details
+                {
+                  (isTablet && willName?.length > 10)
+                    ? willName?.substring(0, 10) + "... "
+                    : willName
+                } Details
               </Text>
               <AppBadge
                 count={
@@ -131,11 +135,11 @@ export const DetailsContainer = (props: DetailsContainerProps) => {
         {
           method === "created" ? (
             <Flex
-              vertical={isMobile ? true : false}
+              vertical={isTablet ? true : false}
               className="details-container--footer"
-              gap={isMobile ? 12 : 20}
+              gap={isTablet ? 12 : 20}
               {
-              ...(!isMobile && {
+              ...(!isTablet && {
                 align: "center",
               })
               }

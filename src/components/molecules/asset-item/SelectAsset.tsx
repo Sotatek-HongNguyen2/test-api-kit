@@ -19,19 +19,21 @@ interface SelectAssetProps {
   | {
     selectedAssets: AssetSelectType[];
   };
+  totalOptions?: any[];
 }
 
 export const SelectAsset = ({
   asset,
   addAsset,
   disableSelected,
+  totalOptions,
 }: SelectAssetProps) => {
   const [currentAsset, setCurrentAsset] = useState<DefaultOptionType | null>(
     null
   );
   const { listBalances } = useAppSelector(getBalanceSlide);
 
-  const assetOptions = (listBalances ?? [])?.map((asset) => {
+  const assetOptions = (totalOptions ?? listBalances ?? [])?.map((asset) => {
     const labelAsset = assetDataList.find(
       (item) => item?.symbol === asset?.symbol
     );

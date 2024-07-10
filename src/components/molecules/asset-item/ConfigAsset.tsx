@@ -14,10 +14,12 @@ interface ConfigAssetProps {
   handleAddConfigAsset: (asset: AssetSelectType, percent: number) => number;
   selectedAssets?: any[];
   currentBeneficiary?: any;
+  totalOptions?: any[];
+  isEdit?: boolean;
 }
 
 export const ConfigAsset = (props: ConfigAssetProps) => {
-  const { handleAddConfigAsset, selectedAssets, currentBeneficiary } = props;
+  const { handleAddConfigAsset, selectedAssets, currentBeneficiary, totalOptions, isEdit } = props;
   const [asset, setAsset] = useState<AssetSelectType | null>(null);
   const [percent, setPercent] = useState<number | string>('');
   const { isTablet } = useDevices();
@@ -50,7 +52,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
       <Flex
         vertical={isTablet ? true : false}
         gap={16}
-        align="center"
+        align={isTablet ? "normal" : "flex-end"}
         justify="space-between"
         className="config-asset"
       >
@@ -67,6 +69,7 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
               setPercent(1);
             }
           }}
+          totalOptions={totalOptions}
         />
         <Flex vertical gap={10} className="input-percentage">
           <Text className="font-semibold neutral-1">
@@ -100,15 +103,33 @@ export const ConfigAsset = (props: ConfigAssetProps) => {
             }}
           />
         </Flex>
+        {
+          isEdit ? (
+            <AppButton
+              type="primary-outlined"
+              size="xl"
+              onClick={handleSave}
+              disabled={!asset || !percent}
+            >
+              <Text className="uppercase primary font-bold" size="text-lg">
+                Configure
+              </Text>
+            </AppButton>
+          ) : null
+        }
       </Flex>
-      <AppButton
-        type="primary"
-        className="none-styles uppercase"
-        onClick={handleSave}
-        disabled={!asset || !percent}
-      >
-        Save
-      </AppButton>
+      {
+        !isEdit && (
+          <AppButton
+            type="primary"
+            className="none-styles uppercase"
+            onClick={handleSave}
+            disabled={!asset || !percent}
+          >
+            Save
+          </AppButton>
+        )
+      }
     </Flex>
   );
 };
