@@ -74,7 +74,7 @@ export const WillName = ({ isEdit }: EditFormProps) => {
             <AppButton
               type="primary"
               size="xl"
-              className={clsx("", !isTablet && "none-styles")}
+              className={`${isTablet ? "" : "none-styles"}`}
               onClick={handleUpdateName}
               loading={loading}
             >
