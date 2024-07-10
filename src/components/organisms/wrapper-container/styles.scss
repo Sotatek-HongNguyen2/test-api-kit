@@ -39,9 +39,32 @@
 }
 
 .app-config-container {
-  padding: 0vh 20vw;
 
-  @media (max-width: $tablet-width) {
-    padding: 0px;
+  @media (min-width: $XXS) {
+    padding: 0
   }
+
+  @media (min-width: $SM) {
+    padding: 0vh 4vw;
+  }
+
+  @media (min-width: $LG) {
+    padding: 0vh 10vw;
+  }
+
+  @media (min-width: $XL) {
+    padding: 0vh 20vw;
+  }
+
+  @media (min-width: $XXL) {
+    padding: 0vh 20vw;
+  }
+
+
+
+
+
+
+
+
 }
